@@ -20,11 +20,18 @@
     <!-- Welcome Section -->
     <section class="welcome-section py-5 text-center bg-light">
         <div class="container">
-            <h1 class="display-4 fw-bold mb-3">Welcome to EventOnline</h1>
+            <h1 class="display-4 fw-bold mb-3">
+                <span th:if="${loggedInUser}">
+                    Welcome, <span th:text="${loggedInUser.fullName}"></span>!
+                </span>
+                            <span th:unless="${loggedInUser}">
+                    Welcome to EventOnline
+                </span>
+            </h1>
             <p class="lead mb-4">
                 Your one-stop platform to discover and join the best events happening around you. Stay connected, stay inspired!
             </p>
-            <a th:href="@{/customer/mainevent}" class="btn btn-primary btn-lg">Explore Events</a>
+            <a th:href="@{/user/main-event}" class="btn btn-primary btn-lg">Explore Events</a>
         </div>
     </section>
 

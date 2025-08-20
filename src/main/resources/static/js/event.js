@@ -1,101 +1,174 @@
-const itemsPerPage = 3;
-let currentPage = 1;
-let events = []; // sẽ load từ file JSON
+document.addEventListener('DOMContentLoaded', () => {
+  const itemsPerPage = 3; // số items hiển thị 1 trang (col-md-4 -> 3 cột)
+  let currentPage = 1;
+  let searchTerm = '';
 
-function renderEvents(page) {
-    const container = document.getElementById("event-container");
-    container.innerHTML = "";
+  const container = document.getElementById('event-container');
+  const paginationEl = document.getElementById('pagination');
+  const form = document.querySelector('.search-form-unique');
+  const input = form ? form.querySelector('.form-control-unique') : null;
+  const searchBtn = form ? form.querySelector('.btn-search-unique') : null;
+
+  // tạo phần hiển thị "không có kết quả" nếu chưa có
+  let noResultsEl = document.getElementById('no-results');
+  if (!noResultsEl) {
+    noResultsEl = document.createElement('div');
+    noResultsEl.id = 'no-results';
+    noResultsEl.style.display = 'none';
+    noResultsEl.style.marginTop = '12px';
+    noResultsEl.style.fontWeight = '600';
+    noResultsEl.textContent = 'Không có sự kiện phù hợp';
+    container.parentNode.insertBefore(noResultsEl, container.nextSibling);
+  }
+
+  // helper: normalize string (bỏ dấu tiếng Việt + lowercase)
+  function normalize(str) {
+    if (!str) return '';
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  function getAllEventElements() {
+    // các event là các thẻ con trực tiếp của #event-container (thẻ col-md-4)
+    return Array.from(container.querySelectorAll(':scope > div'));
+  }
+
+  function getMatchingEvents() {
+    const all = getAllEventElements();
+    if (!searchTerm) return all;
+    const q = normalize(searchTerm);
+    return all.filter(item => {
+      const titleEl = item.querySelector('.card-title') || item.querySelector('h5') || item;
+      const titleText = titleEl ? titleEl.textContent : item.textContent;
+      return normalize(titleText).includes(q);
+    });
+  }
+
+  function renderEvents(page) {
+    const all = getAllEventElements();
+    const matches = getMatchingEvents();
+
+    // ẩn tất cả trước
+    all.forEach(el => (el.style.display = 'none'));
+
+    if (matches.length === 0) {
+      noResultsEl.style.display = 'block';
+      paginationEl.innerHTML = '';
+      return;
+    } else {
+      noResultsEl.style.display = 'none';
+    }
+
+    const pageCount = Math.max(1, Math.ceil(matches.length / itemsPerPage));
+    if (page > pageCount) {
+      page = pageCount;
+      currentPage = page;
+    }
 
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    const paginatedItems = events.slice(start, end);
+    matches.slice(start, end).forEach(el => (el.style.display = ''));
 
-    paginatedItems.forEach(event => {
-        const card = document.createElement("div");
-        card.className = "col-md-4";
-        card.setAttribute("data-id", event.id);
-        card.innerHTML = `
-          <div class="card event-card shadow-sm h-100">
-            <img src="${event.image}" class="card-img-top" alt="${event.title}">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">${event.title}</h5>
-              <p class="card-text flex-grow-1">${event.description}</p>
-              <p class="mb-1"><strong>Date:</strong> ${event.date}</p>
-              <p class="mb-1"><strong>Duration:</strong> ${event.startTime} - ${event.endTime}</p>
-              <p class="mb-1"><strong>Location:</strong> ${event.location}</p>
-              <p class="mb-0"><strong>Tickets left:</strong> ${event.remainingTickets}</p>
-              <div class="d-flex gap-2 align-items-center justify-content-center">
-                <a href="/customer/event-details" class="btn btn-primary mt-auto">Details</a>
-                <a href="/customer/buy-ticket" class="btn btn-success mt-auto">Buy Ticket</a>
-              </div>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const matches = getMatchingEvents();
+    const total = matches.length;
+    paginationEl.innerHTML = '';
+
+    if (total === 0) return;
+
+    const pageCount = Math.ceil(total / itemsPerPage);
+
+    // Prev
+    const prevLi = document.createElement('li');
+    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevLi.innerHTML = `<a class="page-link" href="#" aria-label="Previous">«</a>`;
+    prevLi.style.cursor = currentPage === 1 ? 'default' : 'pointer';
+    prevLi.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentPage > 1) {
+        currentPage--;
+        renderEvents(currentPage);
+      }
     });
-}
+    paginationEl.appendChild(prevLi);
 
-function renderPagination() {
-    const pagination = document.getElementById("pagination");
-    pagination.innerHTML = "";
-
-    const pageCount = Math.ceil(events.length / itemsPerPage);
-
-    // Prev button
-    const prevLi = document.createElement("li");
-    prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
-    prevLi.innerHTML = `<a class="page-link" href="#">«</a>`;
-    prevLi.addEventListener("click", e => {
+    // Pages
+    for (let i = 1; i <= pageCount; i++) {
+      const li = document.createElement('li');
+      li.className = `page-item ${currentPage === i ? 'active' : ''}`;
+      li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+      li.style.cursor = 'pointer';
+      li.addEventListener('click', (e) => {
         e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            update();
-        }
-    });
-    pagination.appendChild(prevLi);
-
-    // Page numbers
-    for(let i = 1; i <= pageCount; i++) {
-        const li = document.createElement("li");
-        li.className = `page-item ${currentPage === i ? "active" : ""}`;
-        li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-        li.addEventListener("click", e => {
-            e.preventDefault();
-            currentPage = i;
-            update();
-        });
-        pagination.appendChild(li);
+        currentPage = i;
+        renderEvents(currentPage);
+      });
+      paginationEl.appendChild(li);
     }
 
-    // Next button
-    const nextLi = document.createElement("li");
-    nextLi.className = `page-item ${currentPage === pageCount ? "disabled" : ""}`;
-    nextLi.innerHTML = `<a class="page-link" href="#">»</a>`;
-    nextLi.addEventListener("click", e => {
-        e.preventDefault();
-        if (currentPage < pageCount) {
-            currentPage++;
-            update();
-        }
+    // Next
+    const nextLi = document.createElement('li');
+    nextLi.className = `page-item ${currentPage === pageCount ? 'disabled' : ''}`;
+    nextLi.innerHTML = `<a class="page-link" href="#" aria-label="Next">»</a>`;
+    nextLi.style.cursor = currentPage === pageCount ? 'default' : 'pointer';
+    nextLi.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentPage < pageCount) {
+        currentPage++;
+        renderEvents(currentPage);
+      }
     });
-    pagination.appendChild(nextLi);
-}
+    paginationEl.appendChild(nextLi);
+  }
 
-function update() {
+  // update toàn bộ view
+  function update() {
     renderEvents(currentPage);
-    renderPagination();
-}
+  }
 
-// Load data từ file JSON rồi gọi update
-fetch('/json/events.json')
-    .then(res => res.json())
-    .then(data => {
-        events = data;
-        update();
-    })
-    .catch(err => {
-        console.error("Lỗi khi load data.json:", err);
-        // Nếu lỗi thì có thể để mảng rỗng hoặc dữ liệu tạm
-        events = [];
-        update();
+  // prevent form submit (HTML form có action -> ta xử lý trên client)
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
     });
+  }
+
+  // khi bấm nút tìm
+  if (searchBtn) {
+    searchBtn.addEventListener('click', () => {
+      searchTerm = input ? input.value.trim() : '';
+      currentPage = 1;
+      update();
+    });
+  }
+
+  // enter trong ô input cũng kích hoạt tìm
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchTerm = input.value.trim();
+        currentPage = 1;
+        update();
+      }
+      // nếu người dùng xoá hết input -> show tất cả
+      if (e.key === 'Backspace' || e.key === 'Delete') {
+        setTimeout(() => {
+          if (input.value.trim() === '') {
+            searchTerm = '';
+            currentPage = 1;
+            update();
+          }
+        }, 0);
+      }
+    });
+  }
+
+  // khởi tạo hiển thị ban đầu
+  update();
+});

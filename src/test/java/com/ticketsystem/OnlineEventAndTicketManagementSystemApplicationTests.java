@@ -1,4 +1,4 @@
-package com.event.online_event_and_ticket_management_system;
+package com.ticketsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

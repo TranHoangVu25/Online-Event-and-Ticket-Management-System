@@ -1,4 +1,4 @@
-admin-update-event.js// Admin Create Event JavaScript
+// Admin Create Event JavaScript
 // Simple JavaScript for basic functionality
 function logout() {
     if (confirm('Bạn có chắc muốn đăng xuất?')) {

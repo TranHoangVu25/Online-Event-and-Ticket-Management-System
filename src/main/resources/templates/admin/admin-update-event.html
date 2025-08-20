@@ -106,8 +106,8 @@
         <main class="main-content">
             <div class="content-header glass">
                 <div class="header-left">
-                    <h2>Tạo sự kiện mới</h2>
-                    <p>Thêm sự kiện mới vào hệ thống EventHub</p>
+                    <h2>Sửa sự kiện</h2>
+<!--                    <p>Sửa sự kiện mới vào hệ thống EventHub</p>-->
                 </div>
                 <div class="header-actions">
                     <button class="preview-btn glass" onclick="previewEvent()">
@@ -123,7 +123,7 @@
 
             <!-- Event Creation Form -->
             <div class="event-form-container glass">
-                <form action="#" th:action="@{/admin/admin-create-event}" th:object="${event}" method="post" id="eventForm" class="event-form">
+                <form action="#" th:action="@{/admin/admin-update-event/{id}(id=${event.id})}" th:object="${event}" method="post" id="eventForm" class="event-form">
                     <!-- Basic Information Section -->
                     <div class="form-section">
                         <div class="section-header">
@@ -142,27 +142,11 @@
                                     <div class="input-border"></div>
                                 </div>
                             </div>
-<!--                            <div class="form-group">-->
-<!--                                <label for="eventCategory">Danh mục *</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <select id="eventCategory" name="eventCategory" required>-->
-<!--                                        <option value="">Chọn danh mục</option>-->
-<!--                                        <option value="concert">Concert</option>-->
-<!--                                        <option value="workshop">Workshop</option>-->
-<!--                                        <option value="conference">Hội nghị</option>-->
-<!--                                        <option value="exhibition">Triển lãm</option>-->
-<!--                                        <option value="sports">Thể thao</option>-->
-<!--                                        <option value="seminar">Hội thảo</option>-->
-<!--                                        <option value="other">Khác</option>-->
-<!--                                    </select>-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="eventDescription">Creator</label>
+                                <label for="eventDescription">Creator ID</label>
                                 <div class="input-wrapper">
                                             <input id="eventDescription" required
                                                       placeholder="Creator Id" th:field="*{creator.id}"/>
@@ -211,24 +195,6 @@
                             </div>
                         </div>
 
-<!--                        <div class="form-row">-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="eventDuration">Thời lượng (giờ) *</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <input type="number" id="eventDuration"-->
-<!--                                           min="0.5" max="24" step="0.5" required placeholder="2.0">-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="eventEndTime">Giờ kết thúc</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <input type="time" id="eventEndTime"  readonly>-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="eventLocation">Địa điểm</label>
@@ -262,27 +228,19 @@
 
                         <div class="form-row">
                             <div class="form-group">
-<!--                                <label for="ticketClass">Hạng vé *</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <select id="ticketClass" name="ticketClass" required>-->
-<!--                                        <option value="">Chọn hạng vé</option>-->
-<!--                                        <option value="vip">VIP</option>-->
-<!--                                        <option value="premium">Premium</option>-->
-<!--                                        <option value="standard">Standard</option>-->
-<!--                                        <option value="economy">Economy</option>-->
-<!--                                        <option value="student">Student</option>-->
-<!--                                        <option value="senior">Senior</option>-->
-<!--                                        <option value="children">Children</option>-->
-<!--                                    </select>-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-                                <div class="form-group">
-                                    <label for="totalTickets">Tổng số vé *</label>
-                                    <div class="input-wrapper">
-                                        <input type="number" id="totalTickets" name="totalTickets"
-                                               min="1" required placeholder="100">
-                                        <div class="input-border"></div>
-                                    </div>
+                                <label for="ticketClass">Hạng vé *</label>
+                                <div class="input-wrapper">
+                                    <select id="ticketClass" name="ticketClass" required>
+                                        <option value="">Chọn hạng vé</option>
+                                        <option value="vip">VIP</option>
+                                        <option value="premium">Premium</option>
+                                        <option value="standard">Standard</option>
+                                        <option value="economy">Economy</option>
+                                        <option value="student">Student</option>
+                                        <option value="senior">Senior</option>
+                                        <option value="children">Children</option>
+                                    </select>
+                                    <div class="input-border"></div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -296,52 +254,59 @@
                         </div>
 
                         <div class="form-row">
-
-<!--                            <div class="form-group">-->
-<!--                                <label for="maxTicketsPerPerson">Số vé tối đa/người</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <input type="number" id="maxTicketsPerPerson" name="maxTicketsPerPerson"-->
-<!--                                           min="1" value="5" placeholder="5">-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="form-group">
+                                <label for="totalTickets">Tổng số vé *</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="totalTickets" name="totalTickets"
+                                           min="1" required placeholder="100">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxTicketsPerPerson">Số vé tối đa/người</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="maxTicketsPerPerson" name="maxTicketsPerPerson"
+                                           min="1" value="5" placeholder="5">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
                         </div>
 
-<!--                        <div class="form-row">-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="earlyBirdPrice">Giá vé sớm (VNĐ)</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <input type="number" id="earlyBirdPrice" name="earlyBirdPrice"-->
-<!--                                           min="0" placeholder="80000">-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                                <small class="form-help">Giá vé ưu đãi cho người đăng ký sớm</small>-->
-<!--                            </div>-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="earlyBirdEndDate">Hạn chót giá vé sớm</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <input type="date" id="earlyBirdEndDate" name="earlyBirdEndDate">-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="earlyBirdPrice">Giá vé sớm (VNĐ)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="earlyBirdPrice" name="earlyBirdPrice"
+                                           min="0" placeholder="80000">
+                                    <div class="input-border"></div>
+                                </div>
+                                <small class="form-help">Giá vé ưu đãi cho người đăng ký sớm</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="earlyBirdEndDate">Hạn chót giá vé sớm</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="earlyBirdEndDate" name="earlyBirdEndDate">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
 
-<!--                        <div class="form-row">-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="ticketSaleStartDate">Ngày bắt đầu bán vé</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <input type="date" id="ticketSaleStartDate" name="ticketSaleStartDate">-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="ticketSaleEndDate">Ngày kết thúc bán vé</label>-->
-<!--                                <div class="input-wrapper">-->
-<!--                                    <input type="date" id="ticketSaleEndDate" name="ticketSaleEndDate">-->
-<!--                                    <div class="input-border"></div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ticketSaleStartDate">Ngày bắt đầu bán vé</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="ticketSaleStartDate" name="ticketSaleStartDate">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketSaleEndDate">Ngày kết thúc bán vé</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="ticketSaleEndDate" name="ticketSaleEndDate">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Media and Images Section -->
@@ -403,17 +368,17 @@
                     </div>
                     <!-- Form Actions -->
                     <div class="form-actions glass">
-                        <button type="button" class="btn-secondary glass" onclick="resetForm()">
-                            <i class="fas fa-undo"></i>
-                            <span>Làm mới</span>
-                        </button>
-                        <button type="button" class="btn-secondary glass" onclick="saveDraft()">
-                            <i class="fas fa-save"></i>
-                            <span>Lưu nháp</span>
-                        </button>
+<!--                        <button type="button" class="btn-secondary glass" onclick="resetForm()">-->
+<!--                            <i class="fas fa-undo"></i>-->
+<!--                            <span>Làm mới</span>-->
+<!--                        </button>-->
+<!--                        <button type="button" class="btn-secondary glass" onclick="saveDraft()">-->
+<!--                            <i class="fas fa-save"></i>-->
+<!--                            <span>Lưu nháp</span>-->
+<!--                        </button>-->
                         <button type="submit" class="btn-primary glass">
                             <i class="fas fa-check"></i>
-                            <span>Tạo sự kiện</span>
+                            <span>Lưu</span>
                         </button>
                     </div>
                 </form>
@@ -450,7 +415,7 @@
         </div>
     </div>
 
-    <script  th:src="@{/js/admin-create-events.js(v=${#dates.createNow().time})}"></script>
+    <script  th:src="@{/js/admin-update-events.js(v=${#dates.createNow().time})}"></script>
 
 </body>
 </html>

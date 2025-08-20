@@ -1,51 +1,121 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Website with Login & Signup Form | CodingNepal</title>
 
     <!-- Google Fonts Link For Icons -->
-    <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0}">
+    <link
+      rel="stylesheet"
+      th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0}"
+    />
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}">
+    <link
+      rel="stylesheet"
+      th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}"
+    />
 
     <!-- CSS -->
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/event.css}">
-</head>
-<body>
-    <div th:replace="layout :: header"></div>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/event.css}" />
+  </head>
+  <body>
+    <div th:replace="~{layout :: header}"></div>
 
     <main>
-        <div class="container py-4">
-            <form class="mb-4 search-form-unique" action="/customer/maine-vent" method="get">
-                <div class="input-group-unique">
-                    <input type="text" name="keyword" class="form-control-unique" placeholder="Search events..." aria-label="Tìm kiếm sự kiện">
-                    <button class="btn-search-unique" type="submit">
-                        <span class="material-symbols-rounded">search</span>
-                    </button>
+      <div class="container py-4">
+        <form
+          class="mb-4 search-form-unique"
+          action="/customer/main-event"
+          method="get"
+        >
+          <div class="input-group-unique">
+            <input
+              type="text"
+              name="keyword"
+              class="form-control-unique"
+              placeholder="Search events..."
+              aria-label="Tìm kiếm sự kiện"
+            />
+            <button class="btn-search-unique" type="button">
+              <span class="material-symbols-rounded">search</span>
+            </button>
+          </div>
+        </form>
+
+        <h2 class="mb-4 text-center" style="color: black">List Events</h2>
+
+        <!-- fake data with js event.js -->
+        <div id="event-container" class="row g-4">
+          <div
+            class="col-md-4"
+            th:each="event : ${events}"
+            th:attr="data-id=${event.id}"
+          >
+            <div class="card event-card shadow-sm h-100">
+              <img
+                th:src="@{${event.thumbnailUrl}}"
+                class="card-img-top"
+                th:alt="${event.name}"
+              />
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title" th:text="${event.name}">Event Title</h5>
+                <p class="card-text flex-grow-1" th:text="${event.description}">
+                  Event description
+                </p>
+                <p class="mb-1">
+                  <strong>Date Time:</strong>
+                  <span
+                    th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy hh:mm a')}"
+                    >2025-08-20</span
+                  >
+                </p>
+                <!--                        <p class="mb-1"><strong>Duration:</strong>-->
+                <!--                            <span th:text="${event.startTime}">19:00</span> - -->
+                <!--                            <span th:text="${event.endTime}">21:00</span>-->
+                <!--                        </p>-->
+                <p class="mb-1">
+                  <strong>Location:</strong>
+                  <span th:text="${event.location.city}">City Hall</span>
+                </p>
+                <!--                        <p class="mb-0"><strong>Tickets left:</strong> <span th:text="${event.remainingTickets}">50</span></p>-->
+                <div
+                  class="d-flex gap-2 align-items-center justify-content-center"
+                >
+                  <a
+                    th:href="@{/user/event-details/{id}(id=${event.id})}"
+                    class="btn btn-primary mt-auto"
+                    >Details</a
+                  >
+                  <a
+                    th:href="@{/user/buy-ticket/{id}(id=${event.id})}"
+                    class="btn btn-success mt-auto"
+                    >Buy Ticket</a
+                  >
                 </div>
-            </form>
-
-            <h2 class="mb-4 text-center" style="color: black">List Events</h2>
-
-            <!-- fake data with js event.js -->
-            <div id="event-container" class="row g-4"></div>
-
-            <!-- Pagination -->
-            <nav class="mt-4">
-                <ul class="pagination justify-content-center" id="pagination"></ul>
-            </nav>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Pagination -->
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center" id="pagination"></ul>
+        </nav>
+      </div>
     </main>
-    <div th:replace="layout :: footer"></div>
+    <div th:replace="~{layout :: footer}"></div>
     <!-- JS -->
     <script th:src="@{/js/script.js}" defer></script>
     <script th:src="@{/js/event.js}" defer></script>
 
     <!-- Bootstrap JS Bundle (gồm Popper) -->
-    <script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script
+      th:src="@{/js/main-events.js(v=${#dates.createNow().time})}"
+    ></script>
+  </body>
 </html>
