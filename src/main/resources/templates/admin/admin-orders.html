@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xử lý đơn hàng - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin-orders-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+
+    <!-- Header -->
+    <header class="admin-header glass">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h1>EventHub Admin</h1>
+            </div>
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <span class="admin-name" th:text="${adminName}">Admin</span>
+                <button class="logout-btn glass"
+                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar glass">
+            <div class="sidebar-header">
+                <div class="admin-avatar-large">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <span>Quản trị viên</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a th:href="@{/admin-home}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-events}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <span>Quản lý sự kiện</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-orders}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <span>Xử lý đơn hàng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-users}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Quản lý người dùng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-create-event}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <span>Tạo sự kiện mới</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-reports}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <span>Báo cáo</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-header glass">
+                <div class="header-left">
+                    <h2>Xử lý đơn hàng</h2>
+                    <p>Quản lý và xử lý tất cả đơn hàng vé sự kiện</p>
+                </div>
+                <div class="header-actions">
+                    <button class="filter-btn glass" onclick="toggleFilters()">
+                        <i class="fas fa-filter"></i>
+                        <span>Bộ lọc</span>
+                    </button>
+                    <button class="export-btn glass" onclick="exportOrders()">
+                        <i class="fas fa-download"></i>
+                        <span>Xuất dữ liệu</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="filters-section glass" id="filtersSection">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="statusFilter">Trạng thái đơn hàng</label>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="pending">Chờ xử lý</option>
+                            <option value="confirmed">Đã xác nhận</option>
+                            <option value="cancelled">Đã hủy</option>
+                            <option value="refunded">Đã hoàn tiền</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="eventFilter">Sự kiện</label>
+                        <select id="eventFilter" class="filter-select">
+                            <option value="">Tất cả sự kiện</option>
+                            <option value="concert">Concert Rock Night</option>
+                            <option value="workshop">Workshop Marketing</option>
+                            <option value="conference">Hội nghị Startup</option>
+                            <option value="exhibition">Triển lãm Nghệ thuật</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Ngày đặt hàng</label>
+                        <select id="dateFilter" class="filter-select">
+                            <option value="">Tất cả ngày</option>
+                            <option value="today">Hôm nay</option>
+                            <option value="week">Tuần này</option>
+                            <option value="month">Tháng này</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchFilter">Tìm kiếm</label>
+                        <input type="text" id="searchFilter" class="filter-input" placeholder="Mã đơn hàng, tên khách hàng...">
+                    </div>
+                </div>
+                <div class="filters-actions">
+                    <button class="btn-secondary glass" onclick="clearFilters()">
+                        <i class="fas fa-undo"></i>
+                        <span>Xóa bộ lọc</span>
+                    </button>
+                    <button class="btn-primary glass" onclick="applyFilters()">
+                        <i class="fas fa-search"></i>
+                        <span>Áp dụng</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="orders-table-container glass">
+                <div class="table-header">
+                    <h3>Danh sách đơn hàng</h3>
+                    <div class="table-actions">
+                        <button class="bulk-action-btn glass" onclick="bulkConfirm()">
+                            <i class="fas fa-check"></i>
+                            <span>Xác nhận hàng loạt</span>
+                        </button>
+                        <button class="bulk-action-btn glass" onclick="bulkCancel()">
+                            <i class="fas fa-times"></i>
+                            <span>Hủy hàng loạt</span>
+                        </button>
+                    </div>
+                </div>
+
+                <table class="orders-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th>Mã đơn hàng</th>
+                        <th>Khách hàng</th>
+                        <th>Sự kiện</th>
+                        <th>Số lượng vé</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày đặt</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="order-checkbox" value="1">
+                        </td>
+                        <td class="order-id">#ORD001</td>
+                        <td class="customer-info">
+                            <div class="customer-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="customer-details">
+                                <div class="customer-name">Nguyễn Văn A</div>
+                                <div class="customer-email">nguyenvana@email.com</div>
+                            </div>
+                        </td>
+                        <td class="event-info">
+                            <div class="event-name">Concert Rock Night</div>
+                            <div class="event-date">15/12/2024 - 20:00</div>
+                        </td>
+                        <td class="ticket-count">2 vé</td>
+                        <td class="order-total">₫400,000</td>
+                        <td>
+                            <span class="status-badge pending">Chờ xử lý</span>
+                        </td>
+                        <td class="order-date">10/12/2024</td>
+                        <td class="actions">
+                            <button class="action-btn view" onclick="viewOrder('ORD001')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn confirm" onclick="confirmOrder('ORD001')" title="Xác nhận">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="action-btn cancel" onclick="cancelOrder('ORD001')" title="Hủy">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="order-checkbox" value="2">
+                        </td>
+                        <td class="order-id">#ORD002</td>
+                        <td class="customer-info">
+                            <div class="customer-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="customer-details">
+                                <div class="customer-name">Trần Thị B</div>
+                                <div class="customer-email">tranthib@email.com</div>
+                            </div>
+                        </td>
+                        <td class="event-info">
+                            <div class="event-name">Workshop Marketing Digital</div>
+                            <div class="event-date">18/12/2024 - 14:00</div>
+                        </td>
+                        <td class="ticket-count">1 vé</td>
+                        <td class="order-total">₫500,000</td>
+                        <td>
+                            <span class="status-badge confirmed">Đã xác nhận</span>
+                        </td>
+                        <td class="order-date">09/12/2024</td>
+                        <td class="actions">
+                            <button class="action-btn view" onclick="viewOrder('ORD002')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn refund" onclick="refundOrder('ORD002')" title="Hoàn tiền">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="order-checkbox" value="3">
+                        </td>
+                        <td class="order-id">#ORD003</td>
+                        <td class="customer-info">
+                            <div class="customer-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="customer-details">
+                                <div class="customer-name">Lê Văn C</div>
+                                <div class="customer-email">levanc@email.com</div>
+                            </div>
+                        </td>
+                        <td class="event-info">
+                            <div class="event-name">Hội nghị Startup</div>
+                            <div class="event-date">22/12/2024 - 09:00</div>
+                        </td>
+                        <td class="ticket-count">3 vé</td>
+                        <td class="order-total">₫3,600,000</td>
+                        <td>
+                            <span class="status-badge cancelled">Đã hủy</span>
+                        </td>
+                        <td class="order-date">08/12/2024</td>
+                        <td class="actions">
+                            <button class="action-btn view" onclick="viewOrder('ORD003')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn restore" onclick="restoreOrder('ORD003')" title="Khôi phục">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="order-checkbox" value="4">
+                        </td>
+                        <td class="order-id">#ORD004</td>
+                        <td class="customer-info">
+                            <div class="customer-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="customer-details">
+                                <div class="customer-name">Phạm Thị D</div>
+                                <div class="customer-email">phamthid@email.com</div>
+                            </div>
+                        </td>
+                        <td class="event-info">
+                            <div class="event-name">Triển lãm Nghệ thuật Đương đại</div>
+                            <div class="event-date">25/12/2024 - 10:00</div>
+                        </td>
+                        <td class="ticket-count">2 vé</td>
+                        <td class="order-total">₫300,000</td>
+                        <td>
+                            <span class="status-badge confirmed">Đã xác nhận</span>
+                        </td>
+                        <td class="order-date">07/12/2024</td>
+                        <td class="actions">
+                            <button class="action-btn view" onclick="viewOrder('ORD004')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn refund" onclick="refundOrder('ORD004')" title="Hoàn tiền">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination glass">
+                <button class="page-btn" onclick="goToPage(1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn" onclick="goToPage(2)">2</button>
+                <button class="page-btn" onclick="goToPage(3)">3</button>
+                <span class="page-ellipsis">...</span>
+                <button class="page-btn" onclick="goToPage(8)">8</button>
+                <button class="page-btn" onclick="goToPage(2)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast glass">
+        <div class="toast-icon"></div>
+        <span class="toast-message"></span>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content glass large">
+            <div class="modal-header">
+                <h3>Chi tiết đơn hàng</h3>
+                <button class="close-btn glass" onclick="closeOrderModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="order-details">
+                    <div class="detail-section">
+                        <h4>Thông tin đơn hàng</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Mã đơn hàng:</span>
+                                <span class="detail-value" id="modalOrderId">#ORD001</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Ngày đặt:</span>
+                                <span class="detail-value" id="modalOrderDate">10/12/2024</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Trạng thái:</span>
+                                <span class="detail-value" id="modalOrderStatus">Chờ xử lý</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Tổng tiền:</span>
+                                <span class="detail-value" id="modalOrderTotal">₫400,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Thông tin khách hàng</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Họ tên:</span>
+                                <span class="detail-value" id="modalCustomerName">Nguyễn Văn A</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value" id="modalCustomerEmail">nguyenvana@email.com</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Số điện thoại:</span>
+                                <span class="detail-value" id="modalCustomerPhone">0123456789</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Chi tiết sự kiện</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Tên sự kiện:</span>
+                                <span class="detail-value" id="modalEventName">Concert Rock Night</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Thời gian:</span>
+                                <span class="detail-value" id="modalEventTime">15/12/2024 - 20:00</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Địa điểm:</span>
+                                <span class="detail-value" id="modalEventLocation">Nhà hát Hòa Bình, TP.HCM</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Số lượng vé:</span>
+                                <span class="detail-value" id="modalTicketCount">2 vé</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary glass" onclick="closeOrderModal()">Đóng</button>
+                <button class="btn-primary glass" onclick="processOrder()">Xử lý đơn hàng</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin-orders.js}"></script>
+</body>
+</html>

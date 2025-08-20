@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website with Login & Signup Form | CodingNepal</title>
+
+    <!-- Google Fonts Link For Icons -->
+    <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/event.css}">
+</head>
+
+<body>
+    <div th:replace="layout :: header"></div>
+
+    <!-- fake data (23-31) -->
+    <main class="container py-5" th:with="
+        eventTitle='Tech Expo 2025',
+        eventDescription='Triển lãm công nghệ lớn nhất trong năm.',
+        eventDate='20/10/2025',
+        eventTime='12:00 - 14:00',
+        eventLocation='Hội trường A',
+        ticketsLeft=100,
+        ticketsSold=850
+    ">
+        <div class="row g-4">
+            <!-- main image -->
+            <div class="col-lg-7">
+                <img th:src="@{'https://picsum.photos/id/1011/800/400'}" th:alt="${eventTitle}" class="img-fluid rounded shadow-sm mb-3" />
+                <div class="d-flex gap-3">
+                    <img th:src="@{'https://picsum.photos/id/1012/200/120'}" alt="Supplementary 1" class="img-thumbnail flex-fill" />
+                    <img th:src="@{'https://picsum.photos/id/1013/200/120'}" alt="Supplementary 2" class="img-thumbnail flex-fill" />
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="col-lg-5 d-flex flex-column">
+                <h1 class="mb-4" th:text="${eventTitle}">eventTitle</h1>
+                <div class="info-box mb-3">
+                    <strong>Description:</strong> <span th:text="${eventDescription}"></span>
+                </div>
+                <div class="info-box mb-3">
+                    <strong>Date:</strong> <span th:text="${eventDate}"></span>
+                </div>
+                <div class="info-box mb-3">
+                    <strong>Duration:</strong> <span th:text="${eventTime}"></span>
+                </div>
+                <div class="info-box mb-3">
+                    <strong>Location:</strong> <span th:text="${eventLocation}"></span>
+                </div>
+                <div class="info-box mb-3">
+                    <strong>Tickets left:</strong> <span th:text="${ticketsLeft}"></span>
+                </div>
+                <div class="info-box mb-4">
+                    <strong>Tickets sold:</strong> <span th:text="${ticketsSold}"></span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a th:href="@{/customer/buy-ticket}" class="btn btn-success btn-lg flex-fill" role="button">Buy now</a>
+                    <a th:href="@{/customer/main-event}" class="btn btn-danger btn-lg flex-fill" role="button">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <div th:replace="layout :: footer"></div>
+    <!-- JS -->
+    <script th:src="@{/js/script.js}" defer></script>
+    <script th:src="@{/js/event.js}" defer></script>
+    <script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+</body>
+</html>

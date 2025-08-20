@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Music Festival 2025",
+    "description": "A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.A lively outdoor music festival featuring top bands and DJs.",
+    "date": "2025-08-20",
+    "startTime": "18:00",
+    "endTime": "23:00",
+    "location": "Central Park, New York",
+    "remainingTickets": 150,
+    "image": "https://picsum.photos/id/1011/800/400",
+    "link": "#"
+  },
+  {
+    "id": 2,
+    "title": "Tech Conference 2025",
+    "description": "Annual gathering of tech enthusiasts and professionals.",
+    "date": "2025-09-05",
+    "startTime": "09:00",
+    "endTime": "17:00",
+    "location": "Silicon Valley Conference Center",
+    "remainingTickets": 80,
+    "image": "https://picsum.photos/id/1015/800/400",
+    "link": "#"
+  },
+  {
+    "id": 3,
+    "title": "Food & Wine Expo",
+    "description": "Taste the finest cuisines and wines from around the world.",
+    "date": "2025-09-15",
+    "startTime": "11:00",
+    "endTime": "20:00",
+    "location": "Los Angeles Convention Center",
+    "remainingTickets": 200,
+    "image": "https://picsum.photos/id/1025/800/400",
+    "link": "#"
+  },
+  {
+    "id": 4,
+    "title": "Tech Expo 2025",
+    "description": "Triển lãm công nghệ lớn nhất trong năm.",
+    "date": "2025-10-20",
+    "startTime": "12:00",
+    "endTime": "14:00",
+    "location": "Hội trường A",
+    "remainingTickets": 100,
+    "image": "https://picsum.photos/id/1011/800/400",
+    "link": "#"
+  }
+]

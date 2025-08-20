@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Đăng ký - EventHub</title>
+    <link th:href="@{/css/register-styles.css}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            rel="stylesheet" />
+</head>
+<body class="dark-theme">
+<!-- Background Particles -->
+<div class="background-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+<div class="container">
+    <div class="register-container glass">
+        <!-- Left Panel - Branding Area -->
+        <div class="brand-section">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="brand-name">
+                <span>EventHub</span>
+            </div>
+            <h1>Đăng ký tài khoản</h1>
+            <p class="brand-tagline">Tham gia cùng chúng tôi để quản lý sự kiện chuyên nghiệp</p>
+        </div>
+
+        <!-- Right Panel - Registration Form -->
+        <div class="form-container">
+            <div class="form-title">Tạo tài khoản mới</div>
+            <form class="register-form auth-form" th:action="@{/register}" method="post">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i>
+                        Họ và tên
+                    </label>
+                    <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Nhập họ và tên của bạn"
+                            required
+                            minlength="2"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </label>
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Nhập địa chỉ email"
+                            required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i>
+                        Username
+                    </label>
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Nhập username của bạn"
+                            required
+                            minlength="6"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        Mật khẩu
+                    </label>
+                    <div class="password-input">
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Tạo mật khẩu (ít nhất 6 ký tự)"
+                                required
+                                minlength="6"
+                        />
+                        <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i>
+                        Xác nhận mật khẩu
+                    </label>
+                    <div class="password-input">
+                        <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Nhập lại mật khẩu"
+                                required
+                        />
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="agree" name="agree" required />
+                        <span class="checkmark"></span>
+                        Tôi đồng ý với <a href="#terms">Điều khoản sử dụng</a> và <a href="#privacy">Chính sách bảo mật</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-user-plus"></i>
+                    Tạo tài khoản
+                </button>
+            </form>
+
+            <div class="register-link">
+                <p>Đã có tài khoản? <a th:href="@{/}" class="register-btn">Đăng nhập ngay</a></p>
+            </div>
+        </div>
+
+        <!-- Background Animation -->
+        <div class="background-animation">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+                <div class="shape shape-5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast glass">
+    <i class="toast-icon"></i>
+    <span class="toast-message"></span>
+</div>
+
+<script th:src="@{/js/register.js}"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Header Fragment -->
+<header th:fragment="header">
+    <nav class="navbar">
+        <span class="hamburger-btn material-symbols-rounded">menu</span>
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.jpg}" alt="logo" />
+            <h2>EventOnlive</h2>
+        </a>
+        <ul class="links">
+            <span class="close-btn material-symbols-rounded">close</span>
+            <li><a th:href="@{/customer-home}">Home</a></li>
+            <li><a th:href="@{/customer/main-event}">Events</a></li>
+            <li><a th:href="@{/customer-home#contact}">Contact us</a></li>
+            <li><a th:href="@{/customer/customer-orders}">My orders</a></li>
+        </ul>
+        <span style = "color: blanchedalmond;"> Welcome, <b th:text="${username}" >User!</b></span>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle logout-btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                More
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li>
+                    <a class="dropdown-item" style="color: red" href="#" th:onclick="|if(confirm('Are you sure you want to log out?')) window.location='@{/}';|">Logout</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" th:href="@{/customer/customer-orders}">My orders</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" th:href="@{/customer/customer-profile}">Edit profile</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- Footer Fragment -->
+<footer th:fragment="footer">
+    <p>&copy; 2025 Eventine. All rights reserved.</p>
+</footer>
+
+<!-- JS -->
+<script th:src="@{/js/script.js}" defer></script>
+
+<!-- Bootstrap JS Bundle -->
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo sự kiện mới - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin-create-event-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <!-- Background Particles -->
+    <div class="background-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="admin-header glass">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h1>EventHub Admin</h1>
+            </div>
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <span class="admin-name" th:text="${adminName}">Admin</span>
+                <button class="logout-btn glass"
+                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar glass">
+            <div class="sidebar-header">
+                <div class="admin-avatar-large">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <span>Quản trị viên</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a th:href="@{/admin-home}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-events}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <span>Quản lý sự kiện</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-orders}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <span>Xử lý đơn hàng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-users}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Quản lý người dùng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-create-event}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <span>Tạo sự kiện mới</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-reports}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <span>Báo cáo</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-header glass">
+                <div class="header-left">
+                    <h2>Tạo sự kiện mới</h2>
+                    <p>Thêm sự kiện mới vào hệ thống EventHub</p>
+                </div>
+                <div class="header-actions">
+                    <button class="preview-btn glass" onclick="previewEvent()">
+                        <i class="fas fa-eye"></i>
+                        <span>Xem trước</span>
+                    </button>
+                    <button class="save-draft-btn glass" onclick="saveDraft()">
+                        <i class="fas fa-save"></i>
+                        <span>Lưu nháp</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Event Creation Form -->
+            <div class="event-form-container glass">
+                <form id="eventForm" class="event-form">
+                    <!-- Basic Information Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <h3 class="section-title">Thông tin cơ bản</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventName">Tên sự kiện *</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="eventName" name="eventName" required
+                                           placeholder="Nhập tên sự kiện">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="eventCategory">Danh mục *</label>
+                                <div class="input-wrapper">
+                                    <select id="eventCategory" name="eventCategory" required>
+                                        <option value="">Chọn danh mục</option>
+                                        <option value="concert">Concert</option>
+                                        <option value="workshop">Workshop</option>
+                                        <option value="conference">Hội nghị</option>
+                                        <option value="exhibition">Triển lãm</option>
+                                        <option value="sports">Thể thao</option>
+                                        <option value="seminar">Hội thảo</option>
+                                        <option value="other">Khác</option>
+                                    </select>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventDescription">Mô tả ngắn *</label>
+                                <div class="input-wrapper">
+                                            <textarea id="eventDescription" name="eventDescription" rows="3" required
+                                                      placeholder="Mô tả ngắn gọn về sự kiện"></textarea>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventContent">Nội dung chi tiết</label>
+                                <div class="input-wrapper">
+                                            <textarea id="eventContent" name="eventContent" rows="6"
+                                                      placeholder="Nội dung chi tiết về sự kiện"></textarea>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date and Time Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3 class="section-title">Thời gian và địa điểm</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventDate">Ngày diễn ra *</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="eventDate" name="eventDate" required>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="eventTime">Giờ diễn ra *</label>
+                                <div class="input-wrapper">
+                                    <input type="time" id="eventTime" name="eventTime" required>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventDuration">Thời lượng (giờ) *</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="eventDuration" name="eventDuration"
+                                           min="0.5" max="24" step="0.5" required placeholder="2.0">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="eventEndTime">Giờ kết thúc</label>
+                                <div class="input-wrapper">
+                                    <input type="time" id="eventEndTime" name="eventEndTime" readonly>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventLocation">Địa điểm *</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="eventLocation" name="eventLocation" required
+                                           placeholder="Nhập địa điểm diễn ra sự kiện">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="eventAddress">Địa chỉ chi tiết</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="eventAddress" name="eventAddress"
+                                           placeholder="Số nhà, đường, quận/huyện, tỉnh/thành phố">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ticket Information Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <h3 class="section-title">Thông tin vé</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ticketClass">Hạng vé *</label>
+                                <div class="input-wrapper">
+                                    <select id="ticketClass" name="ticketClass" required>
+                                        <option value="">Chọn hạng vé</option>
+                                        <option value="vip">VIP</option>
+                                        <option value="premium">Premium</option>
+                                        <option value="standard">Standard</option>
+                                        <option value="economy">Economy</option>
+                                        <option value="student">Student</option>
+                                        <option value="senior">Senior</option>
+                                        <option value="children">Children</option>
+                                    </select>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketPrice">Giá vé (VNĐ) *</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="ticketPrice" name="ticketPrice"
+                                           min="0" required placeholder="100000">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="totalTickets">Tổng số vé *</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="totalTickets" name="totalTickets"
+                                           min="1" required placeholder="100">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxTicketsPerPerson">Số vé tối đa/người</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="maxTicketsPerPerson" name="maxTicketsPerPerson"
+                                           min="1" value="5" placeholder="5">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="earlyBirdPrice">Giá vé sớm (VNĐ)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="earlyBirdPrice" name="earlyBirdPrice"
+                                           min="0" placeholder="80000">
+                                    <div class="input-border"></div>
+                                </div>
+                                <small class="form-help">Giá vé ưu đãi cho người đăng ký sớm</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="earlyBirdEndDate">Hạn chót giá vé sớm</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="earlyBirdEndDate" name="earlyBirdEndDate">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ticketSaleStartDate">Ngày bắt đầu bán vé</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="ticketSaleStartDate" name="ticketSaleStartDate">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketSaleEndDate">Ngày kết thúc bán vé</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="ticketSaleEndDate" name="ticketSaleEndDate">
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Media and Images Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <h3 class="section-title">Hình ảnh và media</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventImage">Hình ảnh chính *</label>
+                                <div class="image-upload glass">
+                                    <input type="file" id="eventImage" name="eventImage"
+                                           accept="image/*" required>
+                                    <div class="upload-placeholder">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <p>Kéo thả hình ảnh hoặc click để chọn</p>
+                                        <span>Kích thước tối đa: 5MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventGallery">Thư viện hình ảnh</label>
+                                <div class="image-upload multiple glass">
+                                    <input type="file" id="eventGallery" name="eventGallery"
+                                           accept="image/*" multiple>
+                                    <div class="upload-placeholder">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-images"></i>
+                                        </div>
+                                        <p>Chọn nhiều hình ảnh</p>
+                                        <span>Tối đa 10 hình</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventVideo">Video giới thiệu</label>
+                                <div class="input-wrapper">
+                                    <input type="url" id="eventVideo" name="eventVideo"
+                                           placeholder="https://youtube.com/watch?v=...">
+                                    <div class="input-border"></div>
+                                </div>
+                                <small class="form-help">Link YouTube hoặc video khác</small>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Form Actions -->
+                    <div class="form-actions glass">
+                        <button type="button" class="btn-secondary glass" onclick="resetForm()">
+                            <i class="fas fa-undo"></i>
+                            <span>Làm mới</span>
+                        </button>
+                        <button type="button" class="btn-secondary glass" onclick="saveDraft()">
+                            <i class="fas fa-save"></i>
+                            <span>Lưu nháp</span>
+                        </button>
+                        <button type="submit" class="btn-primary glass">
+                            <i class="fas fa-check"></i>
+                            <span>Tạo sự kiện</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast glass">
+        <div class="toast-icon"></div>
+        <span class="toast-message"></span>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content large glass">
+            <div class="modal-header">
+                <h3>Xem trước sự kiện</h3>
+                <button class="close-btn glass" onclick="closePreviewModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="event-preview">
+                    <!-- Preview content will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary glass" onclick="closePreviewModal()">Đóng</button>
+                <button class="btn-primary glass" onclick="submitForm()">Tạo sự kiện</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin-create-event.js}"></script>
+</body>
+</html>

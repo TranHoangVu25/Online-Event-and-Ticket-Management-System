@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo - Admin</title>
+    <link rel="stylesheet" href="../css/admin-reports-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <!-- Background Particles -->
+    <div class="background-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="admin-header glass">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h1>EventHub Admin</h1>
+            </div>
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <span class="admin-name" th:text="${adminName}">Admin</span>
+                <button class="logout-btn glass"
+                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar glass">
+            <div class="sidebar-header">
+                <div class="admin-avatar-large">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <span>Quản trị viên</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a th:href="@{/admin-home}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-events}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <span>Quản lý sự kiện</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-orders}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <span>Xử lý đơn hàng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-users}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Quản lý người dùng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-create-event}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <span>Tạo sự kiện mới</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-reports}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <span>Báo cáo</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-header glass">
+                <div class="header-left">
+                    <h2>Báo cáo & Thống kê</h2>
+                    <p>Phân tích dữ liệu và báo cáo chi tiết về hệ thống EventHub</p>
+                </div>
+                <div class="header-actions">
+                    <button class="filter-btn glass" onclick="toggleFilters()">
+                        <i class="fas fa-filter"></i>
+                        <span>Bộ lọc</span>
+                    </button>
+                    <button class="export-btn glass" onclick="exportReport()">
+                        <i class="fas fa-download"></i>
+                        <span>Xuất báo cáo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="filters-section glass" id="filtersSection">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="dateRangeFilter">Khoảng thời gian</label>
+                        <select id="dateRangeFilter" class="filter-select">
+                            <option value="7days">7 ngày qua</option>
+                            <option value="30days">30 ngày qua</option>
+                            <option value="90days">90 ngày qua</option>
+                            <option value="1year">1 năm qua</option>
+                            <option value="custom">Tùy chỉnh</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="eventTypeFilter">Loại sự kiện</label>
+                        <select id="eventTypeFilter" class="filter-select">
+                            <option value="">Tất cả loại</option>
+                            <option value="concert">Concert</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="conference">Hội nghị</option>
+                            <option value="exhibition">Triển lãm</option>
+                            <option value="sports">Thể thao</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="locationFilter">Địa điểm</label>
+                        <select id="locationFilter" class="filter-select">
+                            <option value="">Tất cả địa điểm</option>
+                            <option value="hcm">TP.HCM</option>
+                            <option value="hanoi">Hà Nội</option>
+                            <option value="danang">Đà Nẵng</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="reportTypeFilter">Loại báo cáo</label>
+                        <select id="reportTypeFilter" class="filter-select">
+                            <option value="sales">Báo cáo doanh thu</option>
+                            <option value="attendance">Báo cáo tham dự</option>
+                            <option value="performance">Báo cáo hiệu suất</option>
+                            <option value="trends">Phân tích xu hướng</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filters-actions">
+                    <button class="btn-secondary glass" onclick="clearFilters()">
+                        <i class="fas fa-undo"></i>
+                        <span>Xóa bộ lọc</span>
+                    </button>
+                    <button class="btn-primary glass" onclick="applyFilters()">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Tạo báo cáo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card glass">
+                    <div class="metric-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>1,247</h3>
+                        <p>Vé đã bán</p>
+                        <div class="metric-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+15.3%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card glass">
+                    <div class="metric-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>₫89.2M</h3>
+                        <p>Doanh thu</p>
+                        <div class="metric-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+22.7%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card glass">
+                    <div class="metric-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>892</h3>
+                        <p>Khách hàng mới</p>
+                        <div class="metric-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+8.9%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card glass">
+                    <div class="metric-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>24</h3>
+                        <p>Sự kiện đã tổ chức</p>
+                        <div class="metric-trend negative">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>-3.2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-row">
+                    <div class="chart-card glass">
+                        <div class="chart-header">
+                            <h3>Doanh thu theo tháng</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" onclick="switchChart('revenue')">Doanh thu</button>
+                                <button class="chart-btn" onclick="switchChart('tickets')">Số vé</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Biểu đồ doanh thu theo tháng</p>
+                                <span>Dữ liệu sẽ được hiển thị ở đây</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card glass">
+                        <div class="chart-header">
+                            <h3>Phân bố loại sự kiện</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" onclick="switchChart('eventTypes')">Loại sự kiện</button>
+                                <button class="chart-btn" onclick="switchChart('locations')">Địa điểm</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-pie"></i>
+                                <p>Biểu đồ phân bố sự kiện</p>
+                                <span>Dữ liệu sẽ được hiển thị ở đây</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-row">
+                    <div class="chart-card glass">
+                        <div class="chart-header">
+                            <h3>Xu hướng tham dự</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" onclick="switchChart('attendance')">Tham dự</button>
+                                <button class="chart-btn" onclick="switchChart('engagement')">Tương tác</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-area"></i>
+                                <p>Biểu đồ xu hướng tham dự</p>
+                                <span>Dữ liệu sẽ được hiển thị ở đây</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card glass">
+                        <div class="chart-header">
+                            <h3>Hiệu suất marketing</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" onclick="switchChart('marketing')">Marketing</button>
+                                <button class="chart-btn" onclick="switchChart('conversion')">Chuyển đổi</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>Biểu đồ hiệu suất marketing</p>
+                                <span>Dữ liệu sẽ được hiển thị ở đây</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Reports -->
+            <div class="reports-section">
+                <div class="reports-header glass">
+                    <h3>Báo cáo chi tiết</h3>
+                    <div class="reports-actions">
+                        <button class="btn-secondary glass" onclick="generateReport('summary')">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Báo cáo tóm tắt</span>
+                        </button>
+                        <button class="btn-secondary glass" onclick="generateReport('detailed')">
+                            <i class="fas fa-file-text"></i>
+                            <span>Báo cáo chi tiết</span>
+                        </button>
+                        <button class="btn-primary glass" onclick="generateReport('custom')">
+                            <i class="fas fa-cogs"></i>
+                            <span>Báo cáo tùy chỉnh</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-card glass">
+                        <div class="report-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="report-content">
+                            <h4>Báo cáo doanh thu</h4>
+                            <p>Phân tích chi tiết về doanh thu và hiệu suất bán hàng</p>
+                            <div class="report-meta">
+                                <span class="report-date">Cập nhật: 2 giờ trước</span>
+                                <span class="report-status">Đã hoàn thành</span>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="action-btn view" onclick="viewReport('revenue')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn download" onclick="downloadReport('revenue')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="report-card glass">
+                        <div class="report-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="report-content">
+                            <h4>Báo cáo khách hàng</h4>
+                            <p>Thống kê về khách hàng và hành vi mua hàng</p>
+                            <div class="report-meta">
+                                <span class="report-date">Cập nhật: 1 ngày trước</span>
+                                <span class="report-status">Đã hoàn thành</span>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="action-btn view" onclick="viewReport('customers')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn download" onclick="downloadReport('customers')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="report-card glass">
+                        <div class="report-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="report-content">
+                            <h4>Báo cáo sự kiện</h4>
+                            <p>Đánh giá hiệu suất và kết quả của các sự kiện</p>
+                            <div class="report-meta">
+                                <span class="report-date">Cập nhật: 3 ngày trước</span>
+                                <span class="report-status">Đang xử lý</span>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="action-btn view" onclick="viewReport('events')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn download" onclick="downloadReport('events')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="report-card glass">
+                        <div class="report-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="report-content">
+                            <h4>Báo cáo phân tích</h4>
+                            <p>Phân tích xu hướng và dự báo tương lai</p>
+                            <div class="report-meta">
+                                <span class="report-date">Cập nhật: 1 tuần trước</span>
+                                <span class="report-status">Đã hoàn thành</span>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="action-btn view" onclick="viewReport('analytics')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn download" onclick="downloadReport('analytics')">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast glass">
+        <div class="toast-icon"></div>
+        <span class="toast-message"></span>
+    </div>
+
+    <!-- Custom Report Modal -->
+    <div id="customReportModal" class="modal">
+        <div class="modal-content glass large">
+            <div class="modal-header">
+                <h3>Tạo báo cáo tùy chỉnh</h3>
+                <button class="close-btn glass" onclick="closeCustomReportModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="custom-report-form">
+                    <div class="form-group">
+                        <label for="reportName">Tên báo cáo</label>
+                        <input type="text" id="reportName" class="form-input" placeholder="Nhập tên báo cáo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportDescription">Mô tả</label>
+                        <textarea id="reportDescription" class="form-textarea" placeholder="Mô tả báo cáo"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDate">Ngày bắt đầu</label>
+                            <input type="date" id="startDate" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">Ngày kết thúc</label>
+                            <input type="date" id="endDate" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Loại dữ liệu</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="revenue" checked>
+                                <span>Doanh thu</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="tickets" checked>
+                                <span>Số vé bán</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="customers">
+                                <span>Khách hàng</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="events">
+                                <span>Sự kiện</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportFormat">Định dạng xuất</label>
+                        <select id="reportFormat" class="form-select">
+                            <option value="pdf">PDF</option>
+                            <option value="excel">Excel</option>
+                            <option value="csv">CSV</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary glass" onclick="closeCustomReportModal()">Hủy</button>
+                <button class="btn-primary glass" onclick="createCustomReport()">Tạo báo cáo</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin-reports.js}"></script>
+</body>
+</html>
+

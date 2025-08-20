@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Quản lý sự kiện</title>
+    <link th:href="@{/css/admin-dashboard-styles.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <!-- Background Particles -->
+    <div class="background-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="admin-header glass">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h1>EventHub Admin</h1>
+            </div>
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <span class="admin-name" th:text="${adminName}">Admin</span>
+                <button class="logout-btn glass"
+                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar glass">
+            <div class="sidebar-header">
+                <div class="admin-avatar-large">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <span>Quản trị viên</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a th:href="@{/admin-home}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-events}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <span>Quản lý sự kiện</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-orders}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <span>Xử lý đơn hàng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-users}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Quản lý người dùng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-create-event}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <span>Tạo sự kiện mới</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/admin-reports}" class="nav-link">
+                        <div class="nav-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <span>Báo cáo</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-header glass">
+                <div class="header-left">
+                    <h2>Dashboard Tổng quan</h2>
+                    <p>Chào mừng bạn đến với hệ thống quản lý sự kiện EventHub</p>
+                </div>
+                <div class="header-actions">
+                    <button class="refresh-btn glass" onclick="refreshDashboard()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Làm mới</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${eventCount}">25</h3>
+                        <p>Sự kiện đang diễn ra</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${ticketSold}">1,247</h3>
+                        <p>Vé đã bán</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+8%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${userCount}">892</h3>
+                        <p>Người dùng đăng ký</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+15%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${revenue}">₫45.2M</h3>
+                        <p>Doanh thu tháng</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+23%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities and Charts -->
+            <div class="dashboard-content">
+                <div class="content-row">
+                    <!-- Recent Events -->
+                    <div class="content-card glass">
+                        <div class="card-header">
+                            <h3>Sự kiện gần đây</h3>
+                            <a th:href="@{/admin/admin-events}" class="view-all">Xem tất cả</a>
+                        </div>
+                        <div class="recent-events">
+                            <div class="event-item" th:each="event : ${recentEvents}">
+                                <div class="event-icon">
+                                    <i class="fas" th:classappend="${event.icon}"></i>
+                                </div>
+                                <div class="event-info">
+                                    <h4 th:text="${event.name}">Concert Rock Night</h4>
+                                    <p th:text="${event.date}">15/12/2024 - 20:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="content-card glass">
+                        <div class="card-header">
+                            <h3>Thao tác nhanh</h3>
+                        </div>
+                        <div class="quick-actions">
+                            <a th:href="@{/admin/admin-create-event}" class="action-btn glass">
+                                <div class="action-icon">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <span>Tạo sự kiện mới</span>
+                            </a>
+                            <a th:href="@{/admin/admin-orders}" class="action-btn glass">
+                                <div class="action-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <span>Xử lý đơn hàng</span>
+                            </a>
+                            <a th:href="@{/admin/admin-reports}" class="action-btn glass">
+                                <div class="action-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <span>Xem báo cáo</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-row">
+                    <!-- Revenue Chart -->
+                    <div class="content-card glass large">
+                        <div class="card-header">
+                            <h3>Biểu đồ doanh thu</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-period="week">Tuần</button>
+                                <button class="chart-btn" data-period="month">Tháng</button>
+                                <button class="chart-btn" data-period="year">Năm</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Biểu đồ doanh thu sẽ được hiển thị ở đây</p>
+                                <span>Dữ liệu thống kê theo thời gian thực</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast glass">
+        <div class="toast-icon"></div>
+        <span class="toast-message"></span>
+    </div>
+
+    <script th:src="@{/js/admin-dashboard.js}"></script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sự kiện - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin-events-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <!-- Background Particles -->
+    <div class="background-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="admin-header glass">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h1>EventHub Admin</h1>
+            </div>
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <span class="admin-name" th:text="${adminName}">Admin</span>
+                <button class="logout-btn glass"
+                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Đăng xuất</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-container">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar glass">
+        <div class="sidebar-header">
+            <div class="admin-avatar-large">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <span>Quản trị viên</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item active">
+                <a th:href="@{/adminHome}" class="nav-link">
+                    <div class="nav-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-events}" class="nav-link">
+                    <div class="nav-icon">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <span>Quản lý sự kiện</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-orders}" class="nav-link">
+                    <div class="nav-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <span>Xử lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-users}" class="nav-link">
+                    <div class="nav-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span>Quản lý người dùng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-create-event}" class="nav-link">
+                    <div class="nav-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <span>Tạo sự kiện mới</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-reports}" class="nav-link">
+                    <div class="nav-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <span>Báo cáo</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-header glass">
+            <div class="header-left">
+                <h2>Quản lý sự kiện</h2>
+                <p>Quản lý tất cả sự kiện trong hệ thống EventHub</p>
+            </div>
+            <div class="header-actions">
+                <button class="filter-btn glass" onclick="toggleFilters()">
+                    <i class="fas fa-filter"></i>
+                    <span>Bộ lọc</span>
+                </button>
+                <a th:href="@{/admin/admin-create-event}" class="btn-primary glass">
+                    <i class="fas fa-plus"></i>
+                    <span>Tạo sự kiện mới</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section glass" id="filtersSection">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="categoryFilter">Danh mục</label>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">Tất cả danh mục</option>
+                        <option value="concert">Concert</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="conference">Hội nghị</option>
+                        <option value="exhibition">Triển lãm</option>
+                        <option value="sports">Thể thao</option>
+                        <option value="seminar">Hội thảo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Trạng thái</label>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="published">Đã công khai</option>
+                        <option value="draft">Bản nháp</option>
+                        <option value="private">Riêng tư</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="dateFilter">Ngày diễn ra</label>
+                    <select id="dateFilter" class="filter-select">
+                        <option value="">Tất cả ngày</option>
+                        <option value="today">Hôm nay</option>
+                        <option value="week">Tuần này</option>
+                        <option value="month">Tháng này</option>
+                        <option value="upcoming">Sắp diễn ra</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="searchFilter">Tìm kiếm</label>
+                    <input type="text" id="searchFilter" class="filter-input" placeholder="Tên sự kiện...">
+                </div>
+            </div>
+            <div class="filters-actions">
+                <button class="btn-secondary glass" onclick="clearFilters()">
+                    <i class="fas fa-undo"></i>
+                    <span>Xóa bộ lọc</span>
+                </button>
+                <button class="btn-primary glass" onclick="applyFilters()">
+                    <i class="fas fa-search"></i>
+                    <span>Áp dụng</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Events Grid -->
+        <div class="events-grid">
+            <!-- Event Card 1 -->
+            <div class="event-card glass">
+                <div class="event-image">
+                    <img src="https://via.placeholder.com/300x200/6366f1/ffffff?text=Concert" alt="Concert">
+                    <div class="event-actions">
+                        <button class="action-btn edit" onclick="editEvent(1)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteEvent(1)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="event-content">
+                    <h3>Concert Rock Night</h3>
+                    <p class="event-description">Đêm nhạc rock sôi động với các ban nhạc nổi tiếng</p>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>15/12/2024 - 20:00</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Nhà hát Hòa Bình, TP.HCM</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>₫200,000</span>
+                        </div>
+                    </div>
+                    <div class="event-stats">
+                        <div class="stat">
+                            <span class="stat-label">Vé đã bán</span>
+                            <span class="stat-value">45/100</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Doanh thu</span>
+                            <span class="stat-value">₫9,000,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 2 -->
+            <div class="event-card glass">
+                <div class="event-image">
+                    <img src="https://via.placeholder.com/300x200/8b5cf6/ffffff?text=Workshop" alt="Workshop">
+                    <div class="event-actions">
+                        <button class="action-btn edit" onclick="editEvent(2)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteEvent(2)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="event-content">
+                    <h3>Workshop Marketing Digital</h3>
+                    <p class="event-description">Học cách xây dựng chiến lược marketing hiệu quả</p>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>18/12/2024 - 14:00</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Trung tâm Hội nghị, Hà Nội</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>₫500,000</span>
+                        </div>
+                    </div>
+                    <div class="event-stats">
+                        <div class="stat">
+                            <span class="stat-label">Vé đã bán</span>
+                            <span class="stat-value">0/50</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Doanh thu</span>
+                            <span class="stat-value">₫0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 3 -->
+            <div class="event-card glass">
+                <div class="event-image">
+                    <img src="https://via.placeholder.com/300x200/06b6d4/ffffff?text=Conference" alt="Conference">
+                    <div class="event-actions">
+                        <button class="action-btn edit" onclick="editEvent(3)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteEvent(3)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="event-content">
+                    <h3>Hội nghị Startup</h3>
+                    <p class="event-description">Kết nối các startup với nhà đầu tư và chuyên gia</p>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>22/12/2024 - 09:00</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Khách sạn 5 sao, Đà Nẵng</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>₫1,200,000</span>
+                        </div>
+                    </div>
+                    <div class="event-stats">
+                        <div class="stat">
+                            <span class="stat-label">Vé đã bán</span>
+                            <span class="stat-value">78/150</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Doanh thu</span>
+                            <span class="stat-value">₫93,600,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 4 -->
+            <div class="event-card glass">
+                <div class="event-image">
+                    <img src="https://via.placeholder.com/300x200/10b981/ffffff?text=Exhibition" alt="Exhibition">
+                    <div class="event-actions">
+                        <button class="action-btn edit" onclick="editEvent(4)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteEvent(4)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="event-content">
+                    <h3>Triển lãm Nghệ thuật Đương đại</h3>
+                    <p class="event-description">Khám phá những tác phẩm nghệ thuật hiện đại độc đáo</p>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>25/12/2024 - 10:00</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Bảo tàng Mỹ thuật, TP.HCM</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>₫150,000</span>
+                        </div>
+                    </div>
+                    <div class="event-stats">
+                        <div class="stat">
+                            <span class="stat-label">Vé đã bán</span>
+                            <span class="stat-value">120/200</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Doanh thu</span>
+                            <span class="stat-value">₫18,000,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination glass">
+            <button class="page-btn" onclick="goToPage(1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn" onclick="goToPage(2)">2</button>
+            <button class="page-btn" onclick="goToPage(3)">3</button>
+            <span class="page-ellipsis">...</span>
+            <button class="page-btn" onclick="goToPage(10)">10</button>
+            <button class="page-btn" onclick="goToPage(2)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </main>
+</div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast glass">
+        <div class="toast-icon"></div>
+        <span class="toast-message"></span>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3>Xác nhận xóa</h3>
+                <button class="close-btn glass" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa sự kiện này? Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary glass" onclick="closeDeleteModal()">Hủy</button>
+                <button class="btn-primary glass" onclick="confirmDelete()">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script th:src="@{/js/admin-events.js}"></script>
+</body>
+</html>

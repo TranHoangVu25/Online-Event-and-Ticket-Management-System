@@ -1,0 +1,131 @@
+.event-card {
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.event-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+}
+
+.event-card .card-text {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    margin-bottom: 0.5rem;
+}
+
+.event-card p {
+    margin-bottom: 0.5rem;
+}
+
+.event-card .btn {
+    margin-top: auto;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+}/* Custom styles for search bar to avoid conflicts */
+.search-form-unique {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-form-unique .input-group-unique {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    height: 48px; /* Fixed height for consistency */
+}
+
+.search-form-unique .form-control-unique {
+    flex: 1;
+    border: none;
+    padding: 0 16px;
+    font-size: 16px;
+    outline: none;
+    background-color: transparent;
+    height: 100%; /* Match input height to container */
+    line-height: normal; /* Prevent line-height conflicts */
+}
+
+.search-form-unique .form-control-unique::placeholder {
+    color: #9ca3af;
+}
+
+.search-form-unique .btn-search-unique {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 100%; /* Match button height to container */
+    border: none;
+    background-color: #2563eb !important; /* Override conflicting btn styles */
+    color: #fff !important; /* Override conflicting btn styles */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-form-unique .btn-search-unique:hover {
+    background-color: #1d4ed8 !important; /* Override hover styles */
+}
+
+.search-form-unique .btn-search-unique .material-symbols-rounded {
+    font-size: 24px;
+}
+.info-box {
+    border: 1px solid #dee2e6; /* viền nhẹ */
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 1.1rem;
+    background-color: #f8f9fa;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.05);
+    transition: background-color 0.3s ease;
+}
+
+.info-box strong {
+    color: #495057;
+}
+
+.info-box:hover {
+    background-color: #e9ecef;
+}
+
+.small-box {
+    min-width: 70px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    box-shadow: none;
+}
+
+/* Box số lượng mua */
+.quantity-box {
+    max-width: 150px;
+}
+
+.quantity-box select.form-select {
+    padding: 6px 8px;
+    font-size: 1rem;
+}
+@media (max-width: 767.98px) {
+    .info-box {
+        font-size: 1rem;
+        padding: 10px 14px;
+    }
+}

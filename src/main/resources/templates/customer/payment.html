@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website with Login & Signup Form | CodingNepal</title>
+
+    <!-- Google Fonts Link For Icons -->
+    <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="layout :: header"></div>
+
+    <main class="container py-5"
+          th:with="
+        totalPrice='85.00',
+        ticketName='Diabetes Pump & Supplies',
+        ticketClass='VIP',
+        ticketCode='ST123',
+        insuranceName='Aetna - Open Access',
+        insuranceCode='OAP',
+        ticketPrice='200.000.000',
+        numberOfTickets='5',
+        coinsurance='0.0',
+        shippingCost='50.000',
+        shippingFee='40.000',
+        totalPrice=' 410.000'
+      ">
+        <div class="container mt-3 mb-3">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-6 p-3" style="background-color: white; border: 1px solid #ddd;">
+                    <h5 class="mb-0 text-success" th:text="${totalPrice}"></h5>
+                    <h5 class="mb-3" th:text="${ticketName}"></h5>
+                    <div class="about">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row mt-1">
+                                <h6>Total Ticket Price </h6>
+                                &nbsp;
+                                <h6 class="text-success font-weight-bold ml-5" th:text="${ticketPrice}"></h6>
+                            </div>
+
+                        </div>
+                        <p>The total ticket price and related fees will be calculated and displayed here.</p>
+                        <div class="p-2 d-flex justify-content-between bg-pay align-items-center">
+                            <span th:text="${ticketClass}"></span>
+                            <span th:text="${ticketCode}"></span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row mt-1">
+                                <h6>Shipping Cost</h6>
+                                &nbsp;
+                                <h6 class="text-success font-weight-bold ml-1" th:text="${shippingCost}"VND></h6>
+                            </div>
+                        </div>
+                        <p>Insurance claim and all necessary dependencies will be submitted to your insurer for the covered portion of this order.</p>
+                        <div class="d-flex flex-column">
+                            <label class="radio">
+                                <input type="radio" name="paymentCard" value="VISA" checked>
+                                <div class="d-flex justify-content-between">
+                                    <span>VISA</span>
+                                    <span>**** 5645</span>
+                                </div>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="paymentCard" value="MASTER">
+                                <div class="d-flex justify-content-between">
+                                    <span>MASTER CARD</span>
+                                    <span>**** 5069</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="d-flex mt-3 gap-2">
+                            <button class="btn btn-success flex-fill" onclick="alert('Thanh toán thành công!'); window.history.back();">Checkout</button>
+                            <button class="btn btn-danger flex-fill" onclick="
+                                if(confirm('Are you sure you want to cancel?')) {
+                                  alert('Saved to cart');
+                                  window.location.href = '/customer/main-event';
+                                }
+                              ">Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1"></div>
+                <div class="col-md-3 p-3" style="background-color: white; border: 1px solid #ddd;">
+                    <div class="bg-pay p-3">
+                        <strong class="font-weight-bold text-center d-block">Order Recap</strong>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="fw-500">Ticket Price</span>
+                            <span th:text="${ticketPrice}"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="fw-500">Number of Tickets</span>
+                            <span th:text="${numberOfTickets}"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="fw-500">Coinsurance(0%)</span>
+                            <span>+ <span th:text="${coinsurance}"></span></span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="lh-16 fw-500">Shipping Cost</span>
+                            <span th:text="${shippingCost}"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="fw-500">Shipping Fee</span>
+                            <span th:text="${shippingFee}"></span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="fw-500">Total</span>
+                            <span class="text-success" th:text="${totalPrice}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <div th:replace="layout :: footer"></div>
+    <!-- JS -->
+    <script th:src="@{/js/script.js}" defer></script>
+    <script th:src="@{/js/event.js}" defer></script>
+    <script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+</body>
+</html>
