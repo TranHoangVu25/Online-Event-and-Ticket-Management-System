@@ -39,7 +39,7 @@
         <!-- Right Panel - Registration Form -->
         <div class="form-container">
             <div class="form-title">Tạo tài khoản mới</div>
-            <form class="register-form auth-form" th:action="@{/register}" method="post">
+            <form class="register-form auth-form" th:action="@{/register}" th:object="${user}" method="post">
                 <div class="form-group">
                     <label for="name">
                         <i class="fas fa-user"></i>
@@ -52,6 +52,7 @@
                             placeholder="Nhập họ và tên của bạn"
                             required
                             minlength="2"
+                            th:field="*{fullName}"
                     />
                 </div>
 
@@ -63,9 +64,9 @@
                     <input
                             type="email"
                             id="email"
-                            name="email"
                             placeholder="Nhập địa chỉ email"
                             required
+                            th:field="*{email}"
                     />
                 </div>
 
@@ -81,6 +82,7 @@
                             placeholder="Nhập username của bạn"
                             required
                             minlength="6"
+                            th:field="*{username}"
                     />
                 </div>
 
@@ -97,6 +99,7 @@
                                 placeholder="Tạo mật khẩu (ít nhất 6 ký tự)"
                                 required
                                 minlength="6"
+                                th:field="*{passwordHash}"
                         />
                         <button type="button" class="toggle-password" onclick="togglePassword('password')">
                             <i class="fas fa-eye"></i>
@@ -161,6 +164,7 @@
     <span class="toast-message"></span>
 </div>
 
-<script th:src="@{/js/register.js}"></script>
+<script th:src="@{/js/register.js(v=${#dates.createNow().time})}"></script>
+
 </body>
 </html>

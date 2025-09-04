@@ -7,16 +7,17 @@ import com.ticketsystem.entity.Event;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EventMapper {
-    @Mapping(target = "location", ignore = true)
-    @Mapping(target = "creator",ignore = true)
+//    @Mapping(target = "location", ignore = true)
+//    @Mapping(target = "creator",ignore = true)
     Event toEvent(EventCreationRequest request);
 
     EventResponse toEventResponse(Event event);
 
-    @Mapping(target = "location", ignore = true)
+//    @Mapping(target = "location", ignore = true)
 //    @Mapping(target = "creator",ignore = true)
     void updateEvent(@MappingTarget Event event, EventUpdateRequest request);
 }

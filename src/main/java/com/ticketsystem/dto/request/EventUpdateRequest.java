@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @EndDateConstraint
 public class EventUpdateRequest {
 
-    Location location;
-    User creator;
+//    Location location;
+//    User creator;
     @Size(min = 3,message = "INVALID_EVENT_NAME")
     String name;
     String thumbnailUrl;
