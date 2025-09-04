@@ -68,6 +68,8 @@
                             required
                             th:field="*{email}"
                     />
+                    <span class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+
                 </div>
 
                 <div class="form-group">
@@ -84,6 +86,8 @@
                             minlength="6"
                             th:field="*{username}"
                     />
+                    <span class="error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+
                 </div>
 
                 <div class="form-group">
@@ -101,7 +105,7 @@
                                 minlength="6"
                                 th:field="*{passwordHash}"
                         />
-                        <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                        <button type="button" class="toggle-password" onclick="togglePassword('password','passwordIcon')">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -117,21 +121,26 @@
                                 type="password"
                                 id="confirmPassword"
                                 name="confirmPassword"
-                                placeholder="Nhập lại mật khẩu"
-                                required
-                        />
-                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                placeholder="Nhập lại mật khẩu" />
+<!--&lt;!&ndash;                                required&ndash;&gt;-->
+<!--                        />-->
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword','confirmPasswordIcon')">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
+                    <span class="error-message" id="confirmPassword-error"></span>
                 </div>
 
                 <div class="form-group checkbox-group">
                     <label class="checkbox-container">
-                        <input type="checkbox" id="agree" name="agree" required />
+<!--                        <input type="checkbox" id="agree" name="agree" required />-->
+                        <input type="checkbox" id="agree" name="agree"  />
+
                         <span class="checkmark"></span>
                         Tôi đồng ý với <a href="#terms">Điều khoản sử dụng</a> và <a href="#privacy">Chính sách bảo mật</a>
                     </label>
+                    <span class="error-message" id="agree-error"></span>
+
                 </div>
 
                 <button type="submit" class="submit-btn">

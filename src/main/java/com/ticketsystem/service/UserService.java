@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class UserService {
     UserMapper userMapper;
     UserRepository userRepository;
     RoleRepository roleRepository;
+    PasswordEncoder passwordEncoder;
 
     public User createUser(UserCreationRequest request) throws Exception {
         if (userRepository.existsByUsername(request.getUsername())){
@@ -31,9 +33,10 @@ public class UserService {
         }
 
         User user;
-        Role role = roleRepository.findByRoleName("USER");
+        Role role = roleRepository.findByRoleName("ADMIN");
         user = userMapper.toUser(request);
         user.setRole(role);
+        user.setPasswordHash(passwordEncoder.encode(request.getPasswordHash()));
         log.info(user.getEmail());
         return userRepository.save(user);
     }

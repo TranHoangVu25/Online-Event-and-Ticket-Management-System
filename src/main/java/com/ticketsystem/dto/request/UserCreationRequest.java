@@ -3,7 +3,6 @@ package com.ticketsystem.dto.request;
 import com.ticketsystem.entity.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,5 +19,4 @@ public class UserCreationRequest {
     String fullName;
     String phoneNumber;
     LocalDateTime lastLogin;
-
 }
