@@ -33,7 +33,7 @@ public class UserService {
         }
 
         User user;
-        Role role = roleRepository.findByRoleName("ADMIN");
+        Role role = roleRepository.findByRoleName("USER");
         user = userMapper.toUser(request);
         user.setRole(role);
         user.setPasswordHash(passwordEncoder.encode(request.getPasswordHash()));

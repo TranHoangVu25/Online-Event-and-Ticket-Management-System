@@ -30,7 +30,7 @@ function showToast(message, type = 'success') {
 
 // Form validation
 document.querySelector('.login-form').addEventListener('submit', function(e) {
-    e.preventDefault();
+//    e.preventDefault();
     
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
@@ -55,13 +55,15 @@ document.querySelector('.login-form').addEventListener('submit', function(e) {
         isValid = false;
     }
     
-    if (isValid) {
-        showToast('Đăng nhập thành công!', 'success');
-        // Here you would typically send the data to your backend
-        setTimeout(() => {
-            window.location.href = '/admin-home';
-        }, 2000);
-    } else {
-        showToast('Vui lòng kiểm tra lại thông tin', 'error');
+//    if (isValid) {
+//        showToast('Đăng nhập thành công!', 'success');
+//        // Here you would typically send the data to your backend
+//        setTimeout(() => {
+////            window.location.href = '/admin-home';
+//            window.location.href = '/test';
+//
+//        }, 2000);
+//    } else {
+//        showToast('Vui lòng kiểm tra lại thông tin', 'error');
     }
 });

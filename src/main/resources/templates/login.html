@@ -30,7 +30,7 @@
         <!-- Right Panel - Login Form -->
         <div class="form-container">
             <div class="form-title">Đăng nhập</div>
-            <form class="login-form auth-form" th:action="@{/login}" method="post">
+            <form class="login-form auth-form" th:action="@{/login}" th:object="${request}" method="post">
                 <div class="form-group">
                     <label for="username">
                         <i class="fas fa-user"></i>
@@ -39,11 +39,9 @@
                     <input
                             type="text"
                             id="username"
-                            name="username"
                             placeholder="Nhập tên"
                             required
-                            th:value="${username != null} ? ${username} : ''"
-                    />
+                            th:field="*{username}"                    />
                     <div class="error-message" th:id="'username-error'" th:text="${usernameError}"></div>
                 </div>
 
@@ -56,8 +54,8 @@
                         <input
                                 type="password"
                                 id="password"
-                                name="password"
                                 placeholder="Nhập mật khẩu"
+                                th:field="*{password}"
                                 required
                         />
                         <button type="button" class="toggle-password" onclick="togglePassword()">
@@ -148,6 +146,8 @@
     <span class="toast-message"></span>
 </div>
 
-<script th:src="@{/js/login.js}"></script>
+<!--<script th:src="@{/js/login.js}"></script>-->
+<script th:src="@{/js/login.js(v=${#dates.createNow().time})}"></script>
+
 </body>
 </html>
