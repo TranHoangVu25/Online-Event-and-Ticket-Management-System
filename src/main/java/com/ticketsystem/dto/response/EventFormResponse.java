@@ -1,0 +1,16 @@
+package com.ticketsystem.dto.response;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class EventFormResponse {
+    EventResponse event;
+    List<TicketClassResponse> ticketClass;
+}

@@ -1,19 +1,26 @@
 package com.ticketsystem.controller.admin;
 
-import com.ticketsystem.dto.request.EventCreationRequest;
-import com.ticketsystem.dto.request.EventUpdateRequest;
+import com.ticketsystem.dto.request.*;
+import com.ticketsystem.dto.response.EventFormResponse;
 import com.ticketsystem.dto.response.EventResponse;
+import com.ticketsystem.dto.response.TicketClassResponse;
+import com.ticketsystem.entity.Event;
+import com.ticketsystem.repository.EventRepository;
 import com.ticketsystem.service.EventService;
+import com.ticketsystem.service.TicketClassService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -24,6 +31,8 @@ import java.util.List;
 public class AdminEventController {
 
     EventService eventService;
+    TicketClassService ticketClassService;
+    EventRepository eventRepository;
 
     //hiển thị danh sách events
     @GetMapping("/admin-events")
@@ -43,28 +52,52 @@ public class AdminEventController {
     //chuyển qua trang create event
     @GetMapping("/admin-create-event")
     public String showCreateForm(Model model){
-        model.addAttribute("event",new EventCreationRequest());
+        model.addAttribute("eventForm",new EventFormCreationRequest());
         return "admin/admin-create-event";
     }
+
     @PostMapping("/admin-create-event")
-    public String createEvent(@ModelAttribute("event")@Valid EventCreationRequest request) throws Exception {
-        eventService.createEvent(request);
+    public String createEvent(
+                @ModelAttribute("eventForm")@Valid EventFormCreationRequest request
+    )
+            throws Exception {
+        EventCreationRequest eventCreationRequest = request.getEvent();
+        TicketClassCreationRequest ticketClassCreationRequest = request.getTicketClass();
+
+        eventService.createEvent(eventCreationRequest);
+        ticketClassService.createTicketClass(ticketClassCreationRequest,eventCreationRequest);
         return "redirect:/admin/admin-events";
     }
 
     @GetMapping("/admin-update-event/{id}")
     public String showUpdateForm(@PathVariable int id,Model model){
-        EventResponse event = eventService.getEvent(id);
-        model.addAttribute("event",event);
+        EventResponse eventResponse = eventService.getEvent(id);
+        List<TicketClassResponse> ticketClass = ticketClassService.getTicketClasses(id);
+
+        EventFormResponse eventForm = new EventFormResponse();
+        eventForm.setEvent(eventResponse);
+        eventForm.setTicketClass(ticketClass);
+
+        model.addAttribute("eventForm",eventForm);
+
         return "admin/admin-update-event";
     }
 
     @PostMapping("/admin-update-event/{id}")
-    String updateEvent(@PathVariable int id, @ModelAttribute("event")
-    @Valid EventUpdateRequest request){
-        eventService.updateEvent(request,id);
+    String updateEvent(@PathVariable int id, @ModelAttribute("eventForm")
+    @Valid EventFormUpdateRequest request){
+
+        EventUpdateRequest eventUpdateRequest;
+        List<TicketClassUpdateRequest> ticketClassUpdateRequest;
+
+        eventUpdateRequest = request.getEvent();
+        ticketClassUpdateRequest = request.getTicketClass();
+
+        eventService.updateEvent(eventUpdateRequest,id);
+        ticketClassService.updateTicketClass(ticketClassUpdateRequest);
         return "redirect:/admin/admin-events";
     }
+
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public String deleteEvent(@PathVariable int id) {

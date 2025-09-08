@@ -12,11 +12,11 @@ function logout() {
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     const messageEl = toast.querySelector('.toast-message');
-    
+
     messageEl.textContent = message;
     toast.className = `toast ${type}`;
     toast.classList.add('show');
-    
+
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
@@ -26,19 +26,19 @@ function showToast(message, type = 'success') {
 function previewEvent() {
     const formData = new FormData(document.getElementById('eventForm'));
     const eventData = Object.fromEntries(formData.entries());
-    
+
     if (!eventData.eventName || !eventData.eventCategory || !eventData.eventDate || !eventData.ticketClass) {
         showToast('Vui lòng điền đầy đủ thông tin bắt buộc trước khi xem trước', 'error');
         return;
     }
-    
+
     const previewContent = `
         <div class="preview-event">
             <div class="preview-header">
                 <h2>${eventData.eventName}</h2>
                 <span class="preview-category">${getCategoryName(eventData.eventCategory)}</span>
             </div>
-            
+
             <div class="preview-info">
                 <div class="preview-item">
                     <i class="fas fa-calendar"></i>
@@ -53,14 +53,14 @@ function previewEvent() {
                     <span>${eventData.ticketClass ? getTicketClassName(eventData.ticketClass) : 'Chưa chọn'} - ${eventData.ticketPrice ? formatPrice(eventData.ticketPrice) : 'Chưa cập nhật'}</span>
                 </div>
             </div>
-            
+
             <div class="preview-description">
                 <h4>Mô tả:</h4>
                 <p>${eventData.eventDescription || 'Chưa có mô tả'}</p>
             </div>
         </div>
     `;
-    
+
     document.querySelector('.event-preview').innerHTML = previewContent;
     document.getElementById('previewModal').style.display = 'flex';
 }
@@ -72,7 +72,7 @@ function closePreviewModal() {
 function saveDraft() {
     const formData = new FormData(document.getElementById('eventForm'));
     const eventData = Object.fromEntries(formData.entries());
-    
+
     // Save to localStorage as draft
     localStorage.setItem('eventDraft', JSON.stringify(eventData));
     showToast('Đã lưu nháp thành công!', 'success');
@@ -136,7 +136,7 @@ function formatPrice(price) {
 function autoFillTicketPrice() {
     const ticketClass = document.getElementById('ticketClass').value;
     const ticketPrice = document.getElementById('ticketPrice');
-    
+
     const defaultPrices = {
         'vip': 500000,
         'premium': 300000,
@@ -146,7 +146,7 @@ function autoFillTicketPrice() {
         'senior': 60000,
         'children': 50000
     };
-    
+
     if (ticketClass && !ticketPrice.value) {
         ticketPrice.value = defaultPrices[ticketClass] || '';
         showToast(`Đã tự động điền giá vé cho hạng ${getTicketClassName(ticketClass)}`, 'info');
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const startTime = document.getElementById('eventTime');
     const duration = document.getElementById('eventDuration');
     const endTime = document.getElementById('eventEndTime');
-    
+
     function calculateEndTime() {
         if (startTime.value && duration.value) {
             const start = new Date(`2000-01-01T${startTime.value}`);
@@ -166,16 +166,16 @@ document.addEventListener('DOMContentLoaded', function() {
             endTime.value = end.toTimeString().slice(0, 5);
         }
     }
-    
+
     startTime.addEventListener('change', calculateEndTime);
     duration.addEventListener('input', calculateEndTime);
-    
+
     // Auto-fill ticket price when ticket class changes
     const ticketClass = document.getElementById('ticketClass');
     if (ticketClass) {
         ticketClass.addEventListener('change', autoFillTicketPrice);
     }
-    
+
     // Load draft if exists
 //    const draft = localStorage.getItem('eventDraft');
 //    if (draft) {
@@ -204,7 +204,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 document.addEventListener('DOMContentLoaded', function() {
     const currentPage = window.location.pathname.split('/').pop();
     const navItems = document.querySelectorAll('.nav-item');
-    
+
     navItems.forEach(item => {
         const link = item.querySelector('.nav-link');
         if (link.getAttribute('href') === currentPage) {
@@ -214,3 +214,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+

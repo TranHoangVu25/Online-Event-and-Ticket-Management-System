@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo sự kiện mới - Admin</title>
-    <link rel="stylesheet" th:href="@{/css/admin-create-event-styles.css}">
+    <title>Cập nhật sự kiện - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin-update-event-styles.css(v=${#dates.createNow().time})}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -123,7 +123,7 @@
 
             <!-- Event Creation Form -->
             <div class="event-form-container glass">
-                <form action="#" th:action="@{/admin/admin-update-event/{id}(id=${event.id})}" th:object="${event}" method="post" id="eventForm" class="event-form">
+                <form action="#" th:action="@{/admin/admin-update-event/{id}(id=${eventForm.event.id})}" th:object="${eventForm}" method="post" id="eventForm" class="event-form">
                     <!-- Basic Information Section -->
                     <div class="form-section">
                         <div class="section-header">
@@ -138,7 +138,7 @@
                                 <label for="eventName">Tên sự kiện *</label>
                                 <div class="input-wrapper">
                                     <input type="text" id="eventName" required
-                                           placeholder="Nhập tên sự kiện" th:field="*{name}">
+                                           placeholder="Nhập tên sự kiện" th:field="*{event.name}">
                                     <div class="input-border"></div>
                                 </div>
                             </div>
@@ -149,7 +149,7 @@
                                 <label for="eventDescription">Creator ID</label>
                                 <div class="input-wrapper">
                                             <input id="eventDescription" required
-                                                      placeholder="Creator Id" th:field="*{creator.id}"/>
+                                                      placeholder="Creator Id" th:field="*{event.creator.id}"/>
                                     <div class="input-border"></div>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@
                                 <label for="eventContent">Nội dung chi tiết</label>
                                 <div class="input-wrapper">
                                             <textarea id="eventContent" rows="6"
-                                                      placeholder="Nội dung chi tiết về sự kiện" th:field="*{description}"></textarea>
+                                                      placeholder="Nội dung chi tiết về sự kiện" th:field="*{event.description}"></textarea>
                                     <div class="input-border"></div>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@
                                 <label for="eventDate">Ngày giờ diễn ra *</label>
                                 <div class="input-wrapper">
                                     <input type="datetime-local" id="eventDate" required
-                                           th:field="*{startTime}">
+                                           th:field="*{event.startTime}">
                                     <div class="input-border"></div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                                 <label for="eventTime">Ngày giờ kết thúc *</label>
                                 <div class="input-wrapper">
                                     <input type="datetime-local" id="eventTime"
-                                            required th:field="*{endTime}">
+                                            required th:field="*{event.endTime}">
                                     <div class="input-border"></div>
                                 </div>
                             </div>
@@ -200,7 +200,7 @@
                                 <label for="eventLocation">Địa điểm</label>
                                 <div class="input-wrapper">
                                     <input type="text" id="eventLocation" required
-                                           placeholder="Nhập địa điểm diễn ra sự kiện" th:field="*{location.city}">
+                                           placeholder="Nhập địa điểm diễn ra sự kiện" th:field="*{event.location.city}">
                                     <div class="input-border"></div>
                                 </div>
                             </div>
@@ -209,7 +209,7 @@
                                 <div class="input-wrapper">
                                     <input type="text" id="eventAddress" name="eventAddress"
                                            placeholder="Số nhà, đường, quận/huyện, tỉnh/thành phố"
-                                           th:field="*{location.addressDetail}"
+                                           th:field="*{event.location.addressDetail}"
                                     >
                                     <div class="input-border"></div>
                                 </div>
@@ -225,87 +225,46 @@
                             </div>
                             <h3 class="section-title">Thông tin vé</h3>
                         </div>
-
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="ticketClass">Hạng vé *</label>
+                                <input type="hidden" th:field="*{ticketClass[0].id}" />
+
+                                <label for="ticketPrice">Tên Vé</label>
                                 <div class="input-wrapper">
-                                    <select id="ticketClass" name="ticketClass" required>
-                                        <option value="">Chọn hạng vé</option>
-                                        <option value="vip">VIP</option>
-                                        <option value="premium">Premium</option>
-                                        <option value="standard">Standard</option>
-                                        <option value="economy">Economy</option>
-                                        <option value="student">Student</option>
-                                        <option value="senior">Senior</option>
-                                        <option value="children">Children</option>
-                                    </select>
+                                    <input type="text" id="ticketName"
+                                           required placeholder="Tên vé"
+                                           th:field="*{ticketClass[0].name}"
+                                    >
                                     <div class="input-border"></div>
                                 </div>
                             </div>
+                            <button type="button" class="remove-ticket" title="Xóa loại vé">✕</button>
+                        </div>
+                        <div class="form-row">
+
                             <div class="form-group">
                                 <label for="ticketPrice">Giá vé (VNĐ) *</label>
                                 <div class="input-wrapper">
                                     <input type="number" id="ticketPrice" name="ticketPrice"
-                                           min="0" required placeholder="100000">
+                                           min="0" required placeholder="100000"
+                                           th:field="*{ticketClass[0].price}"
+                                    >
                                     <div class="input-border"></div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-row">
                             <div class="form-group">
                                 <label for="totalTickets">Tổng số vé *</label>
                                 <div class="input-wrapper">
                                     <input type="number" id="totalTickets" name="totalTickets"
-                                           min="1" required placeholder="100">
-                                    <div class="input-border"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="maxTicketsPerPerson">Số vé tối đa/người</label>
-                                <div class="input-wrapper">
-                                    <input type="number" id="maxTicketsPerPerson" name="maxTicketsPerPerson"
-                                           min="1" value="5" placeholder="5">
+                                           min="1" required placeholder="100"
+                                           th:field="*{ticketClass[0].totalQuantity}"
+                                    >
                                     <div class="input-border"></div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="earlyBirdPrice">Giá vé sớm (VNĐ)</label>
-                                <div class="input-wrapper">
-                                    <input type="number" id="earlyBirdPrice" name="earlyBirdPrice"
-                                           min="0" placeholder="80000">
-                                    <div class="input-border"></div>
-                                </div>
-                                <small class="form-help">Giá vé ưu đãi cho người đăng ký sớm</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="earlyBirdEndDate">Hạn chót giá vé sớm</label>
-                                <div class="input-wrapper">
-                                    <input type="date" id="earlyBirdEndDate" name="earlyBirdEndDate">
-                                    <div class="input-border"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="ticketSaleStartDate">Ngày bắt đầu bán vé</label>
-                                <div class="input-wrapper">
-                                    <input type="date" id="ticketSaleStartDate" name="ticketSaleStartDate">
-                                    <div class="input-border"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="ticketSaleEndDate">Ngày kết thúc bán vé</label>
-                                <div class="input-wrapper">
-                                    <input type="date" id="ticketSaleEndDate" name="ticketSaleEndDate">
-                                    <div class="input-border"></div>
-                                </div>
-                            </div>
+                        <div class="actions">
+                            <button id="add-ticket" type="button">Thêm loại vé</button>
                         </div>
                     </div>
 
@@ -358,7 +317,7 @@
                                 <div class="input-wrapper">
                                     <input type="url" id="eventVideo" name="eventVideo"
                                            placeholder="https://youtube.com/watch?v=..."
-                                           th:field="*{thumbnailUrl}"
+                                           th:field="*{event.thumbnailUrl}"
                                     >
                                     <div class="input-border"></div>
                                 </div>

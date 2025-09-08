@@ -5,7 +5,6 @@ import com.ticketsystem.dto.request.EventUpdateRequest;
 import com.ticketsystem.dto.response.EventResponse;
 import com.ticketsystem.entity.Event;
 import com.ticketsystem.entity.Location;
-import com.ticketsystem.entity.TicketClass;
 import com.ticketsystem.mapper.EventMapper;
 import com.ticketsystem.repository.EventRepository;
 import com.ticketsystem.repository.LocationRepository;
@@ -15,7 +14,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -32,15 +30,18 @@ public class EventService {
             throw new Exception("Event name is existed");
         }
         Location location = locationRepository.save(request.getLocation());
-        Event event;
-        event = eventMapper.toEvent(request);
+        Event event = eventMapper.toEvent(request);
         event.setLocation(location);
 
         return eventRepository.save(event);
     }
 
     public List<EventResponse> getEvents(){
-        return eventRepository.findAll().stream().map(eventMapper::toEventResponse).toList();
+        return eventRepository
+                .findAll()
+                .stream()
+                .map(eventMapper::toEventResponse)
+                .toList();
     }
 
     public EventResponse getEvent(int id){
@@ -63,11 +64,17 @@ public class EventService {
     }
 
     public List<EventResponse> findEventByName(String name){
-        return eventRepository.findByName(name).stream().map(eventMapper::toEventResponse).toList();
+        return eventRepository
+                .findByName(name)
+                .stream()
+                .map(eventMapper::toEventResponse)
+                .toList();
     }
 
     public Event getEventEntityById(Integer id) {
-        return eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found!"));
+        return eventRepository
+                .findById(id).
+                orElseThrow(() -> new RuntimeException("Not found!"));
     }
 
 }
