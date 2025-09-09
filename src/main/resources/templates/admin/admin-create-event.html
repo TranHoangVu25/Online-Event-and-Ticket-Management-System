@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tạo sự kiện mới - Admin</title>
-    <link rel="stylesheet" th:href="@{/css/admin-create-event-styles.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-create-event-styles.css(v=${#dates.createNow().time})}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -252,6 +252,8 @@
                     </div>
 
                     <!-- Ticket Information Section -->
+                    <div id="ticket-container">
+
                     <div class="form-section">
                         <div class="section-header">
                             <div class="section-icon">
@@ -288,17 +290,16 @@
                                 <div class="input-wrapper">
                                     <input type="text" id="TicketName"
                                            min="1" required placeholder="Nhập tên vé"
-                                           th:field="*{ticketClass.name}"
-                                    >
+                                           th:field="*{ticketClass.name}">
                                     <div class="input-border"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-row">
-
+<!--                        <button class="btn-delete" style="display: none;">Xóa</button>-->
                         </div>
                     </div>
+<!--                    <button id="btn-add" class="btn-add">+ Thêm vé</button>-->
 
                     <!-- Media and Images Section -->
                     <div class="form-section">

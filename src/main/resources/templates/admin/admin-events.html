@@ -174,37 +174,39 @@
         <!-- Events Grid -->
         <div class="events-grid">
                 <!-- Lặp qua danh sách events -->
-                <div class="event-card glass" th:each="event : ${events}">
-                    <div class="event-image">
-                        <img th:src="@{${event.thumbnailUrl}}" alt="Event Image" src="">
+<!--                <div class="event-card glass" th:each="event : ${events}">-->
+            <div class="event-card glass" th:each="ev : ${eventViews}">
+
+            <div class="event-image">
+                        <img th:src="@{${ev.event.thumbnailUrl}}" alt="Event Image" src="">
 
                         <div class="event-actions">
 <!--                            <button class="action-btn edit" th:onclick="'editEvent(' + ${event.id} + ')'">-->
 
 <!--                            <i class="fas fa-edit"></i>-->
 <!--                            </button>-->
-                            <form th:action="@{'/admin/admin-update-event/' + ${event.id}}" method="get" style="display:inline">
+                            <form th:action="@{'/admin/admin-update-event/' + ${ev.event.id}}" method="get" style="display:inline">
                                 <button type="submit" class="action-btn edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </form>
                             <button type="button" class="action-btn delete"
-                                    th:onclick="'deleteEvent(' + ${event.id} + ')'">
+                                    th:onclick="'deleteEvent(' + ${ev.event.id} + ')'">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
                     <div class="event-content">
-                        <h3 th:text="${event.name}">Event Name</h3>
-                        <p class="event-description" th:text="${event.description}">Description</p>
+                        <h3 th:text="${ev.event.name}">Event Name</h3>
+                        <p class="event-description" th:text="${ev.event.description}">Description</p>
                         <div class="event-meta">
                             <div class="meta-item">
                                 <i class="fas fa-calendar"></i>
-                                <span th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy hh:mm a')}">startTime</span>
+                                <span th:text="${#temporals.format(ev.event.startTime, 'dd/MM/yyyy hh:mm a')}">startTime</span>
                             </div>
                             <div class="meta-item">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span th:text="${event.location.addressDetail}">Event Location</span>
+                                <span th:text="${ev.event.location.addressDetail}">Event Location</span>
                             </div>
 <!--                            <div class="meta-item">-->
 <!--                                <i class="fas fa-ticket-alt"></i>-->
@@ -214,11 +216,13 @@
                         <div class="event-stats">
                             <div class="stat">
                                 <span class="stat-label">Vé đã bán</span>
-<!--                                <span class="stat-value" th:text="${event.soldTickets} + '/' + ${event.totalTickets}">0/0</span>-->
+                                <span class="stat-value" th:text="${ev.ticketClass.soldQuantity} + '/'
+                                + ${ev.ticketClass.totalQuantity}"
+                                >0/0</span>
                             </div>
                             <div class="stat">
                                 <span class="stat-label">Doanh thu</span>
-<!--                                <span class="stat-value" th:text="${#numbers.formatDecimal(event.totalRevenue ?: 0, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>-->
+                                <span class="stat-value" th:text="${#numbers.formatDecimal(ev.revenue ?: 0, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
                             </div>
                         </div>
                     </div>

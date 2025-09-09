@@ -4,7 +4,7 @@ import com.ticketsystem.dto.request.*;
 import com.ticketsystem.dto.response.EventFormResponse;
 import com.ticketsystem.dto.response.EventResponse;
 import com.ticketsystem.dto.response.TicketClassResponse;
-import com.ticketsystem.entity.Event;
+import com.ticketsystem.entity.TicketClass;
 import com.ticketsystem.repository.EventRepository;
 import com.ticketsystem.service.EventService;
 import com.ticketsystem.service.TicketClassService;
@@ -13,14 +13,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -38,14 +37,23 @@ public class AdminEventController {
     @GetMapping("/admin-events")
     public String getEvents(@RequestParam(value = "keyword",required = false) String keyword ,Model model) {
         List<EventResponse> events;
+        List<EventViewRequest> eventViews = new ArrayList<>();
         if(keyword!=null && !keyword.trim().isEmpty()){
             events = eventService.findEventByName(keyword);
         }
         else {
             events = eventService.getEvents();
+
+        }
+        for (EventResponse eventResponse:events){
+            TicketClass ticketClass = ticketClassService.getTicketClass(eventResponse.getId());
+            BigDecimal revenue = ticketClassService.calculateRevenue(ticketClass);
+            eventViews.add(new EventViewRequest(eventResponse,ticketClass,revenue));
         }
         model.addAttribute("events", events);
         model.addAttribute("keyword",keyword);
+        model.addAttribute("eventViews", eventViews);
+
         return "admin/admin-events";
     }
 

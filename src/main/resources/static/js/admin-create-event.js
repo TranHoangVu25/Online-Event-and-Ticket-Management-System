@@ -214,3 +214,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+//
+//document.addEventListener("DOMContentLoaded", () => {
+//    const container = document.getElementById("ticket-container");
+//    const addBtn = document.getElementById("btn-add");
+//
+//    addBtn.addEventListener("click", (e) => {
+//        e.preventDefault(); // Ngăn submit form khi ấn nút thêm
+//
+//        // Lấy form đầu tiên làm mẫu
+//        const firstForm = document.querySelector(".form-section");
+//        const newForm = firstForm.cloneNode(true);
+//
+//        // Reset input values và bỏ th:field
+//        newForm.querySelectorAll("input").forEach((input, index) => {
+//            input.value = "";
+//            input.removeAttribute("th:field"); // bỏ binding Thymeleaf
+//            input.removeAttribute("id"); // tránh trùng id
+//            input.name = `ticketClass[${Date.now()}]_${index}`; // đặt name tạm
+//        });
+//
+//        // Hiện nút xóa
+//        const deleteBtn = newForm.querySelector(".btn-delete");
+//        deleteBtn.style.display = "block";
+//        deleteBtn.onclick = () => newForm.remove();
+//
+//        container.appendChild(newForm);
+//    });
+//});
+
