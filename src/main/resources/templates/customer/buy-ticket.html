@@ -20,22 +20,22 @@
     <div th:replace="layout :: header"></div>
 
     <!-- fake data (24-35) -->
-    <main class="container py-5"
-          th:with="
-        eventTitle='Tech Expo 2025',
-        eventDescription='Triển lãm công nghệ lớn nhất trong năm.',
-        eventDate='20/10/2025',
-        eventTime='12:00 - 14:00',
-        eventLocation='Hội trường A',
-        ticketQuantity=1,
-        ticketsLeft=50,
-        ticketsSold=150,
-        totalPrice='1,000,000 VND',
-        ticketClass='vip'
-    ">
-        <div class="row g-4">
+<!--    <main class="container py-5"-->
+<!--          th:with="-->
+<!--        eventTitle='Tech Expo 2025',-->
+<!--        eventDescription='Triển lãm công nghệ lớn nhất trong năm.',-->
+<!--        eventDate='20/10/2025',-->
+<!--        eventTime='12:00 - 14:00',-->
+<!--        eventLocation='Hội trường A',-->
+<!--        ticketQuantity=1,-->
+<!--        ticketsLeft=50,-->
+<!--        ticketsSold=150,-->
+<!--        totalPrice='1,000,000 VND',-->
+<!--        ticketClass='vip'-->
+<!--    ">-->
+        <div class="row g-4" >
             <div class="col-lg-7">
-                <img th:src="@{'https://picsum.photos/id/1011/800/400'}" th:alt="${eventTitle}" class="img-fluid rounded shadow-sm mb-3" />
+                <img th:src="@{'https://picsum.photos/id/1011/800/400'}" th:alt="${eventForm.event.name}" class="img-fluid rounded shadow-sm mb-3" />
                 <div class="d-flex gap-3">
                     <img th:src="@{'https://picsum.photos/id/1012/200/120'}" alt="Supplementary 1" class="img-thumbnail flex-fill" />
                     <img th:src="@{'https://picsum.photos/id/1013/200/120'}" alt="Supplementary 2" class="img-thumbnail flex-fill" />
@@ -43,60 +43,81 @@
             </div>
 
             <div class="col-lg-5 d-flex flex-column">
-                <h1 class="mb-4" th:text="${eventTitle}">eventTitle</h1>
-                <div class="info-box mb-3"><strong>Description:</strong> <span th:text="${eventDescription}">eventDescription</span></div>
+                <h1 class="mb-4" th:text="${eventForm.event.name}">eventTitle</h1>
+                <div class="info-box mb-3"><strong>Description:</strong> <span th:text="${eventForm.event.description}">eventDescription</span></div>
 
-                <div class="info-box mb-3"><strong>Date:</strong> <span th:text="${eventDate}">eventDate</span></div>
-                <div class="info-box mb-3"><strong>Duration:</strong> <span th:text="${eventTime}">eventTime</span></div>
-                <div class="info-box mb-3"><strong>Location:</strong> <span th:text="${eventLocation}">eventLocation</span></div>
+                <div class="info-box mb-3"><strong>Start Date:</strong>
+                    <span th:text="${#temporals.format(eventForm.event.startTime, 'dd/MM/yyyy hh:mm a')}">eventDate</span></div>
+                <div class="info-box mb-3"><strong>End Date::</strong>
+                    <span th:text="${#temporals.format(eventForm.event.startTime, 'dd/MM/yyyy hh:mm a')}"
+                    >eventTime</span></div>
+                <div class="info-box mb-3"><strong>Location:</strong> <span th:text="${eventForm.event.location.addressDetail}">eventLocation</span></div>
 
                 <form th:action="@{/buyTicket}" method="post">
-                    <h5>Select ticket class</h5>
+                    <h5>Select ticket quantity</h5>
 
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="ticketClass" id="vip" value="vip"
-                               th:checked="${ticketClass == 'vip'}" />
-                        <label class="form-check-label" for="vip">VIP</label>
-                    </div>
+<!--                    <div class="form-check mb-2">-->
+<!--                        <input class="form-check-input" type="radio" name="ticketClass" id="vip" value="vip"-->
+<!--                               th:checked="${ticketClass == 'vip'}" />-->
+<!--                        <label class="form-check-label" for="vip">VIP</label>-->
+<!--                    </div>-->
 
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="ticketClass" id="standard" value="standard"
-                               th:checked="${ticketClass == 'standard'}" />
-                        <label class="form-check-label" for="standard">Standard</label>
-                    </div>
+<!--                    <div class="form-check mb-2">-->
+<!--                        <input class="form-check-input" type="radio" name="ticketClass" id="standard" value="standard"-->
+<!--                               th:checked="${ticketClass == 'standard'}" />-->
+<!--                        <label class="form-check-label" for="standard">Standard</label>-->
+<!--                    </div>-->
 
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="radio" name="ticketClass" id="economy" value="economy"
-                               th:checked="${ticketClass == 'economy'}" />
-                        <label class="form-check-label" for="economy">Economy</label>
-                    </div>
+<!--                    <div class="form-check mb-3">-->
+<!--                        <input class="form-check-input" type="radio" name="ticketClass" id="economy" value="economy"-->
+<!--                               th:checked="${ticketClass == 'economy'}" />-->
+<!--                        <label class="form-check-label" for="economy">Economy</label>-->
+<!--                    </div>-->
 
                     <div class="d-flex gap-3 mb-3 top-boxes">
+<!--                        <div class="info-box small-box text-center flex-fill quantity-box">-->
+<!--                            <label for="quantitySelect" class="form-label mb-1"><strong>Select number</strong></label>-->
+<!--                            <select id="quantitySelect" name="quantity" class="form-select" th:value="${ticketQuantity}">-->
+<!--                                <option th:each="i : ${#numbers.sequence(1, ticketsLeft)}"-->
+<!--                                        th:value="${i}"-->
+<!--                                        th:text="${i}"-->
+<!--                                        th:selected="${ticketQuantity == i}">-->
+<!--                                </option>-->
+<!--                            </select>-->
+<!--                        </div>-->
                         <div class="info-box small-box text-center flex-fill quantity-box">
-                            <label for="quantitySelect" class="form-label mb-1"><strong>Select number</strong></label>
-                            <select id="quantitySelect" name="quantity" class="form-select" th:value="${ticketQuantity}">
-                                <option th:each="i : ${#numbers.sequence(1, ticketsLeft)}"
-                                        th:value="${i}"
-                                        th:text="${i}"
-                                        th:selected="${ticketQuantity == i}">
-                                </option>
-                            </select>
+                         <label for="quantitySelect" class="form-label mb-1"><strong>Select number</strong></label>
+                        <select id="quantitySelect" name="quantity" class="form-select"
+                                th:value="${eventForm.ticketClass[0].totalQuantity}"
+                                th:attr="data-price=${eventForm.ticketClass[0].price}"
+                        >
+                            <option th:each="i : ${#numbers.sequence(1, eventForm.ticketRemain[0])}"
+                                    th:value="${i}"
+                                    th:text="${i}"
+                                    th:selected="${eventForm.ticketClass[0].soldQuantity == i}">
+                            </option>
+                        </select>
                         </div>
-
                         <div class="info-box small-box text-center flex-fill">
                             <p class="mb-1"><strong>Tickets left</strong></p>
-                            <p th:text="${ticketsLeft}">ticketsLeft</p>
+                            <p th:text="${eventForm.ticketClass[0].totalQuantity - eventForm.ticketClass[0].soldQuantity}">ticketsLeft</p>
                         </div>
 
                         <div class="info-box small-box text-center flex-fill">
                             <p class="mb-1"><strong>Tickets sold</strong></p>
-                            <p th:text="${ticketsSold}">ticketsSold</p>
+                            <p th:text="${eventForm.ticketClass[0].soldQuantity}">ticketsSold</p>
                         </div>
                     </div>
 
+<!--                    <div class="info-box text-center price-box mb-4">-->
+<!--                        <p class="mb-1"><strong>Total price</strong></p>-->
+<!--                        <p th:text="${eventForm.totalPrice}">totalPrice</p>-->
+<!--                    </div>-->
                     <div class="info-box text-center price-box mb-4">
                         <p class="mb-1"><strong>Total price</strong></p>
-                        <p th:text="${totalPrice}">totalPrice</p>
+                        <p id="totalPrice"
+                           th:attr="data-price=${eventForm.ticketClass[0].price}"
+                           th:text="${eventForm.totalPrice}">totalPrice</p>
                     </div>
 
                     <div class="d-flex gap-2">
@@ -113,8 +134,29 @@
     <div th:replace="layout :: footer"></div>
 
     <!-- JS -->
-    <script th:src="@{/js/script.js}" defer></script>
-    <script th:src="@{/js/event.js}" defer></script>
+    <script th:src="@{/js/script.js(v=${#dates.createNow().time})}" defer></script>
+    <script th:src="@{/js/event.js(v=${#dates.createNow().time})}" defer></script>
     <script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const select = document.getElementById("quantitySelect");
+            const totalPriceEl = document.getElementById("totalPrice");
+
+            const price = parseFloat(select.getAttribute("data-price")); // giá vé 1 cái
+
+            function updateTotalPrice() {
+                const quantity = parseInt(select.value, 10) || 0;
+                const total = price * quantity;
+                totalPriceEl.textContent = total.toLocaleString("en-US"); // format đẹp
+            }
+
+            // Gọi 1 lần khi load trang (hiển thị mặc định cho option đầu tiên)
+            updateTotalPrice();
+
+            // Update khi user chọn số lượng
+            select.addEventListener("change", updateTotalPrice);
+        });
+    </script>
+
 </body>
 </html>

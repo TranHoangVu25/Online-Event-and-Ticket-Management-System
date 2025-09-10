@@ -69,7 +69,17 @@ public class TicketClassService {
         return ticketClassResponses;
     }
 
-    public BigDecimal calculateRevenue(TicketClass ticketClass){
+    public BigDecimal totalPrice(TicketClass ticketClass){
+        BigDecimal revenue = BigDecimal.ZERO;;
+
+        BigDecimal price = ticketClass.getPrice();
+        BigDecimal soldQuantity = BigDecimal.valueOf(ticketClass.getSoldQuantity());
+
+        revenue = revenue.add(price.multiply(soldQuantity));
+
+        return revenue;
+    }
+    public BigDecimal totalPrice1(TicketClassResponse ticketClass){
         BigDecimal revenue = BigDecimal.ZERO;;
 
         BigDecimal price = ticketClass.getPrice();
@@ -86,5 +96,14 @@ public class TicketClassService {
     public TicketClass getTicketClass(int id){
         TicketClass response = ticketClassRepository.findByEventId(id);
         return response;
+    }
+
+    public List<Integer> calculateRemainTicket(List<TicketClassResponse> responses){
+        List<Integer> remainTickets = new ArrayList<>();
+        for (TicketClassResponse response:responses){
+           int remainTicket = response.getTotalQuantity()-response.getSoldQuantity();
+            remainTickets.add(remainTicket);
+        }
+        return remainTickets;
     }
 }

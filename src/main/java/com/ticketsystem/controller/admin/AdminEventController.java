@@ -1,7 +1,7 @@
 package com.ticketsystem.controller.admin;
 
 import com.ticketsystem.dto.request.*;
-import com.ticketsystem.dto.response.EventFormResponse;
+import com.ticketsystem.dto.response.EventFormUpdateResponse;
 import com.ticketsystem.dto.response.EventResponse;
 import com.ticketsystem.dto.response.TicketClassResponse;
 import com.ticketsystem.entity.TicketClass;
@@ -47,7 +47,7 @@ public class AdminEventController {
         }
         for (EventResponse eventResponse:events){
             TicketClass ticketClass = ticketClassService.getTicketClass(eventResponse.getId());
-            BigDecimal revenue = ticketClassService.calculateRevenue(ticketClass);
+            BigDecimal revenue = ticketClassService.totalPrice(ticketClass);
             eventViews.add(new EventViewRequest(eventResponse,ticketClass,revenue));
         }
         model.addAttribute("events", events);
@@ -82,7 +82,7 @@ public class AdminEventController {
         EventResponse eventResponse = eventService.getEvent(id);
         List<TicketClassResponse> ticketClass = ticketClassService.getTicketClasses(id);
 
-        EventFormResponse eventForm = new EventFormResponse();
+        EventFormUpdateResponse eventForm = new EventFormUpdateResponse();
         eventForm.setEvent(eventResponse);
         eventForm.setTicketClass(ticketClass);
 

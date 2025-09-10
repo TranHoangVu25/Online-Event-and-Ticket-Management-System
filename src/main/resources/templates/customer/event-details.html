@@ -43,7 +43,7 @@
         <div class="col-lg-7">
           <img
             th:src="@{'https://picsum.photos/id/1011/800/400'}"
-            th:alt="${event.name}"
+            th:alt="${eventForm.event.name}"
             class="img-fluid rounded shadow-sm mb-3"
           />
           <div class="d-flex gap-3">
@@ -62,44 +62,44 @@
 
         <!-- Main content -->
         <div class="col-lg-5 d-flex flex-column">
-          <h1 class="mb-4" th:text="${event.name}">eventTitle</h1>
+          <h1 class="mb-4" th:text="${eventForm.event.name}">eventTitle</h1>
 
           <div class="info-box mb-3">
             <strong>Description:</strong>
-            <span th:text="${event.description}"></span>
+            <span th:text="${eventForm.event.description}"></span>
           </div>
           <div class="info-box mb-3">
-            <strong>Date:</strong>
+            <strong>Start Date:</strong>
             <span
-              th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy hh:mm a')}"
+              th:text="${#temporals.format(eventForm.event.startTime, 'dd/MM/yyyy hh:mm a')}"
             ></span>
           </div>
           <div class="info-box mb-3">
-            <strong>Duration:</strong>
+            <strong>End Date::</strong>
             <span
-              th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy hh:mm a')}"
+              th:text="${#temporals.format(eventForm.event.startTime, 'dd/MM/yyyy hh:mm a')}"
             ></span>
             -
             <span
-              th:text="${#temporals.format(event.endTime, 'dd/MM/yyyy hh:mm a')}"
+              th:text="${#temporals.format(eventForm.event.endTime, 'dd/MM/yyyy hh:mm a')}"
             ></span>
           </div>
           <div class="info-box mb-3">
             <strong>Location:</strong>
-            <span th:text="${event.location.addressDetail}"></span>
+            <span th:text="${eventForm.event.location.addressDetail}"></span>
           </div>
           <div class="info-box mb-3">
             <strong>Tickets left:</strong>
-<!--            <span th:text="${event.totalTickets - event.soldTickets}"></span>-->
+            <span th:text="${eventForm.ticketClass[0].totalQuantity - eventForm.ticketClass[0].soldQuantity}"></span>
           </div>
           <div class="info-box mb-4">
             <strong>Tickets sold:</strong>
-<!--            <span th:text="${event.soldTickets}"></span>-->
+            <span th:text="${eventForm.ticketClass[0].soldQuantity}"></span>
           </div>
 
           <div class="d-flex gap-2">
             <a
-              th:href="@{/user/buy-ticket/{id}(id=${event.id})}"
+              th:href="@{/user/buy-ticket/{id}(id=${eventForm.event.id})}"
               class="btn btn-success btn-lg flex-fill"
               role="button"
               >Buy now</a

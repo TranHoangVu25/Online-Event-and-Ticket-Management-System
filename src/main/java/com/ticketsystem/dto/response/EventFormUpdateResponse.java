@@ -10,8 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventFormResponse {
+public class EventFormUpdateResponse {
     EventResponse event;
     List<TicketClassResponse> ticketClass;
-    List<Integer>  remainTicket;
 }

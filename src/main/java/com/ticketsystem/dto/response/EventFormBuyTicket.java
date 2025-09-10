@@ -3,6 +3,7 @@ package com.ticketsystem.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -10,8 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventFormResponse {
+public class EventFormBuyTicket {
     EventResponse event;
     List<TicketClassResponse> ticketClass;
-    List<Integer>  remainTicket;
+    BigDecimal totalPrice;
+    List<Integer> ticketRemain;
 }

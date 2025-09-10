@@ -51,24 +51,24 @@
         <div id="event-container" class="row g-4">
           <div
             class="col-md-4"
-            th:each="event : ${events}"
-            th:attr="data-id=${event.id}"
+            th:each="ev : ${eventForms}"
+            th:attr="data-id=${ev.event.id}"
           >
             <div class="card event-card shadow-sm h-100">
               <img
-                th:src="@{${event.thumbnailUrl}}"
+                th:src="@{${ev.event.thumbnailUrl}}"
                 class="card-img-top"
-                th:alt="${event.name}"
+                th:alt="${ev.event.name}"
               />
               <div class="card-body d-flex flex-column">
-                <h5 class="card-title" th:text="${event.name}">Event Title</h5>
-                <p class="card-text flex-grow-1" th:text="${event.description}">
+                <h5 class="card-title" th:text="${ev.event.name}">Event Title</h5>
+                <p class="card-text flex-grow-1" th:text="${ev.event.description}">
                   Event description
                 </p>
                 <p class="mb-1">
                   <strong>Date Time:</strong>
                   <span
-                    th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy hh:mm a')}"
+                    th:text="${#temporals.format(ev.event.startTime, 'dd/MM/yyyy hh:mm a')}"
                     >2025-08-20</span
                   >
                 </p>
@@ -78,19 +78,20 @@
                 <!--                        </p>-->
                 <p class="mb-1">
                   <strong>Location:</strong>
-                  <span th:text="${event.location.city}">City Hall</span>
+                  <span th:text="${ev.event.location.city}">City Hall</span>
                 </p>
-                <!--                        <p class="mb-0"><strong>Tickets left:</strong> <span th:text="${event.remainingTickets}">50</span></p>-->
+                                        <p class="mb-0"><strong>Tickets left:</strong>
+                                          <span th:text="${ev.remainTicket[0]}">50</span></p>
                 <div
                   class="d-flex gap-2 align-items-center justify-content-center"
                 >
                   <a
-                    th:href="@{/user/event-details/{id}(id=${event.id})}"
+                    th:href="@{/user/event-details/{id}(id=${ev.event.id})}"
                     class="btn btn-primary mt-auto"
                     >Details</a
                   >
                   <a
-                    th:href="@{/user/buy-ticket/{id}(id=${event.id})}"
+                    th:href="@{/user/buy-ticket/{id}(id=${ev.event.id})}"
                     class="btn btn-success mt-auto"
                     >Buy Ticket</a
                   >
