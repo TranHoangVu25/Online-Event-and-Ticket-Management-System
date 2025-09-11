@@ -1,16 +1,20 @@
 package com.ticketsystem.controller;
 
+import com.nimbusds.jwt.SignedJWT;
+import com.ticketsystem.config.CustomJwtDecoder;
 import com.ticketsystem.dto.request.AuthenticationRequest;
 import com.ticketsystem.dto.request.UserCreationRequest;
 import com.ticketsystem.dto.response.AuthenticationResponse;
 import com.ticketsystem.repository.UserRepository;
 import com.ticketsystem.service.AuthenticationService;
 import com.ticketsystem.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +31,7 @@ public class AuthenticateController {
     UserService userService;
     UserRepository userRepository;
     AuthenticationService authenticationService;
+    CustomJwtDecoder customJwtDecoder;
 
     @GetMapping("/login")
     String login(Model model){
@@ -35,28 +40,30 @@ public class AuthenticateController {
     }
 
     @PostMapping("/login")
-    String getLogin(Model model,@ModelAttribute("request") AuthenticationRequest request) throws Exception {
+    String getLogin(HttpSession session,
+                    @ModelAttribute("request") AuthenticationRequest request,
+                    Model model)
+            throws Exception {
         try {
             AuthenticationResponse response = authenticationService.authenticate(request);
             String jwt = response.getToken();
             log.info("JWT generated: {}", jwt);
-            model.addAttribute("jwt",jwt);
-            return "redirect:/test?token=" + jwt;
+
+            session.setAttribute("jwt",jwt);
+            Jwt decodedJwt  = customJwtDecoder.decode(jwt);
+            String scope = decodedJwt.getClaimAsString("scope");
+            if (scope.contains("ROLE_ADMIN")){
+                return "redirect:/admin/admin-users";
+            }
+            else return "redirect:/user/main-event";
+
         }catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "login"; // quay lại login nếu sai
         }
     }
 
-    @GetMapping("/test")
-    public String testPage(@RequestParam(required = false) String token, Model model) {
-        if (token != null) {
-            model.addAttribute("jwt", token);
-        } else {
-            model.addAttribute("jwt", "Chưa có token, hãy đăng nhập!");
-        }
-        return "test"; // test.html
-    }
+
     @GetMapping("/register")
     String getFormRegister(Model model){
         model.addAttribute("user",new UserCreationRequest());

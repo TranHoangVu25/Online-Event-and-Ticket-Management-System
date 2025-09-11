@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class UserTicketController {
-    @GetMapping("/buy-ticket")
-    String buyTicket(){
-        return "customer/buy-ticket";
+public class UserPaymentController {
+    @GetMapping("payment")
+    String getPayment(){
+        return "customer/payment";
     }
 }

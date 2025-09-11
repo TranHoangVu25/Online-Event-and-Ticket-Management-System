@@ -2,11 +2,16 @@ package com.ticketsystem.service;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import com.ticketsystem.dto.request.AuthenticationRequest;
+import com.ticketsystem.dto.request.IntrospectRequest;
 import com.ticketsystem.dto.response.AuthenticationResponse;
+import com.ticketsystem.dto.response.IntrospectResponse;
 import com.ticketsystem.entity.User;
 import com.ticketsystem.repository.UserRepository;
+import com.ticketsystem.utils.ErrorCode;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -44,6 +50,21 @@ public class AuthenticationService {
     @Value("${jwt.refreshable-duration}")
     protected Long REFRESHABLE_DURATION;
 
+    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+        var token = request.getToken();
+        boolean isValid = true;
+        //thêm khối try catch để nếu verifyToken trả về exception thì trả về false
+        try {
+            verifyToken(token,false);
+
+        }catch (Exception e){
+            isValid = false;
+        }
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
+    }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
         var user = userRepository.findByUsername(request.getUsername())
@@ -62,6 +83,36 @@ public class AuthenticationService {
                 .token(token)
                 .authenticated(true)
                 .build();
+    }
+
+    private SignedJWT verifyToken (String token, boolean isRefresh) throws Exception {
+        //Tạo đối tượng để xác minh chữ ký JWT bằng khóa bí mật SIGN_KEY
+        JWSVerifier verifier = new MACVerifier(SIGN_KEY.getBytes());
+
+        //Phân tích chuỗi token thành đối tượng SignedJWT để truy xuất header, payload và chữ ký
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        // lấy ngày hết hạn của token
+        Date expiryTime =(isRefresh)?
+                new Date(signedJWT.getJWTClaimsSet().getIssueTime()
+                        .toInstant().plus(REFRESHABLE_DURATION,ChronoUnit.SECONDS).toEpochMilli())
+                :signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        //kiểm tra token hợp lệ
+        var verified = signedJWT.verify(verifier);
+
+        if (!(verified && expiryTime.after(new Date()))) // time hết hạn sau time hiện tại
+        {
+            log.info("Token was expired");
+            throw (new Exception(String.valueOf(ErrorCode.UNAUTHENTICATED)));
+        }
+//
+//        //kiểm tra xem nếu token đã tồn tại trong bảng InvalidatedToken thì trả về lỗi
+//        if(invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())){
+//            log.info("jwt id was existed in InvalidatedToken table");
+//            throw (new AppException(ErrorCode.UNAUTHENTICATED));
+//        }
+        return  signedJWT;
     }
 
     private String generateToken(User user){

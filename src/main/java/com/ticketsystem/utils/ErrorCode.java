@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ErrCode {
-    INVALID_EVENT_NAME("Event name at least 3 character")
+public enum ErrorCode {
+    INVALID_EVENT_NAME("Event name at least 3 character"),
+    UNAUTHENTICATED("Unauthenticated")
 
     ;
     private String message;
