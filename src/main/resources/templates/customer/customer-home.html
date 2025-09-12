@@ -22,7 +22,7 @@
         <div class="container">
             <h1 class="display-4 fw-bold mb-3">
                 <span th:if="${loggedInUser}">
-                    Welcome, <span th:text="${loggedInUser.fullName}"></span>!
+                    Welcome, <span th:text="${session.userName}"></span>!
                 </span>
                             <span th:unless="${loggedInUser}">
                     Welcome to EventOnline

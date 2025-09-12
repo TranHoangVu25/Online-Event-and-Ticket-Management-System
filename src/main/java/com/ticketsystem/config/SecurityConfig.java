@@ -59,11 +59,11 @@ public class SecurityConfig {
         httpSecurity
                 .addFilterBefore(new JwtSessionFilter(), UsernamePasswordAuthenticationFilter.class)
                 .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwtConfigurer ->
-                                jwtConfigurer.decoder(customJwtDecoder)
-                                        .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        )
-                                .authenticationEntryPoint(customAuthenticationEntryPoint) // config tất cả các endpoint
+                                oauth2.jwt(jwtConfigurer ->
+                                                jwtConfigurer.decoder(customJwtDecoder)
+                                                        .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                                        )
+                                        .authenticationEntryPoint(customAuthenticationEntryPoint) // config tất cả các endpoint
                         //k có quyền truy cập đều phải quay trở về form login
 
                 );

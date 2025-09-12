@@ -3,6 +3,7 @@ package com.ticketsystem.controller.user;
 import com.ticketsystem.dto.response.*;
 import com.ticketsystem.service.EventService;
 import com.ticketsystem.service.TicketClassService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,7 +28,7 @@ public class UserEventController {
     TicketClassService ticketClassService;
 
     @GetMapping("/main-event")
-    public String getEvents(Model model) {
+    public String getEvents(Model model, HttpSession session) {
         List<EventFormResponse> eventForms = new ArrayList<>();
         List<EventResponse> events = eventService.getEvents();
         for(EventResponse event : events){

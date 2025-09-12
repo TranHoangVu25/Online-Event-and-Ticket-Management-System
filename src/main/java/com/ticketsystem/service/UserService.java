@@ -59,4 +59,9 @@ public class UserService {
         userMapper.updateUser(user,request);
         return userMapper.toUserResponse(userRepository.save(user));
     }
+
+    public User getUserByUserName(String userName){
+        return userRepository.findByUsername(userName)
+                .orElseThrow(()->new RuntimeException("User name not found"));
+    }
 }

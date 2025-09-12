@@ -5,6 +5,8 @@ import com.ticketsystem.config.CustomJwtDecoder;
 import com.ticketsystem.dto.request.AuthenticationRequest;
 import com.ticketsystem.dto.request.UserCreationRequest;
 import com.ticketsystem.dto.response.AuthenticationResponse;
+import com.ticketsystem.dto.response.UserResponse;
+import com.ticketsystem.entity.User;
 import com.ticketsystem.repository.UserRepository;
 import com.ticketsystem.service.AuthenticationService;
 import com.ticketsystem.service.UserService;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -52,10 +56,16 @@ public class AuthenticateController {
             session.setAttribute("jwt",jwt);
             Jwt decodedJwt  = customJwtDecoder.decode(jwt);
             String scope = decodedJwt.getClaimAsString("scope");
+            String userName = decodedJwt.getClaimAsString("sub");
+            session.setAttribute("userName",userName);
             if (scope.contains("ROLE_ADMIN")){
+//                model.addAttribute("userName",userName);
                 return "redirect:/admin/admin-users";
             }
-            else return "redirect:/user/main-event";
+            else{
+//                model.addAttribute("userName",userName);
+                return "redirect:/user/main-event";
+            }
 
         }catch (Exception e) {
             model.addAttribute("error", e.getMessage());
