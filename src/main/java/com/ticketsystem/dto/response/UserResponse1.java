@@ -1,23 +1,27 @@
-package com.ticketsystem.dto.request;
+package com.ticketsystem.dto.response;
 
 import com.ticketsystem.entity.Role;
+import com.ticketsystem.validator.EndDateConstraint;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserCreationRequest {
-    Role role;
+@EndDateConstraint
+public class UserResponse1 {
+    Integer id;
+    RoleResponse role;
     String username;
     String email;
-    String passwordHash;
+//    String passwordHash;
     String fullName;
     String phoneNumber;
-    boolean active;
+    Boolean isActive = true;
+    LocalDateTime createdAt = LocalDateTime.now();
     LocalDateTime lastLogin;
 }

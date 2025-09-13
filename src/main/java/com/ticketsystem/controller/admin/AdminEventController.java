@@ -35,7 +35,8 @@ public class AdminEventController {
 
     //hiển thị danh sách events
     @GetMapping("/admin-events")
-    public String getEvents(@RequestParam(value = "keyword",required = false) String keyword ,Model model) {
+    public String getEvents(@RequestParam(value = "keyword",required = false) String keyword
+            ,Model model) {
         List<EventResponse> events;
         List<EventViewRequest> eventViews = new ArrayList<>();
         if(keyword!=null && !keyword.trim().isEmpty()){

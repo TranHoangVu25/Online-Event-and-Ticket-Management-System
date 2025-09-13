@@ -24,7 +24,7 @@ function showToast(message, type = 'success') {
 
 function openAddUserModal() {
     document.getElementById('userModal').style.display = 'flex';
-    document.getElementById('userForm').reset();
+    document.getElementById('createUser').reset();
     document.querySelector('.modal-header h3').textContent = 'Thêm người dùng mới';
 }
 
@@ -64,18 +64,29 @@ function exportUsers() {
     }, 2000);
 }
 
-function editUser(userId) {
+function openUpdateUserModal(userId) {
     showToast(`Đang mở thông tin người dùng ${userId} để chỉnh sửa...`, 'info');
-    document.getElementById('userModal').style.display = 'flex';
+    document.getElementById('updateUserModal').style.display = 'flex';
     document.querySelector('.modal-header h3').textContent = 'Chỉnh sửa người dùng';
-    
-    // Populate form with user data (simulated)
-    setTimeout(() => {
-        document.getElementById('userName').value = 'Nguyễn Văn An';
-        document.getElementById('userEmail').value = 'nguyenvanan@email.com';
-        document.getElementById('userRole').value = 'user';
-        document.getElementById('userStatus').value = 'active';
-    }, 500);
+     fetch(`/admin/admin-users/${userId}`)
+            .then(res => res.json())
+            .then(user => {
+                // Fill dữ liệu vào form
+                document.getElementById('updateFullName').value = user.fullName;
+                document.getElementById('updateEmail').value = user.email;
+                document.getElementById('updatePhone').value = user.phoneNumber;
+                document.getElementById('updateUsername').value = user.username;
+                document.getElementById('updateRole').value = user.role.id;
+//                document.getElementById('updateStatus').value = user.active;
+
+            document.querySelector('#updateUserForm').action = `/admin/admin-update-user/${userId}`;
+//            document.querySelector('#updateUserModal').style.display = 'block';
+
+            })
+            .catch(err => {
+                console.error('Lỗi khi lấy user:', err);
+                showToast('Không thể lấy thông tin người dùng', 'error');
+            });
 }
 
 function viewUser(userId) {
@@ -130,27 +141,27 @@ function togglePassword(inputId) {
 }
 
 function saveUser() {
-    const userName = document.getElementById('userName').value.trim();
-    const userEmail = document.getElementById('userEmail').value.trim();
-    const userRole = document.getElementById('userRole').value;
-    const userStatus = document.getElementById('userStatus').value;
-    const usename = document.getElementById('username').value.trim();
+    const fullName = document.getElementById('firstName').value.trim();
+    const userEmail = document.getElementById('email').value.trim();
+    const userRole = document.getElementById('role').value;
+    const userStatus = document.getElementById('status').value;
+    const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    
-    if (!userName || !userEmail) {
+
+    if (!fullName || !userEmail) {
         showToast('Vui lòng điền đầy đủ thông tin bắt buộc', 'error');
         return;
     }
-    
+
     if (password && password !== confirmPassword) {
         showToast('Mật khẩu xác nhận không khớp', 'error');
         return;
     }
-    
+
     showToast('Đang lưu thông tin người dùng...', 'info');
     closeUserModal();
-    
+
     setTimeout(() => {
         showToast('Đã lưu thông tin người dùng thành công!', 'success');
     }, 1000);
@@ -181,3 +192,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+function closeUpdateUserModal() {
+    document.getElementById("updateUserModal").style.display = "none";
+}
+

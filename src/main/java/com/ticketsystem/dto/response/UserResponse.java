@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 @EndDateConstraint
 public class UserResponse {
     Integer id;
-//    Role role;
+    Role role;
     String username;
     String email;
 //    String passwordHash;
     String fullName;
     String phoneNumber;
-//    Boolean isActive = true;
-//    LocalDateTime createdAt = LocalDateTime.now();
-//    LocalDateTime lastLogin;
+    Boolean isActive = true;
+    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime lastLogin;
 }

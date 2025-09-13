@@ -18,6 +18,7 @@ public class UserUpdateRequest {
     String passwordHash;
     String fullName;
     String phoneNumber;
+    boolean active;
     LocalDateTime lastLogin;
 
 }

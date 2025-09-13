@@ -3,6 +3,7 @@ package com.ticketsystem.service;
 import com.ticketsystem.dto.request.UserCreationRequest;
 import com.ticketsystem.dto.request.UserUpdateRequest;
 import com.ticketsystem.dto.response.UserResponse;
+import com.ticketsystem.dto.response.UserResponse1;
 import com.ticketsystem.entity.Role;
 import com.ticketsystem.entity.User;
 import com.ticketsystem.mapper.UserMapper;
@@ -45,8 +46,8 @@ public class UserService {
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
-    public UserResponse getUser(int id){
-        return userMapper.toUserResponse(userRepository.findById(id)
+    public UserResponse1 getUser(int id){
+        return userMapper.toUserResponse1(userRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Id not found")));
     }
     public void deleteUser(int id){

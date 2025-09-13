@@ -47,6 +47,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, PUBLIC_END_POINT_POST).permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_END_POINT_GET).permitAll()
                                 .requestMatchers(HttpMethod.PUT).permitAll()
+                                .requestMatchers(HttpMethod.GET).permitAll()
+                                .requestMatchers(HttpMethod.POST).permitAll()
 //                         .requestMatchers(HttpMethod.GET,"/users").hasRole(Role.ADMIN.name())
                                 // thay vì phân quyền theo end point thì có thể dùng @Preauthorize #10
                                 .anyRequest().authenticated());
@@ -91,20 +93,6 @@ public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
-    }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedHeader("*");
-
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-
-        return new CorsFilter(urlBasedCorsConfigurationSource);
     }
 
 }
