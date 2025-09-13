@@ -263,7 +263,7 @@
                         </tr>
                         </thead>
                         <tbody id="usersTableBody" >
-                        <tr th:each="user : ${users}">
+                        <tr th:each="user : ${users}" th:id="'user-row-' + ${user.id}">
                             <td>
                                 <input type="checkbox" class="user-checkbox">
                             </td>
@@ -301,13 +301,22 @@
                                         <i class="fas fa-edit"></i>
                                     </button>
 
-                                    <button class="action-btn view" onclick="viewUser(' + ${user.id} + ')" title="Xem chi tiết">
+<!--                                    <button class="action-btn view" onclick="viewUser(' + ${user.id} + ')" title="Xem chi tiết">-->
+<!--                                        <i class="fas fa-eye"></i>-->
+<!--                                    </button>-->
+                                    <button class="action-btn view"
+                                            type="button"
+                                            th:onclick="'viewUser(' + ${user.id} + ')'"
+                                            title="Xem chi tiết">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <button class="action-btn block" onclick="toggleUserStatus(' + ${user.id} + ')" title="Khóa/Mở khóa">
                                         <i class="fas fa-ban"></i>
                                     </button>
-                                    <button class="action-btn delete" onclick="deleteUser(${user.id})" title="Xóa">
+                                    <button class="action-btn delete"
+                                            type="button"
+                                            th:onclick="'deleteUser(' + ${user.id} + ')'"
+                                            title="Xóa">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -455,7 +464,6 @@
     <form th:action="@{/admin/admin-update-user/{id}(id=${id})}"
           th:object="${userUpdate}" method="post" id="updateUserForm">
 
-
     <div id="updateUserModal" class="modal">
             <div class="modal-content glass">
                 <div class="modal-header">
@@ -564,8 +572,7 @@
     </form>
 
 
-
-    <!-- User Details Modal -->
+    <!-- ===================User Details Modal ===========================-->
     <div id="userDetailsModal" class="modal">
         <div class="modal-content glass">
             <div class="modal-header">
@@ -581,7 +588,7 @@
                             <i class="fas fa-user"></i>
                         </div>
                         <div class="user-info-details">
-                            <h4 id="detailUserName">Nguyễn Văn An</h4>
+                            <h4 id="detailFullName">Nguyễn Văn An</h4>
                             <span id="detailUserEmail">nguyenvanan@email.com</span>
                             <div class="user-stats">
                                 <div class="stat-item">

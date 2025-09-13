@@ -24,6 +24,8 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminUserController {
     UserService userService;
+
+    //lấy data user
     @GetMapping("/admin-users")
     public String getUser(Model model){
         List<UserResponse> users = userService.getUsers();
@@ -33,25 +35,19 @@ public class AdminUserController {
         return "admin/admin-users";
     }
 
-//    @GetMapping("/admin-users/{id}")
-//    public String getUserById(@PathVariable int id,Model model){
-//        UserResponse userUpdate = userService.getUser(id);
-//        model.addAttribute("userUpdate",userUpdate);
-//        return "/admin/admin-users";
-//    }
-
-    @GetMapping("/admin-users/{id}")
-    @ResponseBody
-    public UserResponse1 getUserById(@PathVariable int id) {
-        return userService.getUser(id);
-    }
-
-
+    // tạo user mới
     @PostMapping("/admin-create-users")
     public String createUser(
             @ModelAttribute("userCreation") @Valid UserCreationRequest request) throws Exception {
             userService.createUser(request);
             return "redirect:/admin/admin-users";
+    }
+
+    //lấy thông tin user theo id
+    @GetMapping("/admin-user/{id}")
+    @ResponseBody
+    public UserResponse1 getUserById(@PathVariable int id) {
+        return userService.getUser(id);
     }
 
     @PostMapping("/admin-update-user/{id}")
@@ -62,5 +58,12 @@ public class AdminUserController {
         model.addAttribute("userUpdate", userUpdate);
         model.addAttribute("id", id);
         return "redirect:/admin/admin-users";
+    }
+
+    @DeleteMapping("/admin-user/{id}")
+    @ResponseBody
+    public String deleteUser(@PathVariable int id){
+        userService.deleteUser(id);
+        return "OK";
     }
 }

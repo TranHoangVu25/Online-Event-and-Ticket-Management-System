@@ -66,12 +66,10 @@ function exportUsers() {
 
 function openUpdateUserModal(userId) {
     showToast(`Đang mở thông tin người dùng ${userId} để chỉnh sửa...`, 'info');
-    document.getElementById('updateUserModal').style.display = 'flex';
     document.querySelector('.modal-header h3').textContent = 'Chỉnh sửa người dùng';
-     fetch(`/admin/admin-users/${userId}`)
+     fetch(`/admin/admin-user/${userId}`)
             .then(res => res.json())
             .then(user => {
-                // Fill dữ liệu vào form
                 document.getElementById('updateFullName').value = user.fullName;
                 document.getElementById('updateEmail').value = user.email;
                 document.getElementById('updatePhone').value = user.phoneNumber;
@@ -79,8 +77,9 @@ function openUpdateUserModal(userId) {
                 document.getElementById('updateRole').value = user.role.id;
 //                document.getElementById('updateStatus').value = user.active;
 
+                document.getElementById('updateUserModal').style.display = 'flex';
+
             document.querySelector('#updateUserForm').action = `/admin/admin-update-user/${userId}`;
-//            document.querySelector('#updateUserModal').style.display = 'block';
 
             })
             .catch(err => {
@@ -91,13 +90,20 @@ function openUpdateUserModal(userId) {
 
 function viewUser(userId) {
     showToast(`Đang mở chi tiết người dùng ${userId}...`, 'info');
-    document.getElementById('userDetailsModal').style.display = 'flex';
     
-    // Populate user details (simulated)
-    setTimeout(() => {
-        document.getElementById('detailUserName').textContent = 'Nguyễn Văn An';
-        document.getElementById('detailUserEmail').textContent = 'nguyenvanan@email.com';
-    }, 500);
+    fetch(`/admin/admin-user/${userId}`)
+                .then(res => res.json())
+                .then(user => {
+                    document.getElementById('detailFullName').textContent = user.fullName;
+                    document.getElementById('detailUserEmail').textContent = user.email;
+//                    document.getElementById('detailUserName').textContent = user.username;
+                document.getElementById('userDetailsModal').style.display = 'flex';
+
+                })
+                .catch(err => {
+                    console.error('Lỗi khi lấy user:', err);
+                    showToast('Không thể lấy thông tin người dùng', 'error');
+                });
 }
 
 function toggleUserStatus(userId) {
@@ -111,11 +117,30 @@ function toggleUserStatus(userId) {
 function deleteUser(userId) {
     if (confirm('Bạn có chắc muốn xóa người dùng này? Hành động này không thể hoàn tác.')) {
         showToast(`Đang xóa người dùng ${userId}...`, 'info');
-        setTimeout(() => {
-            showToast(`Đã xóa người dùng ${userId} thành công!`, 'success');
-        }, 1000);
+
+        fetch(`/admin/admin-user/${userId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Lỗi khi xoá user");
+            }
+            return response.text(); // vì controller trả về String "OK"
+        })
+        .then(result => {
+            if (result === "OK") {
+                showToast(`Đã xóa người dùng ${userId} thành công!`, 'success');
+                // Có thể xoá user khỏi bảng mà không cần reload
+                document.getElementById(`user-row-${userId}`).remove();
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showToast("Xóa thất bại!", 'error');
+        });
     }
 }
+
 
 function previousPage() {
     showToast('Đang chuyển đến trang trước...', 'info');
