@@ -26,7 +26,7 @@ public class AdminUserController {
     UserService userService;
 
     //lấy data user
-    @GetMapping("/admin-users")
+    @GetMapping("/users")
     public String getUser(Model model){
         List<UserResponse> users = userService.getUsers();
         model.addAttribute("users",users);

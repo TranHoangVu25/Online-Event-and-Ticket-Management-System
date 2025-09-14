@@ -57,12 +57,19 @@ public class UserService {
     public UserResponse updateUser(UserUpdateRequest request, int id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Id not found"));
+        if (request.getPasswordHash()==null){
+            request.setPasswordHash(user.getPasswordHash());
+        }
+        if (request.getRole()==null){
+            request.setRole(user.getRole());
+        }
         userMapper.updateUser(user,request);
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public User getUserByUserName(String userName){
-        return userRepository.findByUsername(userName)
+    public UserResponse getUserByUserName(String userName){
+        User user = userRepository.findByUsername(userName)
                 .orElseThrow(()->new RuntimeException("User name not found"));
+        return userMapper.toUserResponse(user);
     }
 }

@@ -51,25 +51,20 @@ public class AuthenticateController {
         try {
             AuthenticationResponse response = authenticationService.authenticate(request);
             String jwt = response.getToken();
-            log.info("JWT generated: {}", jwt);
-
             session.setAttribute("jwt",jwt);
             Jwt decodedJwt  = customJwtDecoder.decode(jwt);
             String scope = decodedJwt.getClaimAsString("scope");
             String userName = decodedJwt.getClaimAsString("sub");
             session.setAttribute("userName",userName);
             if (scope.contains("ROLE_ADMIN")){
-//                model.addAttribute("userName",userName);
-                return "redirect:/admin/admin-users";
+                return "redirect:/admin/users";
             }
             else{
-//                model.addAttribute("userName",userName);
-                return "redirect:/user/main-event";
+                return "redirect:/home-page";
             }
-
         }catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-            return "login"; // quay lại login nếu sai
+            return "login";
         }
     }
 

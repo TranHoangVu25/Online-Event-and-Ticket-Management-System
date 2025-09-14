@@ -12,10 +12,10 @@
         </a>
         <ul class="links">
             <span class="close-btn material-symbols-rounded">close</span>
-            <li><a th:href="@{/customer-home}">Home</a></li>
-            <li><a th:href="@{/customer/main-event}">Events</a></li>
+            <li><a th:href="@{/home-page}">Home</a></li>
+            <li><a th:href="@{/user/main-event}">Events</a></li>
             <li><a th:href="@{/customer-home#contact}">Contact us</a></li>
-            <li><a th:href="@{/customer/customer-orders}">My orders</a></li>
+            <li><a th:href="@{/user/customer-orders}">My orders</a></li>
         </ul>
         <span style = "color: blanchedalmond;"> Welcome, <b th:text="${session.userName}" >User!</b></span>
         <div class="dropdown">
@@ -27,10 +27,12 @@
                     <a class="dropdown-item" style="color: red" href="#" th:onclick="|if(confirm('Are you sure you want to log out?')) window.location='@{/}';|">Logout</a>
                 </li>
                 <li>
-                    <a class="dropdown-item" th:href="@{/customer/customer-orders}">My orders</a>
+                    <a class="dropdown-item" th:href="@{/user/customer-orders}">My orders</a>
                 </li>
                 <li>
-                    <a class="dropdown-item" th:href="@{/customer/customer-profile}">Edit profile</a>
+                    <a class="dropdown-item"
+                       th:href="@{/user/profile/{username}(username=${session.userName})}">
+                    Edit profile</a>
                 </li>
 
             </ul>
