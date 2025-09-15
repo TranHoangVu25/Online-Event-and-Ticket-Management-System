@@ -17,40 +17,44 @@
 <body>
     <div th:replace="layout :: header"></div>
 
-    <main class="container py-5"
-          th:with="
-        totalPrice='85.00',
-        ticketName='Diabetes Pump & Supplies',
-        ticketClass='VIP',
-        ticketCode='ST123',
-        insuranceName='Aetna - Open Access',
-        insuranceCode='OAP',
-        ticketPrice='200.000.000',
-        numberOfTickets='5',
-        coinsurance='0.0',
-        shippingCost='50.000',
-        shippingFee='40.000',
-        totalPrice=' 410.000'
-      ">
+<!--    <main class="container py-5"-->
+<!--          th:with="-->
+<!--        totalPrice='85.00',-->
+<!--        ticketName='Diabetes Pump & Supplies',-->
+<!--        ticketClass='VIP',-->
+<!--        ticketCode='ST123',-->
+<!--        insuranceName='Aetna - Open Access',-->
+<!--        insuranceCode='OAP',-->
+<!--        ticketPrice='200.000.000',-->
+<!--        numberOfTickets='5',-->
+<!--        coinsurance='0.0',-->
+<!--        shippingCost='50.000',-->
+<!--        shippingFee='40.000',-->
+<!--        totalPrice=' 410.000'-->
+<!--      ">-->
         <div class="container mt-3 mb-3">
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-6 p-3" style="background-color: white; border: 1px solid #ddd;">
                     <h5 class="mb-0 text-success" th:text="${totalPrice}"></h5>
-                    <h5 class="mb-3" th:text="${ticketName}"></h5>
+                    <h5 class="mb-3" th:text="${eventForm.event.name}"></h5>
                     <div class="about">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex flex-row mt-1">
                                 <h6>Total Ticket Price </h6>
                                 &nbsp;
-                                <h6 class="text-success font-weight-bold ml-5" th:text="${ticketPrice}"></h6>
+                                <h6 class="text-success font-weight-bold ml-5" th:text="${eventForm.totalPrice}"></h6>
                             </div>
 
                         </div>
                         <p>The total ticket price and related fees will be calculated and displayed here.</p>
                         <div class="p-2 d-flex justify-content-between bg-pay align-items-center">
-                            <span th:text="${ticketClass}"></span>
-                            <span th:text="${ticketCode}"></span>
+                            <span >Loại vé</span>
+                            <span >Mã Vé</span>
+                        </div>
+                        <div class="p-2 d-flex justify-content-between bg-pay align-items-center">
+                            <span th:text="${eventForm.ticketClass[0].name}"></span>
+                            <span th:text="'VHT' + ${eventForm.ticketClass[0].id}"></span>
                         </div>
                         <hr>
 <!--                        <div class="d-flex justify-content-between align-items-center">-->
@@ -96,17 +100,17 @@
                         <strong class="font-weight-bold text-center d-block">Order Recap</strong>
                         <div class="d-flex justify-content-between mt-2">
                             <span class="fw-500">Ticket Price</span>
-                            <span th:text="${ticketPrice}"></span>
+                            <span th:text="${eventForm.ticketClass[0].price}"></span>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span class="fw-500">Number of Tickets</span>
-                            <span th:text="${numberOfTickets}"></span>
+                            <span th:text="${eventForm.quantity}"></span>
                         </div>
 <!--                        <div class="d-flex justify-content-between mt-2">-->
 <!--                            <span class="fw-500">Coinsurance(0%)</span>-->
 <!--                            <span>+ <span th:text="${coinsurance}"></span></span>-->
 <!--                        </div>-->
-                        <hr>
+<!--                        <hr>-->
 <!--                        <div class="d-flex justify-content-between mt-2">-->
 <!--                            <span class="lh-16 fw-500">Shipping Cost</span>-->
 <!--                            <span th:text="${shippingCost}"></span>-->
@@ -118,7 +122,7 @@
                         <hr>
                         <div class="d-flex justify-content-between mt-2">
                             <span class="fw-500">Total</span>
-                            <span class="text-success" th:text="${totalPrice}"></span>
+                            <span class="text-success" th:text="${eventForm.totalPrice}"></span>
                         </div>
                     </div>
                 </div>
@@ -127,8 +131,7 @@
     </main>
 
 
-    <div th:replace="layout :: footer"></div>
-    <!-- JS -->
+    <div th:replace="~{layout :: footer}"></div>
     <script th:src="@{/js/script.js}" defer></script>
     <script th:src="@{/js/event.js}" defer></script>
     <script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>

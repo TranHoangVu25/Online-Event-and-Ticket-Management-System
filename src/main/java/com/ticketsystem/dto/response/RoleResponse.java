@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EndDateConstraint
 public class RoleResponse {
     Integer id;
     String roleName;

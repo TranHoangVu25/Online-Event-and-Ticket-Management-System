@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EndDateConstraint
 public class UserResponse1 {
     Integer id;
     RoleResponse role;

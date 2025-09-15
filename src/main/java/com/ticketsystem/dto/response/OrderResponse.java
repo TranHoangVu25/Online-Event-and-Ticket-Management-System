@@ -16,7 +16,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EndDateConstraint
 public class OrderResponse {
     Integer id;
     User user;
@@ -24,5 +23,5 @@ public class OrderResponse {
     int status = 0;
     LocalDateTime createdAt = LocalDateTime.now();
     private Set<OrderDetail> orderDetails;
-    Set<Payment> payments;
+    Payment payment;
 }

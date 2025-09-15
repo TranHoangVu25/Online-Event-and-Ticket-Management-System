@@ -53,10 +53,17 @@
                     >eventTime</span></div>
                 <div class="info-box mb-3"><strong>Location:</strong> <span th:text="${eventForm.event.location.addressDetail}">eventLocation</span></div>
 
-                <form th:action="@{/buyTicket}" method="post">
+                <form th:action="@{/user/buy-ticket/{id}(id=${eventForm.event.id})}" method="post">
                     <h5>Select ticket quantity</h5>
+                    <input type="hidden" th:field="*{eventForm.event.id}"/>
+                    <input type="hidden" th:field="*{eventForm.event.name}"/>
+<!--                    <input type="hidden" th:field="*{eventForm.totalPrice}"/>-->
+                    <input type="hidden" th:field="*{eventForm.ticketClass[0].id}"/>
+                    <input type="hidden" th:field="*{eventForm.ticketClass[0].name}"/>
+                    <input type="hidden" th:field="*{eventForm.ticketClass[0].price}"/>
+<!--                    <input type="hidden" th:field="*{eventForm.ticketClass[0].soldQuantity}"/>-->
 
-<!--                    <div class="form-check mb-2">-->
+                    <!--                    <div class="form-check mb-2">-->
 <!--                        <input class="form-check-input" type="radio" name="ticketClass" id="vip" value="vip"-->
 <!--                               th:checked="${ticketClass == 'vip'}" />-->
 <!--                        <label class="form-check-label" for="vip">VIP</label>-->
@@ -118,11 +125,22 @@
                         <p id="totalPrice"
                            th:attr="data-price=${eventForm.ticketClass[0].price}"
                            th:text="${eventForm.totalPrice}">totalPrice</p>
+
+                        <input type="hidden" id="totalPriceInput" name="totalPrice" th:value="${eventForm.totalPrice}" />
                     </div>
 
                     <div class="d-flex gap-2">
-                        <a th:href="@{/user/payment}" class="btn btn-success btn-lg flex-fill" role="button">Buy now</a>
-                        <a th:href="@{/user/event-details/{id}(id=${eventForm.event.id})}" class="btn btn-danger btn-lg flex-fill" role="button">Cancel</a>
+<!--                        <a th:href="@{/user/payment}" class="btn btn-success btn-lg flex-fill" role="button">Buy now</a>-->
+                        <button type="submit" class="btn btn-success btn-lg flex-fill" style="width: 100px;">Buy now</button>
+<!--                        <a th:href="@{/user/event-details/{id}(id=${eventForm.event.id})}" class="btn btn-danger btn-lg flex-fill"-->
+<!--                           role="button">Cancel</a>-->
+                        <button type="button"
+                                class="btn btn-danger btn-lg flex-fill"
+                                style="width: 100px;"
+                                th:onclick="|window.location.href='@{/user/event-details/{id}(id=${eventForm.event.id})}'|">
+                            Cancel
+                        </button>
+
                     </div>
 
                 </form>
@@ -141,21 +159,25 @@
         document.addEventListener("DOMContentLoaded", function () {
             const select = document.getElementById("quantitySelect");
             const totalPriceEl = document.getElementById("totalPrice");
+            const totalPriceInput = document.getElementById("totalPriceInput");
 
             const price = parseFloat(select.getAttribute("data-price")); // giá vé 1 cái
 
             function updateTotalPrice() {
                 const quantity = parseInt(select.value, 10) || 0;
                 const total = price * quantity;
-                totalPriceEl.textContent = total.toLocaleString("en-US"); // format đẹp
+
+                // hiển thị ra giao diện
+                totalPriceEl.textContent = total.toLocaleString("en-US");
+
+                // gán vào input hidden để submit về server
+                totalPriceInput.value = total;
             }
 
-            // Gọi 1 lần khi load trang (hiển thị mặc định cho option đầu tiên)
-            updateTotalPrice();
-
-            // Update khi user chọn số lượng
+            updateTotalPrice(); // chạy lần đầu
             select.addEventListener("change", updateTotalPrice);
         });
+
     </script>
 
 </body>

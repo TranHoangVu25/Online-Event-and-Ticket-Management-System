@@ -5,16 +5,15 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EventFormBuyTicket {
+public class PaymentFormResponse {
     EventResponse event;
     List<TicketClassResponse> ticketClass;
     BigDecimal totalPrice;
     List<Integer> ticketRemain;
-    Integer quantity;
+    Integer soldQuantity;
 }

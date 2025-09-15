@@ -10,9 +10,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -57,9 +56,28 @@ public class UserEventController {
         List<TicketClassResponse> ticketClassResponses = ticketClassService.getTicketClasses(id);
         BigDecimal totalPrice = ticketClassService.totalPrice1(ticketClassResponses.get(0));
         List<Integer> remainTicket = ticketClassService.calculateRemainTicket(ticketClassResponses);
-        EventFormBuyTicket eventForm = new EventFormBuyTicket(event,ticketClassResponses,totalPrice,remainTicket);
+        Integer quantity = 0;
+        EventFormBuyTicket eventForm = new EventFormBuyTicket(event,ticketClassResponses,totalPrice,remainTicket,quantity);
+
         model.addAttribute("eventForm", eventForm);
-//        model.addAttribute("event", event);
         return "customer/buy-ticket";
     }
+
+    @PostMapping("/buy-ticket/{id}")
+    public String buyTicket(@ModelAttribute EventFormBuyTicket eventForm,
+                            RedirectAttributes redirectAttributes) {
+        // eventForm có chứa eventId, ticket số lượng, totalPrice
+        redirectAttributes.addFlashAttribute("eventForm", eventForm);
+        log.info("thong tin event"+eventForm.getEvent().getName());
+        return "redirect:/user/payment";
+    }
+
+    @GetMapping("/payment")
+    public String showPayment(@ModelAttribute("eventForm") EventFormBuyTicket eventForm,
+                              Model model) {
+        model.addAttribute("eventForm", eventForm);
+        return "customer/payment";
+    }
+
+
 }

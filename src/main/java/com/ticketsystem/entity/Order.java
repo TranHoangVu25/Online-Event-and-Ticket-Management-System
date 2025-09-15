@@ -37,24 +37,26 @@ public class Order {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude // Quan trọng: Ngăn vòng lặp vô hạn trong toString()
+    @ToString.Exclude
     private Set<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude // Quan trọng: Ngăn vòng lặp vô hạn trong toString()
-    private Set<Payment> payments;
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+//    private Set<Payment> payments;
+    private Payment payment;
 
-    // **PHẦN SỬA LỖI QUAN TRỌNG NHẤT**
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(id, order.id); // Chỉ so sánh dựa trên ID
+        return Objects.equals(id, order.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id); // Chỉ băm dựa trên ID
+        return Objects.hash(id);
     }
 }
