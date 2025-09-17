@@ -52,5 +52,4 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<TicketClass> ticketClasses;
-
 }
