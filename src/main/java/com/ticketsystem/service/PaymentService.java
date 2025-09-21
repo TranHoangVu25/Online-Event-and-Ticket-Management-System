@@ -27,7 +27,7 @@ public class PaymentService {
         payment.setOrder(order);
         payment.setAmount(order.getTotalAmount());
         payment.setCreatedAt(LocalDateTime.now());
-        payment.setStatus(2);
+        payment.setStatus(1);
         payment.setMethod(method);
         return paymentRepository.save(payment);
     }
