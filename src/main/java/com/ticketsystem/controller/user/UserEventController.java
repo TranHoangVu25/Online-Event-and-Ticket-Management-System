@@ -1,5 +1,6 @@
 package com.ticketsystem.controller.user;
 
+import com.ticketsystem.dto.request.OrderRequest;
 import com.ticketsystem.dto.response.*;
 import com.ticketsystem.service.EventService;
 import com.ticketsystem.service.TicketClassService;
@@ -75,7 +76,7 @@ public class UserEventController {
     @GetMapping("/payment")
     public String showPayment(@ModelAttribute("eventForm") EventFormBuyTicket eventForm,
                               Model model) {
-        model.addAttribute("eventForm", eventForm);
+        model.addAttribute("orderRequest", new OrderRequest());
         return "customer/payment";
     }
 

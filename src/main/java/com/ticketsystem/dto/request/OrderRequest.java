@@ -21,5 +21,5 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderRequest {
     private Map<Integer, Integer> tickets;
-
+    private String method;
 }

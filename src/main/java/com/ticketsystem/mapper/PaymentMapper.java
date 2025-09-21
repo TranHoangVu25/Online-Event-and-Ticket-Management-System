@@ -14,6 +14,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
     @Mapping(target = "order",ignore = true)
+    @Mapping(target = "status",ignore = true)
     Payment toPayment(PaymentRequest request);
     PaymentResponse toPaymentResponse(Payment Payment);
     void updatePayment(@MappingTarget Payment Payment, PaymentRequest request);

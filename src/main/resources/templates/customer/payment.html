@@ -32,6 +32,17 @@
 <!--        shippingFee='40.000',-->
 <!--        totalPrice=' 410.000'-->
 <!--      ">-->
+    <form th:action="@{/user/checkout/{userId}(userId=${session.userId})}"
+          method="post"
+          th:object="${orderRequest}">
+
+
+        <input type="hidden"
+               th:name="'tickets[' + ${eventForm.ticketClass[0].id} + ']'"
+               th:value="${eventForm.quantity}" />
+
+
+
         <div class="container mt-3 mb-3">
             <div class="row">
                 <div class="col-md-1"></div>
@@ -65,18 +76,19 @@
 <!--                            </div>-->
 <!--                        </div>-->
                         <p>Insurance claim and all necessary dependencies will be submitted to your insurer for the covered portion of this order.</p>
+
                         <div class="d-flex flex-column">
                             <label class="radio">
-                                <input type="radio" name="paymentCard" value="VISA" checked>
+                                <input type="radio" th:field="*{method}" value="VNPAY" checked>
                                 <div class="d-flex justify-content-between">
-                                    <span>VISA</span>
+                                    <span>VNPAY</span>
                                     <span>**** 5645</span>
                                 </div>
                             </label>
                             <label class="radio">
-                                <input type="radio" name="paymentCard" value="MASTER">
+                                <input type="radio" th:field="*{method}" value="COD">
                                 <div class="d-flex justify-content-between">
-                                    <span>MASTER CARD</span>
+                                    <span>Cash on Delivery (COD)</span>
                                     <span>**** 5069</span>
                                 </div>
                             </label>
@@ -91,6 +103,7 @@
                               ">Cancel
                             </button>
                         </div>
+                        </form>
                     </div>
                 </div>
 

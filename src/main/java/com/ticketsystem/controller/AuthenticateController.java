@@ -55,7 +55,12 @@ public class AuthenticateController {
             Jwt decodedJwt  = customJwtDecoder.decode(jwt);
             String scope = decodedJwt.getClaimAsString("scope");
             String userName = decodedJwt.getClaimAsString("sub");
+            log.info("USER NAME:"+userName);
             session.setAttribute("userName",userName);
+            Integer userId = userRepository.findIdByUsername(userName)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            session.setAttribute("userId", userId);
+
             if (scope.contains("ROLE_ADMIN")){
                 return "redirect:/admin/users";
             }
