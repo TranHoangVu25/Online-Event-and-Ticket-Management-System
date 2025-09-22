@@ -16,8 +16,8 @@ import java.util.Optional;
 public interface TicketClassRepository extends JpaRepository<TicketClass,Integer> {
     List<TicketClass> findAllByEvent(Event event);
     TicketClass findByEventId(int id);
-//    @Query("SELECT SUM(t.soldQuantity) FROM TicketClass t WHERE t.event.id = :eventId")
-//    Integer findTotalSoldByEvent(@Param("eventId") Integer eventId);
-//    @Query("SELECT SUM(t.soldQuantity) FROM TicketClass t WHERE t.event.id = :eventId")
-//    Integer findTotalTicketEvent(@Param("eventId") Integer eventId);
+
+    @Query("SELECT tc FROM TicketClass tc JOIN FETCH tc.event WHERE tc.id = :id")
+    TicketClass findWithEvent(@Param("id") Integer id);
+
 }

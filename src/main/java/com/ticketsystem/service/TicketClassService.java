@@ -94,7 +94,7 @@ public class TicketClassService {
 //        return ticketClassRepository.findTotalSoldByEvent(event.getId());
 //    }
     public TicketClass getTicketClass(int id){
-        TicketClass response = ticketClassRepository.findByEventId(id);
+        TicketClass response = ticketClassRepository.findWithEvent(id);
         return response;
     }
 

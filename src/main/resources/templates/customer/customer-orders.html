@@ -27,20 +27,21 @@
         <div class="container mt-5 mb-5">
             <div class="d-flex justify-content-center row">
                 <div class="col-md-10">
-                    <div th:each="order : ${orders}" class="row p-2 bg-white border rounded mt-2" th:classappend="${orderStat.index == 0} ? '' : ' mt-2'">
+                    <div th:each="order : ${orderForm}" class="row p-2 bg-white border rounded mt-2" th:classappend="${orderStat.index == 0} ? '' : ' mt-2'">
                         <div class="col-md-3 mt-1">
-                            <img class="img-fluid img-responsive rounded product-image" th:src="${order.imageUrl}" alt="Ticket image">
+                            <img class="img-fluid img-responsive rounded product-image" th:src="${order.ticketClass.event.thumbnailUrl}" alt="Ticket image">
                         </div>
                         <div class="col-md-6 mt-1">
-                            <h5>Order ID: <span th:text="${order.orderId}"></span></h5>
-                            <p>Order Date: <span th:text="${order.orderDate}"></span></p>
-                            <p>Event Title: <span th:text="${order.eventTitle}"></span></p>
-                            <p>Ticket Class: <span th:text="${order.ticketClass}"></span></p>
-                            <p>Quantity: <span th:text="${order.quantity}"></span></p>
+                            <h5>Order ID: <span th:text="${order.order.id}"></span></h5>
+                            <p>Order Date: <span th:text="${#temporals.format(order.order.createdAt, 'dd/MM/yyyy hh:mm a')}"
+                            ></span></p>
+                            <p>Event Title: <span th:text="${order.ticketClass.event.name}"></span></p>
+                            <p>Ticket Class: <span th:text="${order.ticketClass.name}"></span></p>
+                            <p>Quantity: <span th:text="${order.orderDetail.quantity}"></span></p>
                         </div>
                         <div class="align-items-center align-content-center col-md-3 border-left mt-1">
                             <div class="d-flex flex-row align-items-center">
-                                <h4 class="mr-1" th:text="${order.orderPrice}"></h4>
+                                <h4 class="mr-1" th:text="${#numbers.formatDecimal(order.order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></h4>
                             </div>
                             <div class="d-flex flex-column mt-4">
                                 <button
@@ -54,64 +55,7 @@
                         </div>
                     </div>
 
-                    <!-- Fake data demo -->
-                    <th:block th:if="${orders == null}">
-                        <div class="row p-2 bg-white border rounded">
-                            <div class="col-md-3 mt-1">
-                                <img class="img-fluid img-responsive rounded product-image" src="https://i.imgur.com/QpjAiHq.jpg" alt="Ticket image">
-                            </div>
-                            <div class="col-md-6 mt-1">
-                                <h5>Order ID: 00001</h5>
-                                <p>Order Date: 2025-08-01</p>
-                                <p>Event Title: Summer Music Fest</p>
-                                <p>Ticket Class : VIP</p>
-                                <p>Quantity: 2</p>
-                            </div>
-                            <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                                <div class="d-flex flex-row align-items-center">
-                                    <h4 class="mr-1" style="color: green">200.000 VND</h4>
-                                </div>
-                                <div class="d-flex flex-column mt-4">
-                                    <button
-                                            class="btn btn-primary btn-sm"
-                                            type="button"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#orderDetailsModal">
-                                        Details
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </th:block>
 
-                    <th:block th:if="${orders == null}">
-                        <div class="row p-2 bg-white border rounded">
-                            <div class="col-md-3 mt-1">
-                                <img class="img-fluid img-responsive rounded product-image" src="https://i.imgur.com/QpjAiHq.jpg" alt="Ticket image">
-                            </div>
-                            <div class="col-md-6 mt-1">
-                                <h5>Order ID: 00002</h5>
-                                <p>Order Date: 2025-09-01</p>
-                                <p>Event Title: Summer Music Fest</p>
-                                <p>Ticket Class : Standard</p>
-                                <p>Quantity: 6</p>
-                            </div>
-                            <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                                <div class="d-flex flex-row align-items-center">
-                                    <h4 class="mr-1" style="color: green">200.000 VND</h4>
-                                </div>
-                                <div class="d-flex flex-column mt-4">
-                                    <button
-                                            class="btn btn-primary btn-sm"
-                                            type="button"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#orderDetailsModal">
-                                        Details
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </th:block>
 
                     <!-- Modal -->
                     <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsLabel" aria-hidden="true">
