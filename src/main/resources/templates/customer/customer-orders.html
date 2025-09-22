@@ -48,9 +48,12 @@
                                         class="btn btn-primary btn-sm"
                                         type="button"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#orderDetailsModal">
+                                        data-bs-target="#orderDetailsModal"
+                                        th:onclick="|viewOrderDetail(${order.order.id}, ${order.ticketClass.id})|">
                                     Details
                                 </button>
+
+
                             </div>
                         </div>
                     </div>
@@ -66,25 +69,30 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <img class="img-fluid img-responsive rounded product-image " src="https://i.imgur.com/QpjAiHq.jpg" alt="Ticket image" >
-                                    <p><strong>Order ID:</strong> 00001</p>
-                                    <p><strong>Order Date:</strong> 2025-08-01</p>
+                                    <img id="detailTicketImage" class="img-fluid img-responsive rounded product-image"
+                                         alt="Ticket image">
+
+                                    <p><strong>Order ID:</strong> <span id="detailOrderId">00001</span></p>
+                                    <p><strong>Order Date:</strong> <span id="detailOrderDate">2025-08-01</span></p>
                                     <hr>
-                                    <p><strong>Event Title:</strong> Summer Music Fest</p>
-                                    <p><strong>Event Date:</strong> 2025-08-15</p>
-                                    <p><strong>Event Time:</strong> 18:00 - 21:00</p>
-                                    <p><strong>Event Location:</strong> Central Park</p>
+
+                                    <p><strong>Event Title:</strong> <span id="detailEventTitle">Summer Music Fest</span></p>
+                                    <p><strong>Event Date:</strong> <span id="detailEventDate">2025-08-15</span></p>
+                                    <p><strong>Event Time:</strong> <span id="detailEventTime">18:00 - 21:00</span></p>
+                                    <p><strong>Event Location:</strong> <span id="detailEventLocation">Central Park</span></p>
                                     <hr>
-                                    <p><strong>Ticket Code:</strong> ST12345</p>
-                                    <p><strong>Ticket Class:</strong> VIP</p>
-                                    <p><strong>Quantity:</strong> 2</p>
-                                    <p><strong>Price:</strong> 200.000 VND</p>
+
+<!--                                    <p><strong>Ticket Code:</strong> <span id="detailTicketCode">ST12345</span></p>-->
+                                    <p><strong>Ticket Class:</strong> <span id="detailTicketClass">VIP</span></p>
+                                    <p><strong>Quantity:</strong> <span id="detailQuantity">2</span></p>
+<!--                                    <p><strong>Price:</strong> <span id="detailPrice">200.000 VND</span></p>-->
+<!--                                    <hr>-->
+
+<!--                                    <p><strong>Shipping Cost:</strong> <span id="detailShippingCost">50.000 VND</span></p>-->
+                                    <p><strong>Total:</strong> <span id="detailTotal">450.000</span></p>
                                     <hr>
-                                    <p><strong>Shipping Cost:</strong> 50.000 VND</p>
-                                    <p><strong>Total:</strong> 450.000 </p>
-                                    <hr>
-                                    <!-- Bạn có thể thêm các trường chi tiết khác ở đây -->
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>

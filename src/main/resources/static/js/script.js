@@ -31,30 +31,29 @@ signupLoginLink.forEach(link => {
 });
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const buttons = document.querySelectorAll(".show-order-details");
 
-    buttons.forEach(btn => {
-        btn.addEventListener("click", function () {
-            document.getElementById("modal-img").src = this.dataset.img;
-            document.getElementById("modal-id").textContent = this.dataset.id;
-            document.getElementById("modal-date").textContent = this.dataset.date;
-            document.getElementById("modal-event").textContent = this.dataset.event;
-            document.getElementById("modal-eventdate").textContent = this.dataset.eventdate;
-            document.getElementById("modal-eventtime").textContent = this.dataset.eventtime;
-            document.getElementById("modal-location").textContent = this.dataset.location;
-            document.getElementById("modal-code").textContent = this.dataset.code;
-            document.getElementById("modal-class").textContent = this.dataset.class;
-            document.getElementById("modal-qty").textContent = this.dataset.qty;
+function viewOrderDetail(orderId, ticketClassId) {
+    console.log(`Đang mở chi tiết orderId=${orderId}, ticketClassId=${ticketClassId}...`);
 
-            // Format số có dấu chấm (VD: 200000 -> 200.000)
-            const formatNumber = (num) => {
-                return new Intl.NumberFormat('vi-VN').format(num);
-            };
+    fetch(`/user/order-detail/${orderId}/${ticketClassId}`)
+        .then(res => res.json())
+        .then(order => {
+            document.getElementById('detailTicketImage').src = order.thumbnailUrl;
+            document.getElementById('detailOrderId').textContent = order.orderId;
+            document.getElementById('detailOrderDate').textContent = order.createdAt;
+            document.getElementById('detailEventTitle').textContent = order.eventName;
+            document.getElementById('detailEventDate').textContent = order.startTime;
+            document.getElementById('detailEventLocation').textContent = order.addressDetail;
+            document.getElementById('detailTicketClass').textContent = order.ticketClassName;
+            document.getElementById('detailQuantity').textContent = order.quantity;
+            document.getElementById('detailTotal').textContent = order.totalAmount;
 
-            document.getElementById("modal-price").textContent = formatNumber(this.dataset.price);
-            document.getElementById("modal-shipping").textContent = formatNumber(this.dataset.shipping);
-            document.getElementById("modal-total").textContent = formatNumber(this.dataset.total);
+            // mở modal
+            document.getElementById('orderDetailsModal').style.display = 'block';
+        })
+        .catch(err => {
+            console.error('Lỗi khi lấy order:', err);
+            alert('Không thể lấy thông tin đơn hàng');
         });
-    });
-});
+}
+

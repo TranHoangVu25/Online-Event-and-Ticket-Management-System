@@ -2,9 +2,7 @@ package com.ticketsystem.controller.user;
 
 import com.ticketsystem.dto.request.OrderCreationRequest;
 import com.ticketsystem.dto.response.*;
-import com.ticketsystem.entity.Order;
-import com.ticketsystem.entity.Payment;
-import com.ticketsystem.entity.TicketClass;
+import com.ticketsystem.entity.*;
 import com.ticketsystem.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -68,4 +66,14 @@ public class UserOrdersController {
         return "redirect:/user/main-event";
     }
 
+    @GetMapping("/order-detail/{orderId}/{ticketClassId}")
+    @ResponseBody
+    public FormOrderDetailResponse  getOrderDetail(@PathVariable int orderId
+            ,@PathVariable int ticketClassId
+            , Model model){
+        FormOrderDetailResponse response = orderDetailService.getOrderDetailById(orderId,ticketClassId);
+        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
+
+        return response;
+    }
 }

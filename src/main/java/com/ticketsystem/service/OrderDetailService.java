@@ -1,6 +1,7 @@
 package com.ticketsystem.service;
 
 import com.ticketsystem.dto.request.OrderCreationRequest;
+import com.ticketsystem.dto.response.FormOrderDetailResponse;
 import com.ticketsystem.dto.response.OrderDetailResponse;
 import com.ticketsystem.dto.response.OrderResponse;
 import com.ticketsystem.entity.*;
@@ -32,5 +33,9 @@ public class OrderDetailService {
 
     public List<OrderDetailResponse> getOrderDetails(){
         return orderDetailRepository.findAll().stream().map(orderDetailMapper::toOrderDetailResponse).toList();
+    }
+
+    public FormOrderDetailResponse getOrderDetailById( int orderId,int ticketId){
+        return orderDetailRepository.findOrderDetailInfoNative(orderId,ticketId);
     }
 }
