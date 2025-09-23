@@ -55,7 +55,7 @@ public class AuthenticateController {
             Jwt decodedJwt  = customJwtDecoder.decode(jwt);
             String scope = decodedJwt.getClaimAsString("scope");
             String userName = decodedJwt.getClaimAsString("sub");
-            log.info("USER NAME:"+userName);
+//            log.info("USER NAME:"+userName);
             session.setAttribute("userName",userName);
             Integer userId = userRepository.findIdByUsername(userName)
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -83,8 +83,8 @@ public class AuthenticateController {
     @PostMapping("/register")
     String register(@Valid @ModelAttribute("user")  UserCreationRequest user,
                     BindingResult bindingResult) throws Exception {
-        log.info(user.getEmail());
-        log.info(user.getFullName());
+//        log.info(user.getEmail());
+//        log.info(user.getFullName());
         if(bindingResult.hasErrors()){
             return "register";
         }
@@ -102,5 +102,10 @@ public class AuthenticateController {
 //        }
         userService.createUser(user);
         return "redirect:/login";
+    }
+
+    @GetMapping("/forgot-password")
+    public String forgotPassword(){
+        return "forgot-password";
     }
 }

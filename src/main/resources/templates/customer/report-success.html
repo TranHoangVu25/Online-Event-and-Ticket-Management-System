@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Đã gửi báo lỗi</title>
+  <style>
+    body{font-family:system-ui,sans-serif;padding:24px;background:#fafafa}
+    .wrap{max-width:640px;margin:0 auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+    .id{font-family:ui-monospace,monospace;background:#f4f4f5;padding:6px 10px;border-radius:8px;display:inline-block}
+    a.btn{display:inline-block;margin-top:12px;padding:10px 14px;background:#111;color:#fff;border-radius:10px;text-decoration:none}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Cảm ơn!</h1>
+  <p>Thank you! Your report has been submitted.</p>
+  <p>Mã theo dõi (Error ID): <span class="id" th:text="${errorId}">ERR-XXXX</span></p>
+  <p>Nếu bạn đã nhập email, bạn sẽ nhận được email xác nhận.</p>
+  <a class="btn" th:href="@{/}">Về trang chủ</a>
+</div>
+</body>
+</html>

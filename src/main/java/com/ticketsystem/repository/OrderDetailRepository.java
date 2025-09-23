@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailId> {
     @Query(value = """
  SELECT new com.ticketsystem.dto.response.FormOrderDetailResponse(
@@ -32,6 +34,18 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderD
             @Param("orderId") Integer orderId,
             @Param("ticketClassId") Integer ticketClassId
     );
+
+    @Query("""
+    SELECT new com.ticketsystem.dto.response.OrderDetailResponse(
+        od.id,
+        od.quantity,
+        od.price
+    )
+    FROM OrderDetail od
+    JOIN od.order o
+    WHERE o.user.id = :userId
+""")
+    List<OrderDetailResponse> findByUserId(@Param("userId") Integer userId);
 
 
 }

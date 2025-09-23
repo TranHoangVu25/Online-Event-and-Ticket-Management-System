@@ -4,6 +4,7 @@ import com.ticketsystem.dto.request.OrderCreationRequest;
 import com.ticketsystem.dto.response.*;
 import com.ticketsystem.entity.*;
 import com.ticketsystem.service.*;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,9 +32,14 @@ public class UserOrdersController {
 
 
     @GetMapping("/customer-orders")
-    String getPayment(Model model){
+    String getPayment(Model model, HttpSession session){
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            // Nếu chưa login, redirect về login hoặc trả lỗi
+            return "redirect:/login";
+        }
         List<FormUserOrderResponse> orderForm = new ArrayList<>();
-        List<OrderDetailResponse> orderDetails = orderDetailService.getOrderDetails();
+        List<OrderDetailResponse> orderDetails = orderDetailService.getOrderDetailsByUserId(userId);
 
         for (OrderDetailResponse orderDetail : orderDetails) {
             TicketClass ticketClass = ticketClassService.getTicketClass(orderDetail.getId().getTicketClassId());
@@ -72,7 +78,7 @@ public class UserOrdersController {
             ,@PathVariable int ticketClassId
             , Model model){
         FormOrderDetailResponse response = orderDetailService.getOrderDetailById(orderId,ticketClassId);
-        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
+//        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
 
         return response;
     }

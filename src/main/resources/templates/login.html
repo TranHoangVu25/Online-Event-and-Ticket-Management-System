@@ -42,7 +42,11 @@
                             placeholder="Nhập tên"
                             required
                             th:field="*{username}"                    />
-                    <div class="error-message" th:id="'username-error'" th:text="${usernameError}"></div>
+                    <div class="error-message"
+                         th:id="'username-error'"
+                         th:if="${usernameError}"
+                         th:text="${usernameError}">
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -62,7 +66,11 @@
                             <i class="fas fa-eye" id="passwordIcon"></i>
                         </button>
                     </div>
-                    <div class="error-message" th:id="'password-error'" th:text="${passwordError}"></div>
+                    <div class="error-message"
+                         th:if="${passwordError}"
+                         th:id="'password-error'"
+                         th:text="${passwordError}">
+                    </div>
                 </div>
 
                 <div class="form-options">
@@ -148,6 +156,14 @@
 
 <!--<script th:src="@{/js/login.js}"></script>-->
 <script th:src="@{/js/login.js(v=${#dates.createNow().time})}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let errorMessage = /*[[${error}]]*/ null;
+    if (errorMessage !== null && errorMessage.trim() !== "") {
+        showToast(errorMessage, 'error');
+    }
+    /*]]>*/
+</script>
 
 </body>
 </html>

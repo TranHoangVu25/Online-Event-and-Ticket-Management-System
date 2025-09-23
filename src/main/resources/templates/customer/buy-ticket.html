@@ -98,11 +98,12 @@
                                 th:value="${eventForm.ticketClass[0].totalQuantity}"
                                 th:attr="data-price=${eventForm.ticketClass[0].price}"
                         >
+                            <option th:value="0" th:text="0" th:selected="${true}"></option>
                             <option th:each="i : ${#numbers.sequence(1, eventForm.ticketRemain[0])}"
                                     th:value="${i}"
-                                    th:text="${i}"
-                                    th:selected="${eventForm.ticketClass[0].soldQuantity == i}">
+                                    th:text="${i}">
                             </option>
+
                         </select>
                         </div>
                         <div class="info-box small-box text-center flex-fill">

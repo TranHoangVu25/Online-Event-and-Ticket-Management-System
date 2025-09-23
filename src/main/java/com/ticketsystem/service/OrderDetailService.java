@@ -38,4 +38,9 @@ public class OrderDetailService {
     public FormOrderDetailResponse getOrderDetailById( int orderId,int ticketId){
         return orderDetailRepository.findOrderDetailInfoNative(orderId,ticketId);
     }
+
+    public List<OrderDetailResponse> getOrderDetailsByUserId(Integer userId) {
+        return orderDetailRepository.findByUserId(userId);
+    }
+
 }

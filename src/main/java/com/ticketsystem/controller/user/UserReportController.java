@@ -1,4 +1,4 @@
-package com.ticketsystem.controller.admin;
+package com.ticketsystem.controller.user;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/admin")
-public class AdminReportController {
-    @GetMapping("/admin-reports")
-    public String getOrder(){
-        return "/admin/admin-reports";
+@RequestMapping("/user")
+public class UserReportController {
+
+    @GetMapping("/report-error")
+    public String getReportError(){
+        return "/customer/report-error";
+    }
+
+    @GetMapping("/report-success")
+    public String getReportSuccess(){
+        return "/customer/report-success";
     }
 }
