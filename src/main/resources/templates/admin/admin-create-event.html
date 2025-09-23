@@ -31,7 +31,7 @@
                 <div class="admin-avatar">
                     <i class="fas fa-user-circle"></i>
                 </div>
-                <span class="admin-name" th:text="${adminName}">Admin</span>
+                <span class="admin-name" th:text="${session.userName}">Admin</span>
                 <button class="logout-btn glass"
                         th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
                     <i class="fas fa-sign-out-alt"></i>
@@ -160,16 +160,16 @@
 <!--                            </div>-->
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="eventDescription">Creator</label>
-                                <div class="input-wrapper">
-                                            <input id="eventDescription" required
-                                                      placeholder="Creator Id" th:field="*{event.creator.id}"/>
-                                    <div class="input-border"></div>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="form-row">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="eventDescription">Creator</label>-->
+<!--                                <div class="input-wrapper">-->
+<!--                                    <input type="hidden" id="eventDescription" th:value="${session.userId}" th:field="*{event.creator.id}"/>-->
+
+<!--                                    <div class="input-border"></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <div class="form-row">
                             <div class="form-group">

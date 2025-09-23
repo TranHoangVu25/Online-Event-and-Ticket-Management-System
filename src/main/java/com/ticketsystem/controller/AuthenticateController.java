@@ -60,6 +60,7 @@ public class AuthenticateController {
             Integer userId = userRepository.findIdByUsername(userName)
                     .orElseThrow(() -> new RuntimeException("User not found"));
             session.setAttribute("userId", userId);
+//                        log.info("USER ID:============"+userId);
 
             if (scope.contains("ROLE_ADMIN")){
                 return "redirect:/admin/users";

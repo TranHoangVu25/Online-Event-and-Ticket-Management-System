@@ -15,9 +15,12 @@ import java.util.Optional;
 @Repository
 public interface TicketClassRepository extends JpaRepository<TicketClass,Integer> {
     List<TicketClass> findAllByEvent(Event event);
-    TicketClass findByEventId(int id);
 
-    @Query("SELECT tc FROM TicketClass tc JOIN FETCH tc.event WHERE tc.id = :id")
-    TicketClass findWithEvent(@Param("id") Integer id);
+    Optional<TicketClass> findByEventId(int id);
+
+    Optional<TicketClass> findById(Integer id);
+
+    @Query("SELECT tc FROM TicketClass tc JOIN FETCH tc.event e WHERE e.id = :eventId")
+    Optional<TicketClass> findByEventId(@Param("eventId") Integer eventId);
 
 }

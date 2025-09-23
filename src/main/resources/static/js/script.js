@@ -33,15 +33,15 @@ signupLoginLink.forEach(link => {
 
 
 function viewOrderDetail(orderId, ticketClassId) {
-    console.log(`Đang mở chi tiết orderId=${orderId}, ticketClassId=${ticketClassId}...`);
+    alert(`Đang mở chi tiết orderId=${orderId}, ticketClassId=${ticketClassId}...`);
 
     fetch(`/user/order-detail/${orderId}/${ticketClassId}`)
         .then(res => res.json())
         .then(order => {
-            document.getElementById('detailTicketImage').src = order.thumbnailUrl;
             document.getElementById('detailOrderId').textContent = order.orderId;
             document.getElementById('detailOrderDate').textContent = order.createdAt;
             document.getElementById('detailEventTitle').textContent = order.eventName;
+            document.getElementById('detailTicketImage').src = order.thumbnailUrl;
             document.getElementById('detailEventDate').textContent = order.startTime;
             document.getElementById('detailEventLocation').textContent = order.addressDetail;
             document.getElementById('detailTicketClass').textContent = order.ticketClassName;

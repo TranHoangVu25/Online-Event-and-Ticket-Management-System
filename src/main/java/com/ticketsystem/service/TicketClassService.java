@@ -93,8 +93,15 @@ public class TicketClassService {
 //    public Integer getSoldQuantity(EventResponse event){
 //        return ticketClassRepository.findTotalSoldByEvent(event.getId());
 //    }
+    public TicketClass getTicketClassByEventId(int id){
+        TicketClass response = ticketClassRepository.findByEventId(id)
+                .orElseThrow(()->new RuntimeException("id not found"));
+        return response;
+    }
+
     public TicketClass getTicketClass(int id){
-        TicketClass response = ticketClassRepository.findWithEvent(id);
+        TicketClass response = ticketClassRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("id not found"));
         return response;
     }
 

@@ -5,9 +5,12 @@ import com.ticketsystem.dto.response.EventFormUpdateResponse;
 import com.ticketsystem.dto.response.EventResponse;
 import com.ticketsystem.dto.response.TicketClassResponse;
 import com.ticketsystem.entity.TicketClass;
+import com.ticketsystem.entity.User;
 import com.ticketsystem.repository.EventRepository;
+import com.ticketsystem.repository.UserRepository;
 import com.ticketsystem.service.EventService;
 import com.ticketsystem.service.TicketClassService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -32,6 +36,7 @@ public class AdminEventController {
     EventService eventService;
     TicketClassService ticketClassService;
     EventRepository eventRepository;
+    UserRepository userRepository;
 
     //hiển thị danh sách events
     @GetMapping("/admin-events")
@@ -42,12 +47,12 @@ public class AdminEventController {
         if(keyword!=null && !keyword.trim().isEmpty()){
             events = eventService.findEventByName(keyword);
         }
-        else {
+//        else {
             events = eventService.getEvents();
 
-        }
+
         for (EventResponse eventResponse:events){
-            TicketClass ticketClass = ticketClassService.getTicketClass(eventResponse.getId());
+            TicketClass ticketClass = ticketClassService.getTicketClassByEventId(eventResponse.getId());
             BigDecimal revenue = ticketClassService.totalPrice(ticketClass);
             eventViews.add(new EventViewRequest(eventResponse,ticketClass,revenue));
         }
@@ -56,6 +61,7 @@ public class AdminEventController {
         model.addAttribute("eventViews", eventViews);
 
         return "admin/admin-events";
+
     }
 
     //chuyển qua trang create event
@@ -67,13 +73,15 @@ public class AdminEventController {
 
     @PostMapping("/admin-create-event")
     public String createEvent(
-                @ModelAttribute("eventForm")@Valid EventFormCreationRequest request
+                @ModelAttribute("eventForm")@Valid EventFormCreationRequest request,
+                HttpSession session
     )
             throws Exception {
         EventCreationRequest eventCreationRequest = request.getEvent();
+
         TicketClassCreationRequest ticketClassCreationRequest = request.getTicketClass();
 
-        eventService.createEvent(eventCreationRequest);
+        eventService.createEvent(eventCreationRequest,session);
         ticketClassService.createTicketClass(ticketClassCreationRequest,eventCreationRequest);
         return "redirect:/admin/admin-events";
     }

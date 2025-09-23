@@ -12,6 +12,8 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EventMapper {
     @Mapping(target = "location", ignore = true)
+    @Mapping(target = "creator", ignore = true)
+
     Event toEvent(EventCreationRequest request);
 
     EventResponse toEventResponse(Event event);

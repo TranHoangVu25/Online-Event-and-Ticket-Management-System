@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class EventCreationRequest {
 
     Location location;
-    User creator;
+//    User creator;
     @Size(min = 3,message = "INVALID_EVENT_NAME")
     String name;
     String thumbnailUrl;

@@ -31,7 +31,7 @@
                 <div class="admin-avatar">
                     <i class="fas fa-user-circle"></i>
                 </div>
-                <span class="admin-name" th:text="${adminName}">Admin</span>
+                <span class="admin-name" th:text="${session.userName}">Admin</span>
                 <button class="logout-btn glass"
                         th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
                     <i class="fas fa-sign-out-alt"></i>
@@ -188,13 +188,14 @@
                             <a th:href="@{/admin/admin-events}" class="view-all">Xem tất cả</a>
                         </div>
                         <div class="recent-events">
-                            <div class="event-item" th:each="event : ${recentEvents}">
+                            <div class="event-item" th:each="event : ${events}">
                                 <div class="event-icon">
-                                    <i class="fas" th:classappend="${event.icon}"></i>
+                                    <i class="fas" th:classappend="${event.thumbnailUrl}"></i>
                                 </div>
                                 <div class="event-info">
                                     <h4 th:text="${event.name}">Concert Rock Night</h4>
-                                    <p th:text="${event.date}">15/12/2024 - 20:00</p>
+                                    <p th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy hh:mm a')}">
+                                        15/12/2024 - 20:00</p>
                                 </div>
                             </div>
                         </div>

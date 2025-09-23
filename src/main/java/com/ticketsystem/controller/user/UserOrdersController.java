@@ -75,10 +75,9 @@ public class UserOrdersController {
     @GetMapping("/order-detail/{orderId}/{ticketClassId}")
     @ResponseBody
     public FormOrderDetailResponse  getOrderDetail(@PathVariable int orderId
-            ,@PathVariable int ticketClassId
-            , Model model){
+            ,@PathVariable int ticketClassId){
         FormOrderDetailResponse response = orderDetailService.getOrderDetailById(orderId,ticketClassId);
-//        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
+        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
 
         return response;
     }

@@ -5,9 +5,12 @@ import com.ticketsystem.dto.request.EventUpdateRequest;
 import com.ticketsystem.dto.response.EventResponse;
 import com.ticketsystem.entity.Event;
 import com.ticketsystem.entity.Location;
+import com.ticketsystem.entity.User;
 import com.ticketsystem.mapper.EventMapper;
 import com.ticketsystem.repository.EventRepository;
 import com.ticketsystem.repository.LocationRepository;
+import com.ticketsystem.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,14 +28,18 @@ public class EventService {
     EventRepository eventRepository;
     EventMapper eventMapper;
     LocationRepository locationRepository;
+    UserRepository userRepository;
 
-    public Event createEvent(EventCreationRequest request) throws Exception {
+    public Event createEvent(EventCreationRequest request, HttpSession session) throws Exception {
         if (eventRepository.existsByName(request.getName())){
             throw new Exception("Event name is existed");
         }
         Location location = locationRepository.save(request.getLocation());
         Event event = eventMapper.toEvent(request);
         event.setLocation(location);
+        Integer userId = (Integer) session.getAttribute("userId");
+        User user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("id not found"));
+        event.setCreator(user);
 
         return eventRepository.save(event);
     }
