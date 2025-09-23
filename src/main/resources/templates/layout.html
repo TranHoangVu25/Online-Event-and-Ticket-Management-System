@@ -14,7 +14,7 @@
             <span class="close-btn material-symbols-rounded">close</span>
             <li><a th:href="@{/home-page}">Home</a></li>
             <li><a th:href="@{/user/main-event}">Events</a></li>
-            <li><a th:href="@{/customer-home#contact}">Contact us</a></li>
+            <li><a th:href="@{/user/report-error}">Report Error</a></li>
             <li><a th:href="@{/user/customer-orders}">My orders</a></li>
         </ul>
         <span style = "color: blanchedalmond;"> Welcome, <b th:text="${session.userName}" >User!</b></span>
@@ -41,7 +41,7 @@
 </header>
 
 <!-- Footer Fragment -->
-<footer th:fragment="footer">
+<footer th:fragment="footer" class="site-footer">
     <p>&copy; 2025 Eventine. All rights reserved.</p>
 </footer>
 

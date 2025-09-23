@@ -1,0 +1,151 @@
+/* Reset & base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: #f8f9fb;
+  color: #333;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+/* Heading */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #0d3b66;
+}
+
+.hint {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Form layout */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Labels & inputs */
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #0d3b66;
+}
+
+input[type="text"],
+input[type="email"],
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fafafa;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: #0077ff;
+  outline: none;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,119,255,0.15);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* File input hint */
+input[type="file"] {
+  padding: 6px;
+  background: transparent;
+}
+
+.error {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #d9534f;
+}
+
+/* Checkbox */
+input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+  accent-color: #0077ff;
+}
+
+/* Actions */
+.actions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn.primary {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn.primary:hover {
+  transform: translateY(-1px);
+}
+
+.btn.primary:active {
+  transform: translateY(0);
+}
+
+.btn.primary.secondary {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn.primary.secondary:hover {
+  background: #d5d5d5;
+}
+
+/* Chỉ áp dụng gradient cho nút chính (btn-primary), không ảnh hưởng btn-secondary của Bootstrap */
+.btn.primary {
+  background: linear-gradient(135deg, #0077ff, #00c6ff);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: linear-gradient(135deg, #006ae0, #00afd6);
+}
+
+

@@ -4,53 +4,87 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Report Error</title>
+
+  <!-- Google Fonts Link For Icons -->
+  <link
+          rel="stylesheet"
+          th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0}"
+  />
+
+  <!-- Bootstrap CSS -->
+  <link
+          rel="stylesheet"
+          th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}"
+  />
+
+  <!-- CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+
   <link rel="stylesheet" th:href="@{/css/report-error.css}">
+
 </head>
 <body>
 <main class="container">
+  <div th:replace="layout :: header"></div>
   <h1>Report Error</h1>
   <p class="hint">Hãy mô tả lỗi bạn gặp phải. * là bắt buộc.</p>
 
   <div class="card" role="form" aria-labelledby="form-title">
     <h2 id="form-title" class="sr-only">Form báo lỗi</h2>
 
-    <form th:action="@{/report-error}" th:object="${errorReportDTO}" method="post" enctype="multipart/form-data">
+<!--    <form th:action="@{/report-error}" th:object="${errorReportDTO}" method="post" enctype="multipart/form-data">-->
 
       <div class="row">
         <div>
           <label for="title">* Error title</label>
-          <input id="title" type="text" th:field="*{title}" required maxlength="255" autocomplete="off" />
-          <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+<!--          <input id="title" type="text" th:field="*{title}" required maxlength="255" autocomplete="off" />-->
+          <input id="title" type="text"  required maxlength="255" autocomplete="off" />
+
+<!--          <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>-->
+          <div class="error" ></div>
+
         </div>
 
         <div>
           <label for="description">* Description</label>
-          <textarea id="description" th:field="*{description}" required aria-describedby="desc-hint"></textarea>
+<!--          <textarea id="description" th:field="*{description}" required aria-describedby="desc-hint"></textarea>-->
+          <textarea id="description"  required aria-describedby="desc-hint"></textarea>
+
           <div id="desc-hint" class="hint">Cho biết lỗi xuất hiện khi nào, kỳ vọng là gì, thực tế ra sao.</div>
-          <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+<!--          <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>-->
+          <div class="error"></div>
+
         </div>
 
         <div>
           <label for="stepsToReproduce">Steps to reproduce (không bắt buộc)</label>
-          <textarea id="stepsToReproduce" th:field="*{stepsToReproduce}" placeholder="1) ... 2) ... 3) ..."></textarea>
+<!--          <textarea id="stepsToReproduce" th:field="*{stepsToReproduce}" placeholder="1) ... 2) ... 3) ..."></textarea>-->
+          <textarea id="stepsToReproduce"  placeholder="1) ... 2) ... 3) ..."></textarea>
+
         </div>
 
         <div>
           <label for="screenshot">Screenshot (JPG/PNG, tùy chọn)</label>
           <input id="screenshot" name="screenshot" type="file" accept=".jpg,.jpeg,.png" />
           <div class="hint">Không bắt buộc. Vui lòng ẩn thông tin nhạy cảm trước khi gửi.</div>
-          <div class="error" th:if="${fileError != null}" th:text="${fileError}"></div>
+<!--          <div class="error" th:if="${fileError != null}" th:text="${fileError}"></div>-->
+          <div class="error" ></div>
+
         </div>
 
         <div>
           <label for="contactEmail">Contact email</label>
-          <input id="contactEmail" type="email" th:field="*{contactEmail}" placeholder="you@example.com" />
-          <div class="error" th:if="${#fields.hasErrors('contactEmail')}" th:errors="*{contactEmail}"></div>
+<!--          <input id="contactEmail" type="email" th:field="*{contactEmail}" placeholder="you@example.com" />-->
+<!--          <div class="error" th:if="${#fields.hasErrors('contactEmail')}" th:errors="*{contactEmail}"></div>-->
+          <input id="contactEmail" type="email" t placeholder="you@example.com" />
+          <div class="error"></div>
         </div>
 
         <div>
           <label>
-            <input type="checkbox" th:field="*{consentAttachInternal}" />
+<!--            <input type="checkbox" th:field="*{consentAttachInternal}" />-->
+            <input type="checkbox" />
+
             Tôi đồng ý cho phép hệ thống đính kèm dữ liệu kỹ thuật (log/stack trace) nội bộ để hỗ trợ điều tra.
           </label>
           <div class="hint">Các dữ liệu nhạy cảm sẽ không hiển thị cho người dùng khác.</div>
@@ -58,11 +92,14 @@
       </div>
 
       <div class="actions">
-        <a class="btn secondary" th:href="@{/}">Hủy</a>
-        <button class="btn" type="submit">Gửi báo lỗi</button>
+        <a class="btn primary" th:href="@{/}">Hủy</a>
+        <button class="btn primary" type="submit">Gửi báo lỗi</button>
       </div>
-    </form>
+<!--    </form>-->
   </div>
 </main>
+<div th:replace="~{layout :: footer}"></div>
+<script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+
 </body>
 </html>
