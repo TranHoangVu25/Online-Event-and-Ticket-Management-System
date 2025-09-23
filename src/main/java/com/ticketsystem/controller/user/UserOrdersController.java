@@ -78,7 +78,6 @@ public class UserOrdersController {
             ,@PathVariable int ticketClassId){
         FormOrderDetailResponse response = orderDetailService.getOrderDetailById(orderId,ticketClassId);
         log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
-
         return response;
     }
 }

@@ -44,6 +44,15 @@
                                 <h4 class="mr-1" th:text="${#numbers.formatDecimal(order.order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></h4>
                             </div>
                             <div class="d-flex flex-column mt-4">
+<!--                                <button-->
+<!--                                        class="btn btn-primary btn-sm"-->
+<!--                                        type="button"-->
+<!--                                        data-bs-toggle="modal"-->
+<!--                                        data-bs-target="#orderDetailsModal"-->
+<!--                                        th:onclick="|viewOrderDetail(${order.order.id}, ${order.ticketClass.id})|">-->
+<!--                                    Details-->
+<!--                                </button>-->
+
                                 <button
                                         class="btn btn-primary btn-sm"
                                         type="button"
@@ -52,8 +61,6 @@
                                         th:onclick="|viewOrderDetail(${order.order.id}, ${order.ticketClass.id})|">
                                     Details
                                 </button>
-
-
                             </div>
                         </div>
                     </div>
@@ -78,7 +85,7 @@
 
                                     <p><strong>Event Title:</strong> <span id="detailEventTitle">Summer Music Fest</span></p>
                                     <p><strong>Event Date:</strong> <span id="detailEventDate">2025-08-15</span></p>
-                                    <p><strong>Event Time:</strong> <span id="detailEventTime">18:00 - 21:00</span></p>
+<!--                                    <p><strong>Event Time:</strong> <span id="detailEventTime">18:00 - 21:00</span></p>-->
                                     <p><strong>Event Location:</strong> <span id="detailEventLocation">Central Park</span></p>
                                     <hr>
 
@@ -87,10 +94,10 @@
                                     <p><strong>Quantity:</strong> <span id="detailQuantity">2</span></p>
 <!--                                    <p><strong>Price:</strong> <span id="detailPrice">200.000 VND</span></p>-->
 <!--                                    <hr>-->
-
+                                    <hr>
 <!--                                    <p><strong>Shipping Cost:</strong> <span id="detailShippingCost">50.000 VND</span></p>-->
                                     <p><strong>Total:</strong> <span id="detailTotal">450.000</span></p>
-                                    <hr>
+
                                 </div>
 
                                 <div class="modal-footer">
@@ -107,7 +114,9 @@
 
     <div th:replace="layout :: footer"></div>
     <!-- JS -->
-    <script th:src="@{/js/script.js}" defer></script>
+<!--    <script th:src="@{/js/script.js}" defer></script>-->
+    <script th:src="@{/js/script.js(v=${#dates.createNow().time})}" defer></script>
+
 
     <!-- Bootstrap JS Bundle (gồm Popper) -->
     <script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>

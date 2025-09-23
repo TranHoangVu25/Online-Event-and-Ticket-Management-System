@@ -1,6 +1,5 @@
 package com.ticketsystem.dto.response;
 
-import com.ticketsystem.entity.OrderDetailId;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FormOrderDetailResponse {
-
      Integer orderId;
      LocalDateTime orderDate;
      String eventName;
@@ -23,5 +21,4 @@ public class FormOrderDetailResponse {
      String ticketClassName;
      int quantity;
      BigDecimal totalAmount;
-
 }
