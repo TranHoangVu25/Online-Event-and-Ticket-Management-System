@@ -32,6 +32,7 @@ public class AdminUserController {
         model.addAttribute("users",users);
         model.addAttribute("userCreation",new UserCreationRequest());
         model.addAttribute("userUpdate", new UserUpdateRequest()); // thêm dòng này
+        log.info("in getUser Controller");
         return "admin/admin-users";
     }
 

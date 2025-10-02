@@ -70,7 +70,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/admin/admin-users}" class="nav-link">
+                    <a th:href="@{/admin/users}" class="nav-link">
                         <div class="nav-icon">
                             <i class="fas fa-users"></i>
                         </div>
@@ -203,17 +203,12 @@
                         </td>
                         <td class="order-id">#ORD001</td>
                         <td class="customer-info">
-                            <div class="customer-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="customer-details">
-                                <div class="customer-name">Nguyễn Văn A</div>
-                                <div class="customer-email">nguyenvana@email.com</div>
+                            <div class="customer-name">Nguyễn Văn A
+<!--                                <div class="customer-email">nguyenvana@email.com</div>-->
                             </div>
                         </td>
-                        <td class="event-info">
-                            <div class="event-name">Concert Rock Night</div>
-                            <div class="event-date">15/12/2024 - 20:00</div>
+                        <td class="event-name">Concert Rock Night
+<!--                            <div class="event-date">15/12/2024 - 20:00</div>-->
                         </td>
                         <td class="ticket-count">2 vé</td>
                         <td class="order-total">₫400,000</td>
@@ -231,36 +226,8 @@
                             <button class="action-btn cancel" onclick="cancelOrder('ORD001')" title="Hủy">
                                 <i class="fas fa-times"></i>
                             </button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="order-checkbox" value="2">
-                        </td>
-                        <td class="order-id">#ORD002</td>
-                        <td class="customer-info">
-                            <div class="customer-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="customer-details">
-                                <div class="customer-name">Trần Thị B</div>
-                                <div class="customer-email">tranthib@email.com</div>
-                            </div>
-                        </td>
-                        <td class="event-info">
-                            <div class="event-name">Workshop Marketing Digital</div>
-                            <div class="event-date">18/12/2024 - 14:00</div>
-                        </td>
-                        <td class="ticket-count">1 vé</td>
-                        <td class="order-total">₫500,000</td>
-                        <td>
-                            <span class="status-badge confirmed">Đã xác nhận</span>
-                        </td>
-                        <td class="order-date">09/12/2024</td>
-                        <td class="actions">
-                            <button class="action-btn view" onclick="viewOrder('ORD002')" title="Xem chi tiết">
-                                <i class="fas fa-eye"></i>
+                            <button class="action-btn restore" onclick="restoreOrder('ORD003')" title="Khôi phục">
+                                <i class="fas fa-redo"></i>
                             </button>
                             <button class="action-btn refund" onclick="refundOrder('ORD002')" title="Hoàn tiền">
                                 <i class="fas fa-undo"></i>
@@ -268,73 +235,7 @@
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="order-checkbox" value="3">
-                        </td>
-                        <td class="order-id">#ORD003</td>
-                        <td class="customer-info">
-                            <div class="customer-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="customer-details">
-                                <div class="customer-name">Lê Văn C</div>
-                                <div class="customer-email">levanc@email.com</div>
-                            </div>
-                        </td>
-                        <td class="event-info">
-                            <div class="event-name">Hội nghị Startup</div>
-                            <div class="event-date">22/12/2024 - 09:00</div>
-                        </td>
-                        <td class="ticket-count">3 vé</td>
-                        <td class="order-total">₫3,600,000</td>
-                        <td>
-                            <span class="status-badge cancelled">Đã hủy</span>
-                        </td>
-                        <td class="order-date">08/12/2024</td>
-                        <td class="actions">
-                            <button class="action-btn view" onclick="viewOrder('ORD003')" title="Xem chi tiết">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="action-btn restore" onclick="restoreOrder('ORD003')" title="Khôi phục">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="order-checkbox" value="4">
-                        </td>
-                        <td class="order-id">#ORD004</td>
-                        <td class="customer-info">
-                            <div class="customer-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="customer-details">
-                                <div class="customer-name">Phạm Thị D</div>
-                                <div class="customer-email">phamthid@email.com</div>
-                            </div>
-                        </td>
-                        <td class="event-info">
-                            <div class="event-name">Triển lãm Nghệ thuật Đương đại</div>
-                            <div class="event-date">25/12/2024 - 10:00</div>
-                        </td>
-                        <td class="ticket-count">2 vé</td>
-                        <td class="order-total">₫300,000</td>
-                        <td>
-                            <span class="status-badge confirmed">Đã xác nhận</span>
-                        </td>
-                        <td class="order-date">07/12/2024</td>
-                        <td class="actions">
-                            <button class="action-btn view" onclick="viewOrder('ORD004')" title="Xem chi tiết">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="action-btn refund" onclick="refundOrder('ORD004')" title="Hoàn tiền">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
             </div>
