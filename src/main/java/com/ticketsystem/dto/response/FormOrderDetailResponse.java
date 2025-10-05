@@ -12,13 +12,17 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FormOrderDetailResponse {
-     Integer orderId;
-     LocalDateTime orderDate;
-     String eventName;
+    Integer orderId;
+    LocalDateTime orderDate;
+    String eventName;
     String thumbnailUrl;
     LocalDateTime eventStartTime;
-     String eventLocation;
-     String ticketClassName;
-     int quantity;
-     BigDecimal totalAmount;
+    String eventLocation;
+    String ticketClassName;
+    int quantity;
+    BigDecimal totalAmount;
+    String fullName;
+    String email;
+    String phoneNumber;
+    int status;
 }

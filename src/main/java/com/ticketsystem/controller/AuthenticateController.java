@@ -1,12 +1,9 @@
 package com.ticketsystem.controller;
 
-import com.nimbusds.jwt.SignedJWT;
 import com.ticketsystem.config.CustomJwtDecoder;
 import com.ticketsystem.dto.request.AuthenticationRequest;
 import com.ticketsystem.dto.request.UserCreationRequest;
 import com.ticketsystem.dto.response.AuthenticationResponse;
-import com.ticketsystem.dto.response.UserResponse;
-import com.ticketsystem.entity.User;
 import com.ticketsystem.repository.UserRepository;
 import com.ticketsystem.service.AuthenticationService;
 import com.ticketsystem.service.UserService;
@@ -23,9 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -52,15 +46,18 @@ public class AuthenticateController {
             AuthenticationResponse response = authenticationService.authenticate(request);
             String jwt = response.getToken();
             session.setAttribute("jwt",jwt);
+
             Jwt decodedJwt  = customJwtDecoder.decode(jwt);
             String scope = decodedJwt.getClaimAsString("scope");
             String userName = decodedJwt.getClaimAsString("sub");
-//            log.info("USER NAME:"+userName);
-            session.setAttribute("userName",userName);
+
             Integer userId = userRepository.findIdByUsername(userName)
                     .orElseThrow(() -> new RuntimeException("User not found"));
+            String full_name = userService.getFullName(userId);
+
+            session.setAttribute("userName",userName);
             session.setAttribute("userId", userId);
-//                        log.info("USER ID:============"+userId);
+            session.setAttribute("full_name",full_name);
 
             if (scope.contains("ROLE_ADMIN")){
                 return "redirect:/admin/users";
@@ -84,8 +81,6 @@ public class AuthenticateController {
     @PostMapping("/register")
     String register(@Valid @ModelAttribute("user")  UserCreationRequest user,
                     BindingResult bindingResult) throws Exception {
-//        log.info(user.getEmail());
-//        log.info(user.getFullName());
         if(bindingResult.hasErrors()){
             return "register";
         }
@@ -97,10 +92,6 @@ public class AuthenticateController {
             bindingResult.rejectValue("email","error_email","Email đã tồn tại");
             return "register";
         }
-//        if(userRepository.existsByPhoneNumber(user.getPhoneNumber())){
-//            bindingResult.rejectValue("phoneNumber","error_phoneNumber","Số điện thoại đã tồn tại");
-//            return "register";
-//        }
         userService.createUser(user);
         return "redirect:/login";
     }

@@ -38,6 +38,10 @@
                             <p>Event Title: <span th:text="${order.eventName}"></span></p>
                             <p>Ticket Class: <span th:text="${order.ticketClassName}"></span></p>
                             <p>Quantity: <span th:text="${order.quantity}"></span></p>
+                            <p>
+                                Status:
+                                <span th:text="${order.status == 0 ? 'Pending' : (order.status == 1 ? 'Success' : 'Failed')}"></span>
+                            </p>
                         </div>
                         <div class="align-items-center align-content-center col-md-3 border-left mt-1">
                             <div class="d-flex flex-row align-items-center">

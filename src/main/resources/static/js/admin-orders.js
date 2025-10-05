@@ -89,11 +89,43 @@ function bulkCancel() {
     }
 }
 
-function viewOrder(orderId) {
-    // Populate modal with order details
-    document.getElementById('modalOrderId').textContent = `#${orderId}`;
-    document.getElementById('orderModal').style.display = 'flex';
-}
+//function viewOrder(orderId) {
+//    // Populate modal with order details
+//    document.getElementById('modalOrderId').textContent = `#${orderId}`;
+//    document.getElementById('orderModal').style.display = 'flex';
+//}
+window.viewOrder = function (orderId, ticketClassId) {
+    fetch(`/admin/order-detail/${orderId}/${ticketClassId}`)
+        .then(res => res.json())
+        .then(order => {
+            // ===== Thông tin đơn hàng =====
+            document.getElementById('modalOrderId').textContent = order.orderId || '-';
+            document.getElementById('modalOrderDate').textContent = formatDate(new Date(order.orderDate));
+            document.getElementById('modalOrderStatus').textContent =
+                order.status === 0 ? 'Chờ xử lý' :
+                order.status === 1 ? 'Thành công' :
+                order.status === 2 ? 'Thất bại' : 'Không xác định';
+            document.getElementById('modalOrderTotal').textContent = formatCurrency(order.totalAmount);
+
+            // ===== Thông tin khách hàng =====
+            document.getElementById('modalCustomerName').textContent = order.customerName || '-';
+            document.getElementById('modalCustomerEmail').textContent = order.customerEmail || '-';
+            document.getElementById('modalCustomerPhone').textContent = order.customerPhone || '-';
+
+            // ===== Chi tiết sự kiện =====
+            document.getElementById('modalEventName').textContent = order.eventName || '-';
+            document.getElementById('modalEventTime').textContent = formatDate(new Date(order.eventStartTime));
+            document.getElementById('modalEventLocation').textContent = order.eventLocation || '-';
+            document.getElementById('modalTicketCount').textContent = `${order.quantity} vé`;
+
+            // Hiển thị modal
+            document.getElementById('orderDetailsModal').style.display = 'flex';
+        })
+        .catch(err => {
+            console.error('Lỗi khi lấy order:', err);
+            alert('Không thể lấy thông tin đơn hàng');
+        });
+};
 
 function closeOrderModal() {
     document.getElementById('orderModal').style.display = 'none';

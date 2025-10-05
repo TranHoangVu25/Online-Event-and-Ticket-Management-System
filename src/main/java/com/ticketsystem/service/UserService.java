@@ -72,4 +72,9 @@ public class UserService {
                 .orElseThrow(()->new RuntimeException("User name not found"));
         return userMapper.toUserResponse(user);
     }
+
+    public String getFullName(Integer userId){
+        return userRepository.findFullName(userId)
+                .orElseThrow(()->new RuntimeException("Id not found"));
+    }
 }

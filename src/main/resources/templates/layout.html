@@ -17,7 +17,7 @@
             <li><a th:href="@{/user/report-error}">Report Error</a></li>
             <li><a th:href="@{/user/customer-orders}">My orders</a></li>
         </ul>
-        <span style = "color: blanchedalmond;"> Welcome, <b th:text="${session.userName}" >User!</b></span>
+        <span style = "color: blanchedalmond;"> Welcome, <b th:text="${session.full_name}" >User!</b></span>
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle logout-btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 More
@@ -31,7 +31,7 @@
                 </li>
                 <li>
                     <a class="dropdown-item"
-                       th:href="@{/user/profile/{username}(username=${session.userName})}">
+                       th:href="@{/user/profile/{username}(username=${session.full_name})}">
                     Edit profile</a>
                 </li>
 

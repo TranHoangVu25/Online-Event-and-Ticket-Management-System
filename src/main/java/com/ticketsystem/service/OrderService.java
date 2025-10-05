@@ -1,10 +1,8 @@
 package com.ticketsystem.service;
 
 import com.ticketsystem.dto.request.OrderCreationRequest;
-import com.ticketsystem.dto.response.OrderResponse;
-import com.ticketsystem.dto.response.UserOderResponse;
+import com.ticketsystem.dto.response.OrderInformationResponse;
 import com.ticketsystem.entity.*;
-import com.ticketsystem.mapper.OrderMapper;
 import com.ticketsystem.repository.OrderRepository;
 import com.ticketsystem.repository.TicketClassRepository;
 import com.ticketsystem.repository.UserRepository;
@@ -28,8 +26,8 @@ public class OrderService {
     TicketClassRepository ticketClassRepository;
     OrderRepository orderRepository;
     UserRepository userRepository;
-    OrderMapper orderMapper;
 
+    //tạo order,orderDetail
     public Order createOrder(OrderCreationRequest requests, int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -86,11 +84,15 @@ public class OrderService {
     public Order getOrderById(int id){
         return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("id not found"));
     }
-    public List<Order> getAllOrder(){
-        return orderRepository.findAll();
+//    public List<Order> getAllOrder(){
+//        return orderRepository.findAll();
+//    }
+
+    public List<OrderInformationResponse> getAllOrderByUserId(Integer userId){
+        return orderRepository.findAllOrderByUserId(userId);
     }
 
-    public List<UserOderResponse> getAllOrderByUserId(Integer userId){
-        return orderRepository.findAllOrder(userId);
+    public List<OrderInformationResponse> getAllOrder(){
+        return orderRepository.findAllOrder();
     }
 }

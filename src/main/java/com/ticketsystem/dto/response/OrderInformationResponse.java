@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserOderResponse {
+public class OrderInformationResponse {
     Integer orderId;
     LocalDateTime orderDate;
     String eventName;
@@ -21,4 +21,6 @@ public class UserOderResponse {
     Integer ticketClassId;
     int quantity;
     BigDecimal totalAmount;
+    int status;
+    String fullName;
 }

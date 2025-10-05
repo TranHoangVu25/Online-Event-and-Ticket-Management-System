@@ -14,8 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,8 +23,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserOrdersController {
     OrderService orderService;
-    EventService eventService;
-    TicketClassService ticketClassService;
     PaymentService paymentService;
     OrderDetailService orderDetailService;
 
@@ -37,7 +33,7 @@ String getPayment(Model model, HttpSession session){
         // Nếu chưa login, redirect về login hoặc trả lỗi
         return "redirect:/login";
     }
-    List<UserOderResponse> orderForm = orderService.getAllOrderByUserId(userId);
+    List<OrderInformationResponse> orderForm = orderService.getAllOrderByUserId(userId);
     model.addAttribute("orderForm",orderForm);
     return "customer/customer-orders";
 }
@@ -67,7 +63,7 @@ String getPayment(Model model, HttpSession session){
     public FormOrderDetailResponse  getOrderDetail(@PathVariable int orderId
             ,@PathVariable int ticketClassId){
         FormOrderDetailResponse response = orderDetailService.getOrderDetailById(orderId,ticketClassId);
-        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
+//        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
         return response;
     }
 }

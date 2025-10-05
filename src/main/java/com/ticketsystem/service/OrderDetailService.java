@@ -42,5 +42,4 @@ public class OrderDetailService {
     public List<OrderDetailResponse> getOrderDetailsByUserId(Integer userId) {
         return orderDetailRepository.findByUserId(userId);
     }
-
 }

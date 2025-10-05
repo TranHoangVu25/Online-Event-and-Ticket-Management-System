@@ -180,7 +180,7 @@
                     </div>
                 </div>
 
-                <table class="orders-table">
+                <table class="orders-table" >
                     <thead>
                     <tr>
                         <th>
@@ -197,27 +197,36 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr th:each="order : ${orderForm}" >
                         <td>
                             <input type="checkbox" class="order-checkbox" value="1">
                         </td>
-                        <td class="order-id">#ORD001</td>
+                        <td class="order-id" th:text="${order.orderId}">#ORD001</td>
                         <td class="customer-info">
-                            <div class="customer-name">Nguyễn Văn A
+                            <div class="customer-name" th:text="${order.fullName}">Nguyễn Văn A
 <!--                                <div class="customer-email">nguyenvana@email.com</div>-->
                             </div>
                         </td>
-                        <td class="event-name">Concert Rock Night
+                        <td class="event-name" th:text="${order.eventName}">Concert Rock Night
 <!--                            <div class="event-date">15/12/2024 - 20:00</div>-->
                         </td>
-                        <td class="ticket-count">2 vé</td>
-                        <td class="order-total">₫400,000</td>
+                        <td class="ticket-count" th:text="${order.quantity}">2 vé</td>
+                        <td class="order-total"
+                            th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VND'"
+                        >₫400,000</td>
                         <td>
-                            <span class="status-badge pending">Chờ xử lý</span>
+                            <span class="status-badge pending"
+                                  th:text="${order.status == 0 ? 'Pending' : (order.status == 1 ? 'Success' : 'Failed')}"
+                            >Chờ xử lý</span>
                         </td>
-                        <td class="order-date">10/12/2024</td>
+                        <td class="order-date"
+                            th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy hh:mm a')}"
+                        >10/12/2024</td>
                         <td class="actions">
-                            <button class="action-btn view" onclick="viewOrder('ORD001')" title="Xem chi tiết">
+                            <button
+                                    class="action-btn view"
+                                    title="Xem chi tiết"
+                                    th:onclick="|viewOrder(${order.orderId}, ${order.ticketClassId})|">
                                 <i class="fas fa-eye"></i>
                             </button>
                             <button class="action-btn confirm" onclick="confirmOrder('ORD001')" title="Xác nhận">
@@ -344,6 +353,8 @@
         </div>
     </div>
 
-    <script th:src="@{/js/admin-orders.js}"></script>
+<!--    <script th:src="@{/js/admin-orders.js}"></script>-->
+    <script  th:src="@{/js/admin-orders.js(v=${#dates.createNow().time})}"></script>
+
 </body>
 </html>
