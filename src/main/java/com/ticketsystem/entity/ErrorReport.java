@@ -1,9 +1,6 @@
 package com.ticketsystem.entity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class ErrorReport {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
      Integer id;
@@ -53,4 +51,11 @@ public class ErrorReport {
      LocalDateTime updatedAt;
 
     @PreUpdate void onUpdate(){ updatedAt = LocalDateTime.now(); }
+
+    @PrePersist
+    void onCreate() {
+        errorId = java.util.UUID.randomUUID().toString();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
 }
