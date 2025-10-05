@@ -30,27 +30,17 @@ public class UserOrdersController {
     PaymentService paymentService;
     OrderDetailService orderDetailService;
 
-
-    @GetMapping("/customer-orders")
-    String getPayment(Model model, HttpSession session){
-        Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {
-            // Nếu chưa login, redirect về login hoặc trả lỗi
-            return "redirect:/login";
-        }
-        List<FormUserOrderResponse> orderForm = new ArrayList<>();
-        List<OrderDetailResponse> orderDetails = orderDetailService.getOrderDetailsByUserId(userId);
-
-        for (OrderDetailResponse orderDetail : orderDetails) {
-            TicketClass ticketClass = ticketClassService.getTicketClass(orderDetail.getId().getTicketClassId());
-            Order order = orderService.getOrderById(orderDetail.getId().getOrderId());
-            orderForm.add(new FormUserOrderResponse(ticketClass, order, orderDetail));
-        }
-        model.addAttribute("order-request",new OrderCreationRequest());
-        model.addAttribute("orderForm",orderForm);
-        return "customer/customer-orders";
+@GetMapping("/customer-orders")
+String getPayment(Model model, HttpSession session){
+    Integer userId = (Integer) session.getAttribute("userId");
+    if (userId == null) {
+        // Nếu chưa login, redirect về login hoặc trả lỗi
+        return "redirect:/login";
     }
-
+    List<UserOderResponse> orderForm = orderService.getAllOrderByUserId(userId);
+    model.addAttribute("orderForm",orderForm);
+    return "customer/customer-orders";
+}
     @PostMapping("/checkout/{userId}")
     public String checkout(@PathVariable int userId,
                            @ModelAttribute OrderCreationRequest request,

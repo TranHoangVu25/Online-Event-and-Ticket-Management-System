@@ -14,10 +14,10 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderD
     @Query(value = """
  SELECT new com.ticketsystem.dto.response.FormOrderDetailResponse(
         o.id,
-        CAST(o.createdAt AS java.time.LocalDateTime),
+        o.createdAt,
         e.name,
         e.thumbnailUrl,
-        CAST(e.startTime AS java.time.LocalDateTime),
+        e.startTime,
         l.addressDetail,
         tc.name,
         od.quantity,
@@ -46,6 +46,4 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderD
     WHERE o.user.id = :userId
 """)
     List<OrderDetailResponse> findByUserId(@Param("userId") Integer userId);
-
-
 }

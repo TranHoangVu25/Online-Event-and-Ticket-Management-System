@@ -2,6 +2,7 @@ package com.ticketsystem.service;
 
 import com.ticketsystem.dto.request.OrderCreationRequest;
 import com.ticketsystem.dto.response.OrderResponse;
+import com.ticketsystem.dto.response.UserOderResponse;
 import com.ticketsystem.entity.*;
 import com.ticketsystem.mapper.OrderMapper;
 import com.ticketsystem.repository.OrderRepository;
@@ -84,5 +85,12 @@ public class OrderService {
 
     public Order getOrderById(int id){
         return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("id not found"));
+    }
+    public List<Order> getAllOrder(){
+        return orderRepository.findAll();
+    }
+
+    public List<UserOderResponse> getAllOrderByUserId(Integer userId){
+        return orderRepository.findAllOrder(userId);
     }
 }
