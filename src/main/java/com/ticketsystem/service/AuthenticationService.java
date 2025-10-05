@@ -33,7 +33,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
     UserRepository userRepository;
 
@@ -55,9 +55,9 @@ public class AuthenticationService {
         boolean isValid = true;
         //thêm khối try catch để nếu verifyToken trả về exception thì trả về false
         try {
-            verifyToken(token,false);
+            verifyToken(token, false);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             isValid = false;
         }
         return IntrospectResponse.builder()
@@ -70,10 +70,10 @@ public class AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new Exception("USER_NOT_EXISTED"));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        boolean authenticated = passwordEncoder.matches(request.getPassword(),user
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), user
                 .getPasswordHash());
 
-        if (!authenticated){
+        if (!authenticated) {
             throw new Exception("UNAUTHENTICATED");
         }
         var token = generateToken(user);
@@ -85,7 +85,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    private SignedJWT verifyToken (String token, boolean isRefresh) throws Exception {
+    private SignedJWT verifyToken(String token, boolean isRefresh) throws Exception {
         //Tạo đối tượng để xác minh chữ ký JWT bằng khóa bí mật SIGN_KEY
         JWSVerifier verifier = new MACVerifier(SIGN_KEY.getBytes());
 
@@ -93,10 +93,10 @@ public class AuthenticationService {
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         // lấy ngày hết hạn của token
-        Date expiryTime =(isRefresh)?
+        Date expiryTime = (isRefresh) ?
                 new Date(signedJWT.getJWTClaimsSet().getIssueTime()
-                        .toInstant().plus(REFRESHABLE_DURATION,ChronoUnit.SECONDS).toEpochMilli())
-                :signedJWT.getJWTClaimsSet().getExpirationTime();
+                        .toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
+                : signedJWT.getJWTClaimsSet().getExpirationTime();
 
         //kiểm tra token hợp lệ
         var verified = signedJWT.verify(verifier);
@@ -112,10 +112,10 @@ public class AuthenticationService {
 //            log.info("jwt id was existed in InvalidatedToken table");
 //            throw (new AppException(ErrorCode.UNAUTHENTICATED));
 //        }
-        return  signedJWT;
+        return signedJWT;
     }
 
-    private String generateToken(User user){
+    private String generateToken(User user) {
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -127,7 +127,7 @@ public class AuthenticationService {
                         Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
                 ))
 
-                .claim("scope",buildScope(user))
+                .claim("scope", buildScope(user))
 
                 //#16 thêm vào ID của jwt để lưu trữ token gần nhất mới hết hạn trong db
                 .jwtID(UUID.randomUUID().toString())
@@ -135,13 +135,13 @@ public class AuthenticationService {
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
-        JWSObject jwsObject = new JWSObject(header,payload);
+        JWSObject jwsObject = new JWSObject(header, payload);
         try {
             jwsObject.sign(new MACSigner(SIGN_KEY.getBytes()));
 
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            log.error("Cannot create token ",e);
+            log.error("Cannot create token ", e);
             throw new RuntimeException(e);
         }
     }

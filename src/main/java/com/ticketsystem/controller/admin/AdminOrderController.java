@@ -13,10 +13,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.Normalizer;
 import java.util.List;
@@ -43,6 +40,25 @@ public class AdminOrderController {
             @PathVariable int orderId,
             @PathVariable int ticketClassId
     ){
-        return orderDetailService.getOrderDetailById(orderId,ticketClassId);
+        FormOrderDetailResponse response = orderDetailService.getOrderDetailById(orderId,ticketClassId);
+        log.info("Order's detail information:"+response);
+        return response;
+    }
+
+    @PostMapping("admin-order-confirm/{orderId}")
+    public String confirmOder(
+            @PathVariable int orderId
+    ){
+        orderService.confirmOrder(orderId);
+        return "redirect:/admin/admin-orders";
+    }
+
+    @PostMapping("admin-order-cancel/{orderId}")
+    public String cancelOrder(
+            @PathVariable int orderId
+    ){
+        orderService.cancelOrder(orderId);
+        log.info("in cancel Order controller");
+        return "redirect:/admin/admin-orders";
     }
 }

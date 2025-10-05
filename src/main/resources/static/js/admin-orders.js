@@ -89,13 +89,23 @@ function bulkCancel() {
     }
 }
 
-//function viewOrder(orderId) {
-//    // Populate modal with order details
-//    document.getElementById('modalOrderId').textContent = `#${orderId}`;
-//    document.getElementById('orderModal').style.display = 'flex';
-//}
+function formatDate(date) {
+    if (!(date instanceof Date) || isNaN(date)) return '-';
+    return date.toLocaleString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+function formatCurrency(amount) {
+    if (amount == null || isNaN(amount)) return '-';
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+}
+
 window.viewOrder = function (orderId, ticketClassId) {
-    fetch(`/admin/order-detail/${orderId}/${ticketClassId}`)
+    fetch(`/admin/admin-order-detail/${orderId}/${ticketClassId}`)
         .then(res => res.json())
         .then(order => {
             // ===== Thông tin đơn hàng =====
@@ -108,9 +118,9 @@ window.viewOrder = function (orderId, ticketClassId) {
             document.getElementById('modalOrderTotal').textContent = formatCurrency(order.totalAmount);
 
             // ===== Thông tin khách hàng =====
-            document.getElementById('modalCustomerName').textContent = order.customerName || '-';
-            document.getElementById('modalCustomerEmail').textContent = order.customerEmail || '-';
-            document.getElementById('modalCustomerPhone').textContent = order.customerPhone || '-';
+            document.getElementById('modalCustomerName').textContent = order.fullName || '-';
+            document.getElementById('modalCustomerEmail').textContent = order.email || '-';
+            document.getElementById('modalCustomerPhone').textContent = order.phoneNumber || '-';
 
             // ===== Chi tiết sự kiện =====
             document.getElementById('modalEventName').textContent = order.eventName || '-';
@@ -119,7 +129,7 @@ window.viewOrder = function (orderId, ticketClassId) {
             document.getElementById('modalTicketCount').textContent = `${order.quantity} vé`;
 
             // Hiển thị modal
-            document.getElementById('orderDetailsModal').style.display = 'flex';
+            document.getElementById('orderModal').style.display = 'flex';
         })
         .catch(err => {
             console.error('Lỗi khi lấy order:', err);
@@ -132,20 +142,51 @@ function closeOrderModal() {
 }
 
 function confirmOrder(orderId) {
-    showToast(`Đang xác nhận đơn hàng ${orderId}...`, 'info');
-    setTimeout(() => {
-        showToast(`Đã xác nhận đơn hàng ${orderId} thành công!`, 'success');
-    }, 1000);
+if (confirm("Bạn có chắc muốn xác nhận đơn hàng #" + orderId + " không?")) {
+        fetch(`/admin/admin-order-confirm/${orderId}`, {
+            method: "POST"
+        })
+        .then(response => {
+            if (response.redirected) {
+                // Spring redirect -> tự động chuyển hướng
+                window.location.href = response.url;
+            } else if (response.ok) {
+                alert("Xác nhận đơn hàng thành công!");
+                location.reload();
+            } else {
+                alert("Không thể xác đơn hàng (mã lỗi: " + response.status + ")");
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi khi gửi yêu cầu xác nhận:", error);
+            alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        });
+    }
 }
 
 function cancelOrder(orderId) {
-    if (confirm(`Bạn có chắc muốn hủy đơn hàng ${orderId}?`)) {
-        showToast(`Đang hủy đơn hàng ${orderId}...`, 'info');
-        setTimeout(() => {
-            showToast(`Đã hủy đơn hàng ${orderId} thành công!`, 'success');
-        }, 1000);
+    if (confirm("Bạn có chắc muốn hủy đơn hàng #" + orderId + " không?")) {
+        fetch(`/admin/admin-order-cancel/${orderId}`, {
+            method: "POST"
+        })
+        .then(response => {
+            if (response.redirected) {
+                // Spring redirect -> tự động chuyển hướng
+                window.location.href = response.url;
+            } else if (response.ok) {
+                alert("Hủy đơn hàng thành công!");
+                location.reload();
+            } else {
+                alert("Không thể hủy đơn hàng (mã lỗi: " + response.status + ")");
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi khi gửi yêu cầu hủy:", error);
+            alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        });
     }
 }
+
 
 function refundOrder(orderId) {
     if (confirm(`Bạn có chắc muốn hoàn tiền cho đơn hàng ${orderId}?`)) {

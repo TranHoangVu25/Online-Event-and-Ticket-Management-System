@@ -31,12 +31,12 @@ public class OrderDetailService {
     OrderDetailMapper orderDetailMapper;
     OrderDetailRepository orderDetailRepository;
 
-    public List<OrderDetailResponse> getOrderDetails(){
+    public List<OrderDetailResponse> getOrderDetails() {
         return orderDetailRepository.findAll().stream().map(orderDetailMapper::toOrderDetailResponse).toList();
     }
 
-    public FormOrderDetailResponse getOrderDetailById( int orderId,int ticketId){
-        return orderDetailRepository.findOrderDetailInfoNative(orderId,ticketId);
+    public FormOrderDetailResponse getOrderDetailById(int orderId, int ticketId) {
+        return orderDetailRepository.findOrderDetailInfoNative(orderId, ticketId);
     }
 
     public List<OrderDetailResponse> getOrderDetailsByUserId(Integer userId) {
