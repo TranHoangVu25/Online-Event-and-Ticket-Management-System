@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>EventHub Admin · Error Reports</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap}">
+
+    <!-- CSS riêng cho trang Error Reports -->
+    <link rel="stylesheet" th:href="@{/css/admin-error-reports.css}">
+</head>
+<body class="dark-theme">
+<!-- Background particles -->
+<div class="background-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+<!-- Header -->
+<header class="admin-header glass">
+    <div class="header-content">
+        <div class="logo-section">
+            <div class="logo-icon"><i class="fas fa-calendar-alt"></i></div>
+            <h1>EventHub Admin</h1>
+        </div>
+        <div class="admin-info">
+            <div class="admin-avatar"><i class="fas fa-user-circle"></i></div>
+            <span class="admin-name" th:text="${session.userName}">Admin</span>
+            <button class="logout-btn glass"
+                    th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')){window.location='@{/logout}';}|">
+                <i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="admin-container">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar glass">
+        <div class="sidebar-header">
+            <div class="admin-avatar-large"><i class="fas fa-user-shield"></i></div>
+            <span>Quản trị viên</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a th:href="@{/admin/home}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-tachometer-alt"></i></div><span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-events}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-calendar-plus"></i></div><span>Quản lý sự kiện</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-orders}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-shopping-cart"></i></div><span>Xử lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/users}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-users"></i></div><span>Quản lý người dùng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/admin-create-event}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-plus-circle"></i></div><span>Tạo sự kiện mới</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a th:href="@{/admin/error-reports}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-bug"></i></div><span>Báo lỗi người dùng</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-content">
+        <!-- Section header -->
+        <div class="content-header glass">
+            <div class="header-left">
+                <div class="section-icon"><i class="fas fa-bug"></i></div>
+                <div class="header-text">
+                    <h2>Danh sách báo lỗi</h2>
+                    <p>Xem & xử lý lỗi do người dùng gửi lên</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a class="btn-secondary glass" th:href="@{/admin/error-reports}">
+                    <i class="fas fa-sync-alt"></i><span>Làm mới</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Flash message -->
+        <div th:if="${mess}" th:class="'alert ' + ('alert-' + (${type}?: 'info'))" th:text="${mess}"></div>
+
+        <!-- Table -->
+        <div class="users-table-container glass">
+
+            <div class="table-responsive">
+                <table class="users-table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Error ID</th>
+                        <th>Tiêu đề</th>
+                        <th>Người báo</th>
+                        <th>Trạng thái</th>
+                        <th>Thời gian</th>
+                        <th style="text-align:right;">Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="er:${errorReports}">
+                        <td th:text="${er.id}">1</td>
+                        <td class="cell-mono"><span class="tag-badge" th:text="${er.errorId}">ERR-XXXX</span></td>
+
+                        <td>
+                            <div th:text="${er.title}">Tiêu đề</div>
+                            <div class="text-muted" style="font-size:.8rem" th:if="${er.stepsToReproduce != null}">
+                                Có bước tái hiện
+                            </div>
+                        </td>
+                        <td>
+                            <div th:text="${er.contactEmail != null ? er.contactEmail : '—'}">email@example.com</div>
+                            <div class="text-muted" style="font-size:.8rem"
+                                 th:if="${er.user != null}" th:text="${er.user.fullName}">User Name</div>
+                        </td>
+
+                        <td>
+                            <span class="status-badge" th:classappend="' ' + ${er.status}" th:text="${er.status}">new</span>
+                        </td>
+
+                        <td th:text="${#temporals.format(er.createdAt, 'yyyy-MM-dd HH:mm')}">2025-08-18 10:00</td>
+
+
+                        <td style="text-align:right;">
+                            <div class="table-actions" style="display:flex;gap:.5rem;justify-content:flex-end">
+                                <a class="btn-mini" th:href="@{/admin/error-report-detail/{id}(id=${er.id})}" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <!--                                <a class="btn-mini"-->
+<!--                                   th:href="@{|/admin/error-reports?page=${page.number}&size=${page.size}&q=${q}&status=${status}|}"-->
+<!--                                   title="Làm mới hàng">-->
+<!--                                    <i class="fas fa-rotate"></i>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                        </td>-->
+
+                                <a class="btn-mini"
+                                   title="Làm mới hàng">
+                                    <i class="fas fa-rotate"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            </div>
+
+    </main>
+</div>
+</body>
+</html>

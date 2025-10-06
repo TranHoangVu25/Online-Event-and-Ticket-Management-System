@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -33,6 +35,33 @@ public class ErrorReportService {
                 .status(request.getStatus())
                 .consentAttachInternal(request.getConsentAttachInternal())
                 .build();
+        return errorReportRepository.save(errorReport);
+    }
+    public List<ErrorReport> getAllReport(){
+        return errorReportRepository.findAll();
+    }
+
+    public ErrorReport getReportById(int id){
+        return errorReportRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Error's id not found"));
+    }
+
+    public ErrorReport changeStatus(int id,String status){
+        ErrorReport errorReport = errorReportRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Error's id not found"));
+        errorReport.setStatus(status);
+        return errorReportRepository.save(errorReport);
+    }
+    public ErrorReport changeStatus1(int id){
+        ErrorReport errorReport = errorReportRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Error's id not found"));
+        errorReport.setStatus("in_progress");
+        return errorReportRepository.save(errorReport);
+    }
+    public ErrorReport changeStatus2(int id){
+        ErrorReport errorReport = errorReportRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Error's id not found"));
+        errorReport.setStatus("resolved");
         return errorReportRepository.save(errorReport);
     }
 }

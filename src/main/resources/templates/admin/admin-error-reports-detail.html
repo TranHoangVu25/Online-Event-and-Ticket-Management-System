@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>EventHub Admin · Error Report Detail</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap}">
+
+    <!-- CSS riêng của trang Error Reports -->
+    <link rel="stylesheet" th:href="@{/css/admin-error-reports.css}">
+    <style>
+        /* Bổ sung nhẹ cho trang detail */
+        .detail-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:1.25rem}
+        .detail-card{padding:1.25rem}
+        .detail-title{font-size:1.25rem;font-weight:600;margin-bottom:.25rem}
+        .meta{display:flex;flex-wrap:wrap;gap:.5rem;margin:.5rem 0 1rem 0;color:var(--text-2);font-size:.85rem}
+        .meta .pill{padding:.25rem .5rem;border:1px solid var(--border);border-radius:8px;background:var(--glass)}
+        .field-label{font-weight:600;margin-bottom:.35rem;color:var(--text-2)}
+        .pre{white-space:pre-wrap;word-break:break-word;background:var(--glass-light);border:1px solid var(--border);
+            border-radius:12px;padding:.75rem}
+        .screenshot-box img{width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+        .stack{display:flex;flex-direction:column;gap:1rem}
+        .toolbar{display:flex;gap:.5rem;justify-content:flex-end}
+        .badge-id{font-family:ui-monospace,Menlo,Consolas,monospace;padding:.25rem .5rem;border-radius:.5rem;
+            background:rgba(148,163,184,.15);color:var(--text-2)}
+        .row-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+        .info-pair{display:flex;gap:.5rem;align-items:center}
+        .info-pair i{opacity:.8}
+        @media (max-width: 992px){ .detail-grid{grid-template-columns:1fr} }
+    </style>
+</head>
+<body class="dark-theme">
+
+<!-- Background particles -->
+<div class="background-particles">
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+</div>
+
+<!-- Header -->
+<header class="admin-header glass">
+    <div class="header-content">
+        <div class="logo-section">
+            <div class="logo-icon"><i class="fas fa-calendar-alt"></i></div>
+            <h1>EventHub Admin</h1>
+        </div>
+        <div class="admin-info">
+            <div class="admin-avatar"><i class="fas fa-user-circle"></i></div>
+            <span class="admin-name" th:text="${adminName}">Admin</span>
+            <button class="logout-btn glass"
+                    th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')){window.location='@{/logout}';}|">
+                <i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="admin-container">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar glass">
+        <div class="sidebar-header">
+            <div class="admin-avatar-large"><i class="fas fa-user-shield"></i></div>
+            <span>Quản trị viên</span>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a th:href="@{/admin}" class="nav-link"><div class="nav-icon"><i class="fas fa-tachometer-alt"></i></div><span>Dashboard</span></a></li>
+            <li class="nav-item"><a th:href="@{/admin/admin-events}" class="nav-link"><div class="nav-icon"><i class="fas fa-calendar-plus"></i></div><span>Quản lý sự kiện</span></a></li>
+            <li class="nav-item"><a th:href="@{/admin/admin-orders}" class="nav-link"><div class="nav-icon"><i class="fas fa-shopping-cart"></i></div><span>Xử lý đơn hàng</span></a></li>
+            <li class="nav-item"><a th:href="@{/admin/users}" class="nav-link"><div class="nav-icon"><i class="fas fa-users"></i></div><span>Quản lý người dùng</span></a></li>
+            <li class="nav-item"><a th:href="@{/admin/admin-create-event}" class="nav-link"><div class="nav-icon"><i class="fas fa-plus-circle"></i></div><span>Tạo sự kiện mới</span></a></li>
+            <li class="nav-item"><a th:href="@{/admin/reports}" class="nav-link"><div class="nav-icon"><i class="fas fa-chart-bar"></i></div><span>Báo cáo</span></a></li>
+            <li class="nav-item active">
+                <a th:href="@{/admin/error-reports}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-bug"></i></div><span>Báo lỗi người dùng</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-content">
+        <!-- Header section -->
+        <div class="content-header glass">
+            <div class="header-left">
+                <div class="section-icon"><i class="fas fa-bug"></i></div>
+                <div class="header-text">
+                    <h2>Chi tiết báo lỗi</h2>
+                    <p>Xem nội dung và cập nhật trạng thái xử lý</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a class="btn-secondary glass" th:href="@{/admin/error-reports}">
+                    <i class="fas fa-arrow-left"></i><span>Quay lại danh sách</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Flash -->
+        <div th:if="${mess}" th:class="'alert ' + ('alert-' + (${type}?: 'info'))" th:text="${mess}"></div>
+
+        <!-- Nội dung -->
+        <div class="detail-grid">
+            <!-- Cột trái: nội dung chính -->
+            <section class="glass detail-card stack">
+                <div class="row-actions" style="justify-content:space-between;align-items:center">
+                    <div class="info-pair" style="gap:.5rem">
+                        <span class="badge-id" title="Error ID" th:text="${er.errorId}">ERR-XXXX</span>
+                        <span class="status-badge" th:classappend="' ' + ${er.status}" th:text="${er.status}">new</span>
+                    </div>
+
+                    <div class="toolbar">
+                        <button class="btn-secondary" type="button" onclick="copyText('#errorIdText')">
+                            <i class="fas fa-copy"></i><span>Sao chép ID</span>
+                        </button>
+                        <a class="btn-secondary" th:href="@{/admin/error-reports}" title="Danh sách">
+                            <i class="fas fa-list-ul"></i><span>Danh sách</span>
+                        </a>
+                    </div>
+                </div>
+                <span id="errorIdText" class="sr-only" th:text="${er.errorId}"></span>
+
+                <div>
+                    <div class="detail-title" th:text="${er.title}">Tiêu đề lỗi</div>
+
+                    <div class="meta">
+            <span class="pill"><i class="fa-regular fa-clock"></i>&nbsp;
+              <span th:text="${#temporals.format(er.createdAt,'yyyy-MM-dd HH:mm')}">2025-08-18 10:00</span>
+
+            </span>
+                        <span class="pill" th:if="${er.updatedAt != null}"><i class="fa-solid fa-rotate-right"></i>&nbsp;Cập nhật:&nbsp;
+
+                        <span th:text="${#temporals.format(er.updatedAt,'yyyy-MM-dd HH:mm')}">2025-08-18 11:00</span>
+
+                        </span>
+                        <span class="pill" th:if="${er.consentAttachInternal}"><i class="fa-solid fa-shield-halved"></i>&nbsp;Có đồng ý đính kèm dữ liệu kỹ thuật</span>
+
+                    </div>
+                </div>
+
+                <div>
+                    <div class="field-label">Mô tả</div>
+                    <div class="pre" th:text="${er.description}">Nội dung mô tả…</div>
+
+                </div>
+
+                <div th:if="${er.stepsToReproduce != null and !#strings.isEmpty(er.stepsToReproduce)}">
+                    <div class="field-label">Steps to reproduce</div>
+                    <div class="pre" th:text="${er.stepsToReproduce}">1) … 2) …</div>
+                </div>
+
+                <div>
+                    <div class="field-label">Người báo</div>
+                    <div class="info-pair">
+                        <i class="fa-regular fa-envelope"></i>
+                        <a th:if="${er.contactEmail != null}" th:href="'mailto:' + ${er.contactEmail}" th:text="${er.contactEmail}">email@example.com</a>
+                        <span th:if="${er.contactEmail == null}">—</span>
+                    </div>
+
+                    <div class="info-pair" th:if="${er.user != null}">
+                        <i class="fa-regular fa-user"></i>
+                        <span th:text="${er.user.fullName}">User Name</span>
+                        <span class="text-muted">&nbsp;•&nbsp;ID:</span>
+                        <span class="cell-mono" th:text="${er.user.id}">1</span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Cột phải: ảnh, cập nhật trạng thái -->
+            <aside class="glass detail-card stack">
+                <!-- Ảnh/screenshot -->
+                <div>
+                    <div class="field-label">Screenshot</div>
+                    <div class="screenshot-box" th:if="${er.screenshotUrl != null}">
+                        <a th:href="${er.screenshotUrl}" target="_blank" rel="noopener">
+                            <img th:src="${er.screenshotUrl}" alt="Screenshot đính kèm">
+                        </a>
+                        <div class="text-muted" style="margin-top:.25rem">Nhấp để mở ảnh trong tab mới</div>
+                    </div>
+                    <div class="text-muted" th:if="${er.screenshotUrl == null}">Không có tệp đính kèm</div>
+                </div>
+
+                <!-- Form cập nhật trạng thái -->
+                <div>
+                    <div class="field-label">Cập nhật trạng thái</div>
+
+                    <!-- Hiển thị message từ RedirectAttributes -->
+                    <div th:if="${successMessage}" class="text-success" style="margin-bottom:.5rem" th:text="${successMessage}"></div>
+                    <div th:if="${errorMessage}" class="text-danger" style="margin-bottom:.5rem" th:text="${errorMessage}"></div>
+
+                    <form th:action="@{/admin/error-report/change-status}" method="post"
+                          style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+
+                        <!-- Ẩn id để gửi lên controller -->
+                        <input type="hidden" name="id" th:value="${er.id}" />
+
+                        <select name="status" class="input-border" style="min-width:180px">
+                            <option value="new" th:selected="${er.status == 'new'}">new</option>
+                            <option value="in_progress" th:selected="${er.status == 'in_progress'}">in_progress</option>
+                            <option value="resolved" th:selected="${er.status == 'resolved'}">resolved</option>
+                        </select>
+
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i><span>Lưu</span>
+                        </button>
+
+                        <!-- Reload trang chi tiết -->
+                        <a class="btn-secondary" th:href="@{|/admin/error-reports/${er.id}|}">
+                            <i class="fa-solid fa-rotate"></i><span>Tải lại</span>
+                        </a>
+                    </form>
+
+                    <div class="text-muted" style="margin-top:.5rem">
+                        Thay đổi trạng thái để điều phối xử lý.
+                    </div>
+                </div>
+
+
+                <!-- Thao tác nhanh -->
+                <div>
+<!--                    <div class="field-label">Thao tác nhanh</div>-->
+<!--                    <div class="row-actions">-->
+
+<!--                        &lt;!&ndash; Đang xử lý &ndash;&gt;-->
+<!--                        <form th:action="@{/admin/error-reports/change-status}" method="post" style="display:inline-block;">-->
+<!--                            <input type="hidden" name="id" th:value="${er.id}" />-->
+<!--                            <input type="hidden" name="status" value="in_progress" />-->
+<!--                            <button type="submit" class="btn-secondary">-->
+<!--                                <i class="fa-solid fa-person-digging"></i>-->
+<!--                                <span>Đang xử lý</span>-->
+<!--                            </button>-->
+<!--                        </form>-->
+
+<!--                        &lt;!&ndash; Đã xử lý &ndash;&gt;-->
+<!--                        <form th:action="@{/admin/error-reports/change-status}" method="post" style="display:inline-block;">-->
+<!--                            <input type="hidden" name="id" th:value="${er.id}" />-->
+<!--                            <input type="hidden" name="status" value="resolved" />-->
+<!--                            <button type="submit" class="btn-secondary">-->
+<!--                                <i class="fa-solid fa-circle-check"></i>-->
+<!--                                <span>Đã xử lý</span>-->
+<!--                            </button>-->
+<!--                        </form>-->
+
+<!--                    </div>-->
+
+
+                </div>
+
+
+            </aside>
+        </div>
+    </main>
+</div>
+
+<script>
+    function copyText(selector){
+        const el = document.querySelector(selector);
+        if(!el) return;
+        const text = el.textContent || el.value || '';
+        if(!text) return;
+        navigator.clipboard.writeText(text).then(()=>{
+            alert('Đã sao chép Error ID');
+        });
+    }
+</script>
+</body>
+</html>
