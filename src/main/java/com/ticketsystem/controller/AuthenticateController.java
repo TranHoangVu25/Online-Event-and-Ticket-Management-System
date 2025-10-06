@@ -60,7 +60,7 @@ public class AuthenticateController {
             session.setAttribute("full_name",full_name);
 
             if (scope.contains("ROLE_ADMIN")){
-                return "redirect:/admin/users";
+                return "redirect:/admin-home";
             }
             else{
                 return "redirect:/home-page";

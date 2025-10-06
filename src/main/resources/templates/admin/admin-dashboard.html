@@ -116,65 +116,6 @@
                 </div>
             </div>
 
-            <!-- Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 th:text="${eventCount}">25</h3>
-                        <p>Sự kiện đang diễn ra</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+12%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-ticket-alt"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 th:text="${ticketSold}">1,247</h3>
-                        <p>Vé đã bán</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+8%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 th:text="${userCount}">892</h3>
-                        <p>Người dùng đăng ký</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+15%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 th:text="${revenue}">₫45.2M</h3>
-                        <p>Doanh thu tháng</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+23%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Recent Activities and Charts -->
             <div class="dashboard-content">
                 <div class="content-row">
@@ -186,9 +127,9 @@
                         </div>
                         <div class="recent-events">
                             <div class="event-item" th:each="event : ${events}">
-                                <div class="event-icon">
-                                    <i class="fas" th:classappend="${event.thumbnailUrl}"></i>
-                                </div>
+<!--                                <div class="event-icon">-->
+<!--                                    <i class="fas" th:classappend="${event.thumbnailUrl}"></i>-->
+<!--                                </div>-->
                                 <div class="event-info">
                                     <h4 th:text="${event.name}">Concert Rock Night</h4>
                                     <p th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy hh:mm a')}">
@@ -238,13 +179,9 @@
                                 <button class="chart-btn" data-period="year">Năm</button>
                             </div>
                         </div>
-                        <div class="chart-container">
-                            <div class="chart-placeholder">
-                                <i class="fas fa-chart-line"></i>
-                                <p>Biểu đồ doanh thu sẽ được hiển thị ở đây</p>
-                                <span>Dữ liệu thống kê theo thời gian thực</span>
-                            </div>
-                        </div>
+
+                        <!-- Fragment sẽ được tải ở đây -->
+                        <div th:replace="admin/revenue-chart-fragment :: revenue-chart"></div>
                     </div>
                 </div>
             </div>
@@ -257,6 +194,10 @@
         <span class="toast-message"></span>
     </div>
 
-    <script th:src="@{/js/admin-dashboard.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script th:src="@{/js/admin-dashboard.js(v=${#dates.createNow().time})}"></script>
+
+<!--    <script th:src="@{/js/admin-dashboard.js}"></script>-->
 </body>
 </html>

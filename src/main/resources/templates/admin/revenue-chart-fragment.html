@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- Revenue Chart Fragment -->
+<div th:fragment="revenue-chart">
+    <!-- Hiển thị tổng doanh thu -->
+    <div th:if="${revenueData != null and revenueData.totalRevenue != null}" class="total-revenue">
+        <h4>Tổng doanh thu</h4>
+        <p class="amount" th:text="|${#numbers.formatDecimal(revenueData.totalRevenue, 0, 'COMMA', 0, 'POINT')} VND|"></p>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="revenueChart"></canvas>
+        <div class="chart-placeholder" id="chartPlaceholder">
+            <i class="fas fa-chart-line"></i>
+            <p>Biểu đồ doanh thu sẽ được hiển thị ở đây</p>
+            <span>Dữ liệu thống kê theo thời gian thực</span>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // Dữ liệu từ server
+        const revenueData = /*[[${revenueData.monthlyRevenue}]]*/ [];
+        const totalRevenue = /*[[${revenueData.totalRevenue != null ? revenueData.totalRevenue : 0}]]*/ 0;
+        const activePeriod = /*[[${activePeriod}]]*/ 'year';
+
+        // Render biểu đồ khi fragment được tải
+        document.addEventListener('DOMContentLoaded', function() {
+            if (revenueData && revenueData.length > 0) {
+                renderRevenueChart(revenueData, totalRevenue, activePeriod);
+            } else {
+                showChartError('Không có dữ liệu để hiển thị');
+            }
+        });
+        /*]]>*/
+    </script>
+</div>
+</body>
+</html>
