@@ -27,10 +27,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final String[] PUBLIC_END_POINT_POST = {
-            "/login","/register", "/auth/token", "/auth/introspect", "auth/logout", "auth/refresh"
+            "/login","/register", "/auth/token", "/auth/introspect", "auth/logout", "auth/refresh","/forgot-password"
     };
     private final String[] PUBLIC_END_POINT_GET = {
-            "/login","/register","test"
+            "/login","/register","/forgot-password"
     };
 
     @Autowired
@@ -46,12 +46,9 @@ public class SecurityConfig {
                                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, PUBLIC_END_POINT_POST).permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_END_POINT_GET).permitAll()
-                                .requestMatchers(HttpMethod.PUT).permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()
                                 .requestMatchers(HttpMethod.POST).permitAll()
-                                .requestMatchers(HttpMethod.DELETE).permitAll()
-//                         .requestMatchers(HttpMethod.GET,"/users").hasRole(Role.ADMIN.name())
-                                // thay vì phân quyền theo end point thì có thể dùng @Preauthorize #10
+//
                                 .anyRequest().authenticated());
 
         //thực hiện request mà cung cấp 1 token của user thì server sẽ xác thực người dùng

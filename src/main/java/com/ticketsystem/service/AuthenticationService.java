@@ -70,15 +70,15 @@ public class AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new Exception("USER_NOT_EXISTED"));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        boolean authenticated = passwordEncoder.matches(request.getPassword(), user
-                .getPasswordHash());
+
+        String rawPassword = request.getPassword().trim();
+
+        boolean authenticated = passwordEncoder.matches(rawPassword, user.getPasswordHash());
 
         if (!authenticated) {
             throw new Exception("UNAUTHENTICATED");
         }
         var token = generateToken(user);
-        log.info(token);
-        log.info("in authenticate service");
         return AuthenticationResponse.builder()
                 .token(token)
                 .authenticated(true)

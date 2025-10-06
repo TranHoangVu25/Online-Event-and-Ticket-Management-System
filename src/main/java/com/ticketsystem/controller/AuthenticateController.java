@@ -2,24 +2,30 @@ package com.ticketsystem.controller;
 
 import com.ticketsystem.config.CustomJwtDecoder;
 import com.ticketsystem.dto.request.AuthenticationRequest;
+import com.ticketsystem.dto.request.ForgotPasswordDTO;
 import com.ticketsystem.dto.request.UserCreationRequest;
 import com.ticketsystem.dto.response.AuthenticationResponse;
 import com.ticketsystem.repository.UserRepository;
+import com.ticketsystem.service.AuthService;
 import com.ticketsystem.service.AuthenticationService;
+import com.ticketsystem.service.SpamProtectionService;
 import com.ticketsystem.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -30,6 +36,8 @@ public class AuthenticateController {
     UserRepository userRepository;
     AuthenticationService authenticationService;
     CustomJwtDecoder customJwtDecoder;
+    SpamProtectionService spamProtectionService;
+    AuthService authService;
 
     @GetMapping("/login")
     String login(Model model){
@@ -71,7 +79,6 @@ public class AuthenticateController {
         }
     }
 
-
     @GetMapping("/register")
     String getFormRegister(Model model){
         model.addAttribute("user",new UserCreationRequest());
@@ -97,7 +104,51 @@ public class AuthenticateController {
     }
 
     @GetMapping("/forgot-password")
-    public String forgotPassword(){
+    public String showForgotPassword(Model model) {
+        model.addAttribute("forgotDTO", new ForgotPasswordDTO());
         return "forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> doForgot(
+            @Valid @RequestBody ForgotPasswordDTO forgotDTO,
+            BindingResult br,
+            HttpServletRequest request) {
+
+        log.info("in forgot password ================");
+        Map<String, String> response = new HashMap<>();
+        String ipAddress = request.getRemoteAddr();
+
+        if (spamProtectionService.isBlocked(ipAddress)) {
+            response.put("mess", "Bạn đã yêu cầu quá nhiều lần. Vui lòng thử lại sau 15 phút.");
+            response.put("type", "error");
+            return ResponseEntity.status(429).body(response);
+        }
+
+        if (br.hasErrors()) {
+            response.put("mess", "Dữ liệu không hợp lệ");
+            response.put("type", "error");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        try {
+            String message = authService.forgotPassword(forgotDTO);
+            spamProtectionService.recordRequest(ipAddress);
+            response.put("mess", message);
+            response.put("type", "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("mess", e.getMessage());
+            response.put("type", "error");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        // Xóa toàn bộ session, bao gồm cả "loggedInUser"
+        session.invalidate();
+        // Chuyển hướng về trang chủ
+        return "redirect:/";
     }
 }

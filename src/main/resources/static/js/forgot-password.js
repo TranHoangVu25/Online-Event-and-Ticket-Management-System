@@ -1,227 +1,220 @@
+// ===========================
 // Forgot Password JavaScript
-// Simple JavaScript for basic functionality
+// ===========================
 
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    const messageEl = toast.querySelector('.toast-message');
-    const iconEl = toast.querySelector('.toast-icon');
-    
-    // Set icon based on type
+// --- Hàm hiển thị Toast ---
+function showToast(message, type = "info") {
+    const toast = document.getElementById("toast");
+    if (!toast) return console.error("Không tìm thấy phần tử #toast");
+
+    const icon = toast.querySelector(".toast-icon");
+    const msg = toast.querySelector(".toast-message");
+
     const icons = {
-        success: 'fas fa-check-circle',
-        error: 'fas fa-exclamation-circle',
-        warning: 'fas fa-exclamation-triangle',
-        info: 'fas fa-info-circle'
+        success: "fas fa-check-circle",
+        error: "fas fa-exclamation-circle",
+        warning: "fas fa-exclamation-triangle",
+        info: "fas fa-info-circle"
     };
-    
-    iconEl.className = icons[type] || icons.info;
-    messageEl.textContent = message;
-    
-    // Set toast type
-    toast.className = `toast glass ${type}`;
-    toast.classList.add('show');
-    
-    // Auto hide after 3 seconds
+
+    icon.className = `toast-icon ${icons[type] || icons.info}`;
+    msg.textContent = message;
+
+    toast.className = `toast glass ${type} show`;
+
     setTimeout(() => {
-        toast.classList.remove('show');
+        toast.classList.remove("show");
     }, 3000);
 }
 
-// Simulated user database for demo
-const userDatabase = [
-    { email: 'admin@eventhub.com', role: 'admin' },
-    { email: 'user@eventhub.com', role: 'user' },
-    { email: 'nguyenvanan@email.com', role: 'user' },
-    { email: 'tranthibinh@email.com', role: 'user' },
-    { email: 'levancuong@email.com', role: 'moderator' }
-];
-
-// Check if email exists in database
-function checkEmailExists(email) {
-    return userDatabase.some(user => user.email.toLowerCase() === email.toLowerCase());
-}
-
-// Simulate sending email
-function sendResetEmail(email) {
-    return new Promise((resolve, reject) => {
-        // Simulate API call delay
-        setTimeout(() => {
-            // Simulate 90% success rate
-            const isSuccess = Math.random() > 0.1;
-            
-            if (isSuccess) {
-                resolve({
-                    success: true,
-                    message: 'Email đã được gửi thành công'
-                });
-            } else {
-                reject({
-                    success: false,
-                    message: 'Gửi email thất bại. Vui lòng thử lại sau.'
-                });
-            }
-        }, 2000);
-    });
-}
-
-// Form validation
+// --- Validate Email ---
 function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
-// Clear form errors
+// --- Xóa lỗi form ---
 function clearFormErrors() {
     document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
     document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
 }
 
-// Show field error
+// --- Hiển thị lỗi cụ thể cho field ---
 function showFieldError(fieldId, message) {
     const field = document.getElementById(fieldId);
     const errorEl = document.getElementById(`${fieldId}-error`);
     const formGroup = field.closest('.form-group');
-    
-    if (errorEl) {
-        errorEl.textContent = message;
-    }
-    
-    if (formGroup) {
-        formGroup.classList.add('error');
-    }
+
+    if (errorEl) errorEl.textContent = message;
+    if (formGroup) formGroup.classList.add('error');
 }
 
-// Handle form submission
-document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const email = document.getElementById('email').value.trim();
-    const submitBtn = document.querySelector('.submit-btn');
-    
-    // Clear previous errors
-    clearFormErrors();
-    
-    let isValid = true;
-    
-    // Validate email
-    if (!email) {
-        showFieldError('email', 'Vui lòng nhập email');
-        isValid = false;
-    } else if (!validateEmail(email)) {
-        showFieldError('email', 'Email không hợp lệ');
-        isValid = false;
-    }
-    
-    if (!isValid) {
-        showToast('Vui lòng kiểm tra lại thông tin', 'error');
-        return;
-    }
-    
-    // Check if email exists
-    if (!checkEmailExists(email)) {
-        showFieldError('email', 'Email không tồn tại trong hệ thống');
-        showToast('Email không tồn tại', 'error');
-        return;
-    }
-    
-    // Disable submit button and show loading
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
-    
-    try {
-        // Send reset email
-        const result = await sendResetEmail(email);
-        
-        if (result.success) {
-            // Show success message
-            document.getElementById('forgotPasswordForm').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
-            showToast('Email đã được gửi thành công!', 'success');
+// --- Nút cooldown ---
+function disableButtonWithCooldown(button, seconds, originalHTML) {
+    let remaining = seconds;
+    button.disabled = true;
+    button.innerHTML = `Vui lòng đợi (${remaining}s)`;
+
+    const interval = setInterval(() => {
+        remaining--;
+        if (remaining > 0) {
+            button.innerHTML = `Vui lòng đợi (${remaining}s)`;
+        } else {
+            clearInterval(interval);
+            button.disabled = false;
+            button.innerHTML = originalHTML;
         }
-    } catch (error) {
-        showToast(error.message, 'error');
-        
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi liên kết đặt lại mật khẩu';
-    }
-});
-
-// Resend email function
-function resendEmail() {
-    const email = document.getElementById('email').value.trim();
-    const resendBtn = document.querySelector('.btn-secondary');
-    
-    if (!email) {
-        showToast('Không tìm thấy email để gửi lại', 'error');
-        return;
-    }
-    
-    // Disable resend button and show loading
-    resendBtn.disabled = true;
-    resendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
-    
-    sendResetEmail(email)
-        .then(result => {
-            if (result.success) {
-                showToast('Email đã được gửi lại thành công!', 'success');
-            }
-        })
-        .catch(error => {
-            showToast(error.message, 'error');
-        })
-        .finally(() => {
-            // Re-enable resend button
-            resendBtn.disabled = false;
-            resendBtn.innerHTML = '<i class="fas fa-redo"></i> Gửi lại email';
-        });
+    }, 1000);
 }
 
-// Real-time email validation
-document.getElementById('email').addEventListener('input', function() {
+// --- Gửi form quên mật khẩu ---
+document.getElementById("forgotPasswordForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const submitBtn = document.querySelector(".submit-btn");
+    const originalHTML = submitBtn.innerHTML;
+
+    clearFormErrors();
+
+    if (!email) {
+        showFieldError("email", "Vui lòng nhập email");
+        showToast("Vui lòng nhập email", "error");
+        return;
+    }
+
+    if (!validateEmail(email)) {
+        showFieldError("email", "Email không hợp lệ");
+        showToast("Email không hợp lệ", "error");
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang gửi...`;
+
+    try {
+        const response = await fetch("/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+
+        // Nếu server trả về HTML (vd: 404, redirect), tránh lỗi JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Server không trả về JSON!");
+        }
+
+        const result = await response.json();
+
+        if (response.status === 429) {
+            showToast(result.mess || "Bạn thao tác quá nhanh", "error");
+            disableButtonWithCooldown(submitBtn, 30, originalHTML);
+            return;
+        }
+
+        if (!response.ok) {
+            showFieldError("email", result.mess || "Email không tồn tại");
+            showToast(result.mess || "Có lỗi xảy ra", "error");
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalHTML;
+            return;
+        }
+
+        document.getElementById("forgotPasswordForm").style.display = "none";
+        document.getElementById("successMessage").style.display = "block";
+        showToast(result.mess || "Email khôi phục đã được gửi!", "success");
+
+    } catch (error) {
+        console.error(error);
+        showToast("Đã xảy ra lỗi, vui lòng thử lại sau!", "error");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalHTML;
+    }
+});
+
+// --- Gửi lại email ---
+async function resendEmail() {
+    const email = document.getElementById("email").value.trim();
+    const resendBtn = document.querySelector(".btn-secondary");
+    const originalHTML = resendBtn.innerHTML;
+
+    if (!email) {
+        showToast("Không tìm thấy email để gửi lại", "error");
+        return;
+    }
+
+    resendBtn.disabled = true;
+    resendBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang gửi...`;
+
+    try {
+        const response = await fetch("/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Server không trả về JSON!");
+        }
+
+        const result = await response.json();
+
+        if (response.status === 429) {
+            showToast(result.mess || "Vui lòng chờ trước khi gửi lại", "error");
+            disableButtonWithCooldown(resendBtn, 30, originalHTML);
+            return;
+        }
+
+        if (!response.ok) {
+            showToast(result.mess || "Có lỗi xảy ra", "error");
+            resendBtn.disabled = false;
+            resendBtn.innerHTML = originalHTML;
+            return;
+        }
+
+        showToast(result.mess || "Email đã được gửi lại!", "success");
+        disableButtonWithCooldown(resendBtn, 30, originalHTML);
+
+    } catch (error) {
+        console.error(error);
+        showToast("Đã xảy ra lỗi, vui lòng thử lại sau!", "error");
+        resendBtn.disabled = false;
+        resendBtn.innerHTML = originalHTML;
+    }
+}
+window.resendEmail = resendEmail;
+
+// --- Xử lý input email realtime ---
+document.getElementById("email").addEventListener("input", function () {
     const email = this.value.trim();
-    const errorEl = document.getElementById('email-error');
-    const formGroup = this.closest('.form-group');
-    
-    // Clear error when user starts typing
-    if (errorEl) {
-        errorEl.textContent = '';
-    }
-    
-    if (formGroup) {
-        formGroup.classList.remove('error');
-    }
-    
-    // Real-time validation
+    const errorEl = document.getElementById("email-error");
+    const formGroup = this.closest(".form-group");
+
+    if (errorEl) errorEl.textContent = "";
+    if (formGroup) formGroup.classList.remove("error");
+
     if (email && !validateEmail(email)) {
-        showFieldError('email', 'Email không hợp lệ');
+        showFieldError("email", "Email không hợp lệ");
     }
 });
 
-// Keyboard shortcuts
-document.addEventListener('keydown', function(e) {
-    // Enter key to submit form
-    if (e.key === 'Enter' && document.getElementById('forgotPasswordForm').style.display !== 'none') {
-        document.getElementById('forgotPasswordForm').dispatchEvent(new Event('submit'));
+// --- Phím tắt ---
+document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && document.getElementById("forgotPasswordForm").style.display !== "none") {
+        document.getElementById("forgotPasswordForm").dispatchEvent(new Event("submit"));
     }
-    
-    // Escape key to go back to login
-    if (e.key === 'Escape') {
-        window.location.href = '/';
+    if (e.key === "Escape") {
+        window.location.href = "/login";
     }
 });
 
-// Focus management
-document.addEventListener('DOMContentLoaded', function() {
-    // Focus on email input when page loads
-    document.getElementById('email').focus();
-    
-    // Add loading animation to shapes
-    const shapes = document.querySelectorAll('.shape');
+// --- Animation & focus ---
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("email").focus();
+    const shapes = document.querySelectorAll(".shape");
     shapes.forEach((shape, index) => {
         shape.style.animationDelay = `${index * 0.5}s`;
     });
 });
-
-// Export functions for global access
-window.resendEmail = resendEmail;

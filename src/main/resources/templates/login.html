@@ -41,7 +41,9 @@
                             id="username"
                             placeholder="Nhập tên"
                             required
-                            th:field="*{username}"                    />
+                            th:field="*{username}"
+                            autocomplete="username"
+                    />
                     <div class="error-message"
                          th:id="'username-error'"
                          th:if="${usernameError}"
@@ -61,6 +63,7 @@
                                 placeholder="Nhập mật khẩu"
                                 th:field="*{password}"
                                 required
+                                autocomplete="current-password"
                         />
                         <button type="button" class="toggle-password" onclick="togglePassword()">
                             <i class="fas fa-eye" id="passwordIcon"></i>
@@ -75,7 +78,7 @@
 
                 <div class="form-options">
                     <label class="checkbox-container">
-                        <input type="checkbox" id="remember" name="remember" th:checked="${remember}" />
+                        <input type="checkbox" id="remember" name="remember-me" th:checked="${remember}" />
                         <span class="checkmark"></span>
                         Ghi nhớ đăng nhập
                     </label>
