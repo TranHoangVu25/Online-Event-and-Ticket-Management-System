@@ -128,7 +128,8 @@ public class AuthenticationService {
                 ))
 
                 .claim("scope", buildScope(user))
-
+                .claim("userId", user.getId())
+                .claim("full_name",user.getFullName())
                 //#16 thêm vào ID của jwt để lưu trữ token gần nhất mới hết hạn trong db
                 .jwtID(UUID.randomUUID().toString())
                 .build();
@@ -154,5 +155,10 @@ public class AuthenticationService {
             stringJoiner.add("ROLE_" + user.getRole().getRoleName());
         }
         return stringJoiner.toString();
+    }
+
+    public boolean checkPassword(String rawPassword,String hashPassword){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(rawPassword,hashPassword);
     }
 }

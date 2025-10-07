@@ -23,4 +23,5 @@ public class UserResponse1 {
     Boolean isActive = true;
     LocalDateTime createdAt = LocalDateTime.now();
     LocalDateTime lastLogin;
+    boolean mustChangePassword;
 }

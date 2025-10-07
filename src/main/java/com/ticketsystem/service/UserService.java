@@ -60,6 +60,10 @@ public class UserService {
         if (request.getPasswordHash()==null){
             request.setPasswordHash(user.getPasswordHash());
         }
+        else {
+            String password = passwordEncoder.encode(request.getPasswordHash());
+            user.setPasswordHash(password);
+        }
         if (request.getRole()==null){
             request.setRole(user.getRole());
         }
@@ -76,5 +80,12 @@ public class UserService {
     public String getFullName(Integer userId){
         return userRepository.findFullName(userId)
                 .orElseThrow(()->new RuntimeException("Id not found"));
+    }
+
+    public User changePassword(String password, int userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("In change password. Id not found"));
+        user.setPasswordHash(passwordEncoder.encode(password));
+        return userRepository.save(user);
     }
 }

@@ -5,6 +5,9 @@ import com.ticketsystem.dto.request.AuthenticationRequest;
 import com.ticketsystem.dto.request.ForgotPasswordDTO;
 import com.ticketsystem.dto.request.UserCreationRequest;
 import com.ticketsystem.dto.response.AuthenticationResponse;
+import com.ticketsystem.dto.response.UserResponse;
+import com.ticketsystem.dto.response.UserResponse1;
+import com.ticketsystem.entity.User;
 import com.ticketsystem.repository.UserRepository;
 import com.ticketsystem.service.AuthService;
 import com.ticketsystem.service.AuthenticationService;
@@ -54,14 +57,16 @@ public class AuthenticateController {
             AuthenticationResponse response = authenticationService.authenticate(request);
             String jwt = response.getToken();
             session.setAttribute("jwt",jwt);
-
+//            log.info("jwt====="+jwt);
             Jwt decodedJwt  = customJwtDecoder.decode(jwt);
             String scope = decodedJwt.getClaimAsString("scope");
             String userName = decodedJwt.getClaimAsString("sub");
+            String full_name = decodedJwt.getClaimAsString("full_name");
+            int userId = Integer.parseInt(decodedJwt.getClaimAsString("userId"));
 
-            Integer userId = userRepository.findIdByUsername(userName)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            String full_name = userService.getFullName(userId);
+            UserResponse1 user = userService.getUser(userId);
+
+            log.info("must ========="+ user.isMustChangePassword());
 
             session.setAttribute("userName",userName);
             session.setAttribute("userId", userId);
@@ -70,9 +75,16 @@ public class AuthenticateController {
             if (scope.contains("ROLE_ADMIN")){
                 return "redirect:/admin-home";
             }
-            else{
-                return "redirect:/home-page";
+//            else if (){
+            else if (user.isMustChangePassword() && scope.contains("ROLE_USER")){
+                User userEntity = userRepository.findById(user.getId())
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+
+                userEntity.setMustChangePassword(false);
+                userRepository.save(userEntity);
+                return "redirect:/user/change-password";
             }
+            else return "redirect:/home-page";
         }catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "login";
@@ -149,6 +161,6 @@ public class AuthenticateController {
         // Xóa toàn bộ session, bao gồm cả "loggedInUser"
         session.invalidate();
         // Chuyển hướng về trang chủ
-        return "redirect:/";
+        return "redirect:/login";
     }
 }

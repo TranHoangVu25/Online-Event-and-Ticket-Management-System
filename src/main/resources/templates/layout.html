@@ -14,8 +14,8 @@
             <span class="close-btn material-symbols-rounded">close</span>
             <li><a th:href="@{/home-page}">Home</a></li>
             <li><a th:href="@{/user/main-event}">Events</a></li>
-            <li><a th:href="@{/user/report-error}">Report Error</a></li>
             <li><a th:href="@{/user/customer-orders}">My orders</a></li>
+            <li><a th:href="@{/user/report-error}">Report Error</a></li>
         </ul>
         <span style = "color: blanchedalmond;"> Welcome, <b th:text="${session.full_name}" >User!</b></span>
         <div class="dropdown">
@@ -23,18 +23,23 @@
                 More
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li>
-                    <a class="dropdown-item" style="color: red" href="#" th:onclick="|if(confirm('Are you sure you want to log out?')) window.location='@{/}';|">Logout</a>
-                </li>
+
                 <li>
                     <a class="dropdown-item" th:href="@{/user/customer-orders}">My orders</a>
                 </li>
                 <li>
                     <a class="dropdown-item"
-                       th:href="@{/user/profile/{username}(username=${session.userName})}">
+                       th:href="@{/user/profile}">
                     Edit profile</a>
                 </li>
-
+                <li>
+                    <a class="dropdown-item"
+                       th:href="@{/user/change-password}">
+                        Change Password</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" style="color: red" href="#" th:onclick="|if(confirm('Are you sure you want to log out?')) window.location='@{/logout}';|">Logout</a>
+                </li>
             </ul>
         </div>
     </nav>

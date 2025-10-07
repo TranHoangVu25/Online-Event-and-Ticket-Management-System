@@ -29,6 +29,7 @@ public class AuthService {
         String newPassword = generateRandomPassword(10);
 
         user.setPasswordHash(passwordEncoder.encode(newPassword));
+        user.setMustChangePassword(true);
         userRepository.save(user);
 
         emailService.sendPasswordResetEmail(user.getEmail(), newPassword);

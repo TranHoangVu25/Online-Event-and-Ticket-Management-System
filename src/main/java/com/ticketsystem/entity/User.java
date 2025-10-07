@@ -52,6 +52,9 @@ public class User implements UserDetails {
     @Column(name = "last_login")
     LocalDateTime lastLogin;
 
+    @Column(name = "must_change_password")
+    Boolean mustChangePassword  = false;
+
 
     @OneToMany(mappedBy = "creator")
     Set<Event> createdEvents;
