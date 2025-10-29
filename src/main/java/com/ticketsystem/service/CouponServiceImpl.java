@@ -56,4 +56,10 @@ public class CouponServiceImpl implements CouponService{
     public List<Coupon> getAllCoupon() {
         return couponRepository.findAll();
     }
+
+    @Override
+    public Coupon getCouponById(int coupon_id) {
+        return couponRepository.findById(coupon_id)
+                .orElseThrow(()->new RuntimeException("Coupon not found"));
+    }
 }

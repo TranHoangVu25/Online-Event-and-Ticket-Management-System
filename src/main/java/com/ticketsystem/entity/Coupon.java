@@ -20,7 +20,7 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer coupon_id;
-    @Column
+    @Column(name = "`condition`")
     Integer condition;
     @Column(nullable = false)
     LocalDateTime expire;
@@ -32,7 +32,7 @@ public class Coupon {
     //loại coupon
     //1 :fixed (tiền mặt)
     //2 :percent (phần trăm)
-    @Column(nullable = false)
+    @Column(nullable = false,name = "`type`")
     Integer type;
 
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, orphanRemoval = true)

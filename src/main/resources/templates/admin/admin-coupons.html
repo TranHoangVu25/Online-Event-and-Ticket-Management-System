@@ -1,48 +1,49 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý sự kiện - Admin</title>
-    <link rel="stylesheet" th:href="@{/css/admin-events-styles.css}">
+    <title>Quản lý người dùng - EventHub Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin-coupons.css(v=${#dates.createNow().time})}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
-    <!-- Background Particles -->
-    <div class="background-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-
-    <!-- Header -->
-    <header class="admin-header glass">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <h1>EventHub Admin</h1>
+<!-- Background Particles -->
+<div class="background-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+<!-- Header -->
+<header class="admin-header glass">
+    <div class="header-content">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-calendar-alt"></i>
             </div>
-            <div class="admin-info">
-                <div class="admin-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <span class="admin-name" th:text="${session.userName}">Admin</span>
-                <button class="logout-btn glass"
-                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Đăng xuất</span>
-                </button>
-            </div>
+            <h1>EventHub Admin</h1>
         </div>
-    </header>
+        <div class="admin-info">
+            <div class="admin-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <span class="admin-name" th:text="${session.userName}">Admin</span>
+            <button class="logout-btn glass"
+                    th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/}'; }|">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </div>
+</header>
 
-    <div class="admin-container">
-    <!-- Sidebar -->
+<!-- Main Content -->
+<div class="admin-container">
+    <!-- Sidebar Navigation -->
     <nav class="admin-sidebar glass">
         <div class="sidebar-header">
             <div class="admin-avatar-large">
@@ -91,11 +92,15 @@
                     </div>
                     <span>Tạo sự kiện mới</span>
                 </a>
-
             </li>
             <li class="nav-item active">
                 <a th:href="@{/admin/error-reports}" class="nav-link">
                     <div class="nav-icon"><i class="fas fa-bug"></i></div><span>Báo lỗi người dùng</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a th:href="@{/admin/error-reports}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-tag"></i></div><span>Khuyến mại</span>
                 </a>
             </li>
         </ul>
@@ -105,173 +110,402 @@
     <main class="main-content">
         <div class="content-header glass">
             <div class="header-left">
-                <h2>Quản lý sự kiện</h2>
-                <p>Quản lý tất cả sự kiện trong hệ thống EventHub</p>
+                <div class="section-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="header-text">
+                    <h2>Quản lý mã giảm giá</h2>
+                </div>
             </div>
             <div class="header-actions">
-                <button class="filter-btn glass" onclick="toggleFilters()">
-                    <i class="fas fa-filter"></i>
-                    <span>Bộ lọc</span>
+                <button class="btn-primary glass" onclick="openAddCouponModal()">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Thêm mã giảm giá</span>
                 </button>
-                <a th:href="@{/admin/admin-create-event}" class="btn-primary glass">
-                    <i class="fas fa-plus"></i>
-                    <span>Tạo sự kiện mới</span>
-                </a>
+
+                <button class="btn-secondary glass" onclick="refreshUsers()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Làm mới</span>
+                </button>
             </div>
         </div>
 
-        <!-- Filters Section -->
-        <div class="filters-section glass" id="filtersSection">
-            <div class="filters-row">
-                <div class="filter-group">
-                    <label for="categoryFilter">Danh mục</label>
-                    <select id="categoryFilter" class="filter-select">
-                        <option value="">Tất cả danh mục</option>
-                        <option value="concert">Concert</option>
-                        <option value="workshop">Workshop</option>
-                        <option value="conference">Hội nghị</option>
-                        <option value="exhibition">Triển lãm</option>
-                        <option value="sports">Thể thao</option>
-                        <option value="seminar">Hội thảo</option>
+        <!-- Filters and Search -->
+        <div class="filters-section glass">
+            <div class="filter-group">
+                <label for="roleFilter">Sắp xếp:</label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <select id="roleFilter" class="input-border">
+                        <option value="admin">A-Z</option>
+                        <option value="user">Z-A</option>
                     </select>
-                </div>
-                <div class="filter-group">
-                    <label for="statusFilter">Trạng thái</label>
-                    <select id="statusFilter" class="filter-select">
-                        <option value="">Tất cả trạng thái</option>
-                        <option value="published">Đã công khai</option>
-                        <option value="draft">Bản nháp</option>
-                        <option value="private">Riêng tư</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="dateFilter">Ngày diễn ra</label>
-                    <select id="dateFilter" class="filter-select">
-                        <option value="">Tất cả ngày</option>
-                        <option value="today">Hôm nay</option>
-                        <option value="week">Tuần này</option>
-                        <option value="month">Tháng này</option>
-                        <option value="upcoming">Sắp diễn ra</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="searchFilter">Tìm kiếm</label>
-                    <input type="text" id="searchFilter" class="filter-input" placeholder="Tên sự kiện...">
                 </div>
             </div>
-            <div class="filters-actions">
+            <div class="filter-group">
+                <label for="statusFilter">Trạng thái:</label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <i class="fas fa-toggle-on"></i>
+                    </div>
+                    <select id="statusFilter" class="input-border">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="active">Còn hạn</option>
+                        <option value="inactive">Hết hạn</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn-primary glass" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i>
+                    <span>Lọc</span>
+                </button>
                 <button class="btn-secondary glass" onclick="clearFilters()">
-                    <i class="fas fa-undo"></i>
+                    <i class="fas fa-times"></i>
                     <span>Xóa bộ lọc</span>
                 </button>
-                <button class="btn-primary glass" onclick="applyFilters()">
-                    <i class="fas fa-search"></i>
-                    <span>Áp dụng</span>
-                </button>
             </div>
         </div>
 
-        <!-- Events Grid -->
-        <div class="events-grid">
-                <!-- Lặp qua danh sách events -->
-<!--                <div class="event-card glass" th:each="event : ${events}">-->
-            <div class="event-card glass" th:each="ev : ${eventViews}">
-
-            <div class="event-image">
-                        <img th:src="@{${ev.event.thumbnailUrl}}" alt="Event Image" src="">
-
-                        <div class="event-actions">
-<!--                            <button class="action-btn edit" th:onclick="'editEvent(' + ${event.id} + ')'">-->
-
-<!--                            <i class="fas fa-edit"></i>-->
-<!--                            </button>-->
-                            <form th:action="@{'/admin/admin-update-event/' + ${ev.event.id}}" method="get" style="display:inline">
-                                <button type="submit" class="action-btn edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                            </form>
-                            <button type="button" class="action-btn delete"
-                                    th:onclick="'deleteEvent(' + ${ev.event.id} + ')'">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <h3 th:text="${ev.event.name}">Event Name</h3>
-                        <p class="event-description" th:text="${ev.event.description}">Description</p>
-                        <div class="event-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                <span th:text="${#temporals.format(ev.event.startTime, 'dd/MM/yyyy hh:mm a')}">startTime</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span th:text="${ev.event.location.addressDetail}">Event Location</span>
-                            </div>
-<!--                            <div class="meta-item">-->
-<!--                                <i class="fas fa-ticket-alt"></i>-->
-<!--&lt;!&ndash;                                <span th:text="${event.price}">Price</span>&ndash;&gt;-->
-<!--                            </div>-->
-                        </div>
-                        <div class="event-stats">
-                            <div class="stat">
-                                <span class="stat-label">Vé đã bán</span>
-                                <span class="stat-value" th:text="${ev.ticketClass.soldQuantity} + '/'
-                                + ${ev.ticketClass.totalQuantity}"
-                                >0/0</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Doanh thu</span>
-                                <span class="stat-value" th:text="${#numbers.formatDecimal(ev.revenue ?: 0, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Users Table -->
+        <div class="users-table-container glass">
+            <div class="table-header">
+                <h3>Danh sách mã</h3>
+                <div class="table-actions">
+                    <button class="btn-secondary glass" onclick="exportUsers()">
+                        <i class="fas fa-download"></i>
+                        <span>Xuất Excel</span>
+                    </button>
                 </div>
             </div>
 
-        <!-- Pagination -->
-        <div class="pagination glass">
-            <button class="page-btn" onclick="goToPage(1)">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn" onclick="goToPage(2)">2</button>
-            <button class="page-btn" onclick="goToPage(3)">3</button>
-            <span class="page-ellipsis">...</span>
-            <button class="page-btn" onclick="goToPage(10)">10</button>
-            <button class="page-btn" onclick="goToPage(2)">
-                <i class="fas fa-chevron-right"></i>
-            </button>
+            <div class="table-responsive">
+                <table class="users-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th>ID</th>
+                        <th>Mã giảm giá</th>
+                        <th>Giảm giá</th>
+                        <th>Loại</th>
+                        <th>Ngày hết hạn</th>
+                        <th>Đơn giá tối thiểu</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody id="usersTableBody" >
+                    <tr th:each="c : ${coupons}" th:id="'user-row-' + ${c.coupon_id}">
+                        <td>
+                            <input type="checkbox" class="user-checkbox">
+                        </td>
+
+                        <td th:text="${c.coupon_id}">001</td>
+                        <td>
+                                <span class="role-badge admin" th:text="${c.code}">
+                                    SALE50K</span>
+                        </td>
+
+                        <td th:text="${c.discount}"
+                        >10%</td>
+
+                        <td th:text="${c.type}">fix</td>
+                        <td th:text="${#temporals.format(c.expire, 'dd/MM/yyyy hh:mm a')}">27/10/2025</td>
+                        <td th:text="${c.condition}">fix</td>
+
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit"
+                                        type="button"
+                                        th:onclick="'openUpdateCouponModal(' + ${c.coupon_id} + ')'"
+                                        title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <button class="action-btn view"
+                                        type="button"
+                                        th:onclick="'viewUser(' + ${c.coupon_id} + ')'"
+                                        title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
+                                <button class="action-btn delete"
+                                        type="button"
+                                        th:onclick="'deleteCoupon(' + ${c.coupon_id} + ')'"
+                                        title="Xóa">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination glass">
+                <button class="pagination-btn" onclick="previousPage()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <span class="pagination-ellipsis">...</span>
+                <button class="pagination-btn">10</button>
+                <button class="pagination-btn" onclick="nextPage()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </main>
 </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast glass">
-        <div class="toast-icon"></div>
-        <span class="toast-message"></span>
-    </div>
+<!-- ====================== Add Form===================-->
 
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="modal">
+<form action="#" th:action="@{/admin-coupon/admin-create-coupon}" th:object="${newCoupon}" method="post" id="createCouponForm">
+
+    <div id="couponModal" class="modal">
         <div class="modal-content glass">
             <div class="modal-header">
-                <h3>Xác nhận xóa</h3>
-                <button class="close-btn glass" onclick="closeDeleteModal()">
+                <h3 id="modalTitle">Thêm mã giảm giá</h3>
+                <button type="button" class="close-btn" onclick="closeCouponModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Bạn có chắc chắn muốn xóa sự kiện này? Hành động này không thể hoàn tác.</p>
+
+                <div class="form-group"> <label for="couponCode">Mã Coupon</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <input type="text" id="couponCode" class="input-border" required
+                               th:field="*{code}" placeholder="Vd: SALE50">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="couponType">Loại giảm giá</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-percent"></i>
+                            </div>
+                            <select id="couponType" class="input-border" required th:field="*{type}">
+                                <option value="1">Tiền mặt (fixed)</option>
+                                <option value="2">Phần trăm (percent)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="couponDiscount">Giá trị giảm</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <input type="number" id="couponDiscount" class="input-border" required
+                                   th:field="*{discount}" placeholder="Vd: 50000 hoặc 20">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="couponCondition">Đơn hàng tối thiểu (VND)</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <input type="number" id="couponCondition" class="input-border"
+                                   th:field="*{condition}" placeholder="Bỏ trống nếu không có">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="couponExpire">Ngày hết hạn</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-calendar-times"></i>
+                            </div>
+                            <input type="datetime-local" id="couponExpire" class="input-border" required
+                                   th:field="*{expire}">
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
-                <button class="btn-secondary glass" onclick="closeDeleteModal()">Hủy</button>
-                <button class="btn-primary glass" onclick="confirmDelete()">Xóa</button>
+                <button type="button" class="btn-secondary glass" onclick="closeCouponModal()">Hủy</button>
+                <button class="btn-primary glass" type="submit">Lưu</button>
             </div>
         </div>
     </div>
-<!--    <script th:src="@{/js/admin-events.js}"></script>-->
-    <script th:src="@{/js/admin-events.js(v=${#dates.createNow().time})}"></script>
-</body>
+</form>
 
+<!--==================FORM UPDATE======================-->
+<form th:action="@{/admin-coupon/admin-update-coupon/0}" th:object="${couponUpdate}" method="POST" id="updateCouponForm">
+
+    <input type="hidden" name="_method" value="POST">
+    <input type="hidden" name="coupon_id" id="updateCouponId">
+    <div id="updateCouponModal" class="modal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3 id="modalUpdateTitle">Cập nhật mã giảm giá</h3>
+                <button type="button" class="close-btn" onclick="closeUpdateCouponModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group"> <label for="updateCouponCode">Mã Coupon</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <input type="text" id="updateCouponCode" class="input-border" required
+                               th:field="*{code}" placeholder="Vd: SALE50">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="updateCouponType">Loại giảm giá</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-percent"></i>
+                            </div>
+                            <select id="updateCouponType" class="input-border" required th:field="*{type}">
+                                <option value="1">Tiền mặt (fixed)</option>
+                                <option value="2">Phần trăm (percent)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateCouponDiscount">Giá trị giảm</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <input type="number" id="updateCouponDiscount" class="input-border" required
+                                   th:field="*{discount}" placeholder="Vd: 50000 hoặc 20">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="updateCouponCondition">Đơn hàng tối thiểu (VND)</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <input type="number" id="updateCouponCondition" class="input-border"
+                                   th:field="*{condition}" placeholder="Bỏ trống nếu không có">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateCouponExpire">Ngày hết hạn</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-calendar-times"></i>
+                            </div>
+                            <input type="datetime-local" id="updateCouponExpire" class="input-border" required
+                                   th:field="*{expire}">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary glass" onclick="closeUpdateCouponModal()">Hủy</button>
+                <button class="btn-primary glass" type="submit">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- ===================User Details Modal ===========================-->
+<!--<div id="userDetailsModal" class="modal">-->
+<!--    <div class="modal-content glass">-->
+<!--        <div class="modal-header">-->
+<!--            <h3>Chi tiết người dùng</h3>-->
+<!--            <button class="close-btn" onclick="closeUserDetailsModal()">-->
+<!--                <i class="fas fa-times"></i>-->
+<!--            </button>-->
+<!--        </div>-->
+<!--        <div class="modal-body">-->
+<!--            <div class="user-details-content">-->
+<!--                <div class="user-profile">-->
+<!--                    <div class="user-avatar-large">-->
+<!--                        <i class="fas fa-user"></i>-->
+<!--                    </div>-->
+<!--                    <div class="user-info-details">-->
+<!--                        <h4 id="detailFullName">Nguyễn Văn An</h4>-->
+<!--                        <span id="detailUserEmail">nguyenvanan@email.com</span>-->
+<!--                        <div class="user-stats">-->
+<!--                            <div class="stat-item">-->
+<!--                                <span class="stat-label">Số đơn hàng:</span>-->
+<!--                                <span class="stat-value">15</span>-->
+<!--                            </div>-->
+<!--                            <div class="stat-item">-->
+<!--                                <span class="stat-label">Tổng chi tiêu:</span>-->
+<!--                                <span class="stat-value">2,500,000 VNĐ</span>-->
+<!--                            </div>-->
+<!--                            <div class="stat-item">-->
+<!--                                <span class="stat-label">Ngày tham gia:</span>-->
+<!--                                <span class="stat-value">15/01/2024</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="user-activity">-->
+<!--                    <h5>Hoạt động gần đây</h5>-->
+<!--                    <div class="activity-list">-->
+<!--                        <div class="activity-item">-->
+<!--                            <div class="activity-icon">-->
+<!--                                <i class="fas fa-shopping-cart"></i>-->
+<!--                            </div>-->
+<!--                            <div class="activity-content">-->
+<!--                                <p>Đặt vé sự kiện "Concert Mùa Hè 2024"</p>-->
+<!--                                <span class="activity-time">2 giờ trước</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="activity-item">-->
+<!--                            <div class="activity-icon">-->
+<!--                                <i class="fas fa-sign-in-alt"></i>-->
+<!--                            </div>-->
+<!--                            <div class="activity-content">-->
+<!--                                <p>Đăng nhập vào hệ thống</p>-->
+<!--                                <span class="activity-time">1 ngày trước</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="modal-footer">-->
+<!--            <button class="btn-secondary glass" onclick="closeUserDetailsModal()">Đóng</button>-->
+<!--            <button class="btn-primary glass" onclick="editUserFromDetails()">Chỉnh sửa</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!-- Toast Notification -->
+<div id="toast" class="toast glass">
+    <div class="toast-content">
+        <i class="toast-icon"></i>
+        <span class="toast-message"></span>
+    </div>
+</div>
+
+<script  th:src="@{/js/admin-coupons.js(v=${#dates.createNow().time})}"></script>
+
+</body>
 </html>

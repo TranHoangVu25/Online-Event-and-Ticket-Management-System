@@ -2,6 +2,7 @@ package com.ticketsystem.service;
 
 import com.ticketsystem.dto.request.CouponCreateRequest;
 import com.ticketsystem.dto.request.CouponUpdateRequest;
+import com.ticketsystem.dto.response.CouponResponse;
 import com.ticketsystem.entity.Coupon;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +17,6 @@ public interface CouponService {
     void deleteCoupon(int coupon_id);
 
     List<Coupon> getAllCoupon();
+
+    Coupon getCouponById(int coupon_id);
 }
