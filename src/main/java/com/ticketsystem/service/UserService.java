@@ -32,7 +32,6 @@ public class UserService {
         if (userRepository.existsByUsername(request.getUsername())){
             throw new Exception("User is existed");
         }
-
         User user;
         Role role = roleRepository.findByRoleName("USER");
         user = userMapper.toUser(request);

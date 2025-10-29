@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -61,6 +62,14 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     Set<Order> orders;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_coupon", // Tên bảng trung gian
+            joinColumns = @JoinColumn(name = "user_id"), // Khóa ngoại trỏ về bảng USER
+            inverseJoinColumns = @JoinColumn(name = "coupon_id") // Khóa ngoại trỏ về bảng COUPON
+    )
+    private List<Coupon> coupons;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

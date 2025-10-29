@@ -46,6 +46,10 @@ public class Order {
 //    private Set<Payment> payments;
     private Payment payment;
 
+    @ManyToOne()
+    @ToString.Exclude
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
 
     @Override
     public boolean equals(Object o) {

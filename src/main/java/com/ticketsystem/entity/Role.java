@@ -25,6 +25,5 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     Set<User> users;
-
 }
 
