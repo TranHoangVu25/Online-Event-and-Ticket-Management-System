@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/layout.css(v=${#dates.createNow().time})}">
 <body>
-
 <!-- Header Fragment -->
 <header th:fragment="header">
     <nav class="navbar">
@@ -46,10 +47,107 @@
 </header>
 
 <!-- Footer Fragment -->
-<footer th:fragment="footer" class="site-footer">
-    <p>&copy; 2025 Eventine. All rights reserved.</p>
-</footer>
+<!--<footer th:fragment="footer" class="site-footer">-->
+<!--    <p>&copy; 2025 Eventine. All rights reserved.</p>-->
+<!--</footer>-->
+<footer class="footer-section">
+    <div class="container">
+        <div class="row">
 
+            <!-- === Cột 1: Thông tin công ty === -->
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <div class="footer-widget">
+                    <div class="footer-logo">
+                        <!-- TODO: THAY LOGO -->
+                        <a href="#">
+                            <img src="https://placehold.co/180x50/ffffff/1a2d6a?text=TERACOM" alt="Teracom Logo">
+                        </a>
+                    </div>
+                    <h3 class="footer-company-name">TERACOM JOINT STOCK COMPANY</h3>
+
+                    <h4 class="footer-widget-title">HEADQUATER</h4>
+                    <ul class="footer-contact-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>03rd & 06th Floor, ATS Building, 252, Hoang Quoc Viet Street, Nghia Do Ward, Ha Noi</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+84 97 269 77 70</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>sales@teracom.vn</span>
+                        </li>
+                    </ul>
+
+                    <h4 class="footer-widget-title mt-4">BRANCH</h4>
+                    <ul class="footer-contact-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>No.25T2, Hoang Dao Thuy Street, Thanh Xuan Ward, Ha Noi</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- === Cột 2: Company Links === -->
+            <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                <div class="footer-widget">
+                    <h4 class="footer-widget-title">COMPANY</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Service</a></li>
+                        <li><a href="#">Blogs</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- === Cột 3: Follow Us === -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <div class="footer-widget">
+                    <h4 class="footer-widget-title">FOLLOW US</h4>
+                    <div class="footer-social-icons">
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" aria-label="Medium"><i class="fab fa-medium-m"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- === Cột 4: Subscribe Us === -->
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-widget footer-subscribe">
+                    <!-- "Subscriber Us" không đúng ngữ pháp, tôi đã sửa thành "Subscribe" -->
+                    <h4 class="footer-widget-title">SUBSCRIBE US</h4>
+                    <p>Sign up to get the latest updates and amazing offers delivered directly to your inbox</p>
+                    <!-- Bạn có thể thêm một form input tại đây nếu muốn -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- === Thanh Copyright === -->
+    <div class="footer-copyright-bar">
+        <div class="container">
+            <p>&copy; Copyright 2025 by Teracom Jsc, Leading Software Outsourcing Company in Vietnam. All Rights Reserved.</p>
+        </div>
+    </div>
+
+    <!-- === Các nút nổi === -->
+    <div class="footer-floating-buttons">
+        <!-- Nút Back to Top (sẽ được JS điều khiển) -->
+        <a href="#" id="backToTopBtn" class="floating-btn back-to-top" aria-label="Back to top">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        <!-- Nút còn lại -->
+        <a href="#" class="floating-btn other-btn" aria-label="Other action">
+            <i class="fas fa-arrow-right-to-bracket"></i> <!-- Icon ví dụ, bạn có thể thay bằng icon 'g' hoặc 'login' -->
+        </a>
+    </div>
+</footer>
 <!-- JS -->
 <script th:src="@{/js/script.js}" defer></script>
 

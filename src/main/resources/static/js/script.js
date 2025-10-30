@@ -74,4 +74,28 @@ window.viewOrderDetail = function (orderId, ticketClassId) {
         });
 };
 
+        document.addEventListener("DOMContentLoaded", function() {
+            var backToTopBtn = document.getElementById("backToTopBtn");
 
+            // Hiển thị/ẩn nút khi cuộn
+            window.onscroll = function() {
+                scrollFunction();
+            };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                    backToTopBtn.style.display = "flex";
+                } else {
+                    backToTopBtn.style.display = "none";
+                }
+            }
+
+            // Cuộn lên đầu khi nhấp
+            backToTopBtn.addEventListener("click", function(e) {
+                e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // Cuộn mượt
+                });
+            });
+        });

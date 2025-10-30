@@ -483,3 +483,204 @@ footer {
     outline: none;
     box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.5);
 }
+        /* --- CÀI ĐẶT CHUNG --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Thêm nội dung giả để có thể cuộn trang */
+            min-height: 200vh;
+            background-color: #f0f2f5;
+        }
+
+        /* --- KHUNG FOOTER CHÍNH --- */
+        .footer-section {
+            background-color: #1a2d6a; /* Màu xanh đậm từ ảnh */
+            color: #ffffff;
+            padding: 80px 0 0; /* 80px top, 0 bottom (vì copyright bar sẽ lo phần bottom) */
+            position: relative;
+            overflow: hidden; /* Ẩn phần thừa của map */
+        }
+
+        /* Lớp giả cho ảnh bản đồ thế giới */
+        .footer-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* TODO: THAY ANH MAP */
+            /* Thay thế '...' bằng đường dẫn đến ảnh map của bạn */
+            /* background-image: url('https://your-domain.com/path/to/world-map-bg.png'); */
+            background-image: url('https://placehold.co/1920x600/ffffff/cccccc?text=World+Map+BG+Placeholder'); /* Ảnh giữ chỗ */
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover; /* Hoặc 'contain' tùy ảnh của bạn */
+            opacity: 0.1; /* Độ mờ */
+            z-index: 1;
+        }
+
+        /* Đẩy nội dung container lên trên lớp map */
+        .footer-section .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- STYLES CHO CÁC CỘT (WIDGETS) --- */
+        .footer-logo img {
+            max-width: 180px;
+            margin-bottom: 15px;
+        }
+
+        .footer-company-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-widget-title {
+            font-size: 1.1rem; /* 18px */
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Danh sách liên hệ (Cột 1) */
+        .footer-contact-list {
+            list-style: none;
+            padding-left: 0;
+            color: #e0e0e0;
+        }
+
+        .footer-contact-list li {
+            display: flex;
+            align-items: flex-start; /* Căn icon và text ở trên cùng */
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-contact-list li i {
+            font-size: 16px;
+            width: 30px; /* Tạo khoảng trống cố định cho icon */
+            text-align: center; /* Căn icon ở giữa */
+            margin-top: 4px; /* Đẩy icon xuống 1 chút cho đẹp */
+            flex-shrink: 0; /* Không cho icon bị co lại */
+        }
+
+        .footer-contact-list li span {
+            flex: 1; /* Text chiếm phần còn lại */
+        }
+
+        /* Danh sách link (Cột 2) */
+        .footer-links-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .footer-links-list li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links-list li a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links-list li a:hover {
+            color: #ffffff;
+            padding-left: 5px; /* Hiệu ứng hover */
+        }
+
+        /* Icon mạng xã hội (Cột 3) */
+        .footer-social-icons {
+            display: flex;
+            gap: 15px; /* Khoảng cách giữa các icon */
+        }
+
+        .footer-social-icons .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            color: #1a2d6a; /* Màu nền footer */
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social-icons .social-icon:hover {
+            transform: translateY(-3px); /* Hiệu ứng nhấc lên */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Cột Subscribe (Cột 4) */
+        .footer-subscribe p {
+            color: #e0e0e0;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* --- THANH COPYRIGHT --- */
+        .footer-copyright-bar {
+            background-color: #111e4a; /* Màu tối hơn 1 chút */
+            padding: 20px 0;
+            margin-top: 60px; /* Khoảng cách với nội dung bên trên */
+            position: relative;
+            z-index: 2; /* Nằm trên map */
+        }
+
+        .footer-copyright-bar p {
+            margin-bottom: 0;
+            color: #aaa;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* --- CÁC NÚT NỔI (FLOATING BUTTONS) --- */
+        .footer-floating-buttons {
+            position: fixed;
+            bottom: 30px; /* Đẩy lên trên thanh copyright 1 chút */
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Khoảng cách giữa 2 nút */
+        }
+
+        .floating-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            font-size: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Nút "Back to Top" */
+        .floating-btn.back-to-top {
+            background-color: #ffffff;
+            color: #1a2d6a;
+            display: none; /* Ẩn ban đầu, JS sẽ điều khiển */
+        }
+
+        /* Nút còn lại */
+        .floating-btn.other-btn {
+            background-color: #1a2d6a; /* Giống màu nền */
+            color: #ffffff;
+            border: 1px solid #ffffff; /* Viền trắng */
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }

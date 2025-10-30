@@ -1,0 +1,188 @@
+    /* --- Biến màu cho Footer --- */
+:root {
+    --footer-bg: #0a2c6d; /* Màu xanh đậm chính */
+    --footer-text: #ffffff;
+    --footer-link: #d0dfff; /* Màu text phụ, nhạt hơn */
+    --footer-bottom-bg: #004a99; /* Màu thanh copyright */
+    --footer-scroll-bg: #ececec;
+    --footer-scroll-icon: #333333;
+}
+
+/* --- Khung Footer chính --- */
+.site-footer {
+    position: relative;
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+    padding-top: 60px; /* Thêm khoảng đệm ở trên */
+    font-size: 15px;
+    line-height: 1.6;
+    overflow: hidden; /* Ẩn phần thừa của bản đồ */
+}
+
+/* --- Lớp phủ bản đồ --- */
+.site-footer .footer-bg-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Bạn cần cung cấp hình ảnh bản đồ của riêng mình */
+    background-image: url('path/to/world-map.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    opacity: 0.1; /* Làm mờ bản đồ */
+    z-index: 1;
+}
+
+/* --- Container (căn giữa nội dung) --- */
+.site-footer .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    position: relative; /* Để nội dung đè lên bản đồ */
+    z-index: 2;
+}
+
+/* --- Lưới nội dung Footer --- */
+.site-footer .footer-content-wrapper {
+    display: grid;
+    /* Bố cục 3 cột, cột 1 rộng hơn */
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* --- Responsive cho di động --- */
+@media (max-width: 992px) {
+    .site-footer .footer-content-wrapper {
+        /* Chuyển thành 2 cột trên tablet */
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 768px) {
+    .site-footer .footer-content-wrapper {
+        /* Chuyển thành 1 cột trên di động */
+        grid-template-columns: 1fr;
+    }
+    .site-footer {
+        padding-top: 40px;
+    }
+}
+
+/* --- Kiểu chữ chung cho các cột --- */
+.site-footer .footer-col h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--footer-text);
+}
+
+.site-footer .footer-col h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    color: var(--footer-text);
+}
+.site-footer .footer-col h4:first-of-type {
+    margin-top: 0;
+}
+
+/* --- Cột 1: Danh sách liên hệ --- */
+.site-footer .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.site-footer .contact-list li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    color: var(--footer-link);
+}
+.site-footer .contact-list li i {
+    margin-right: 12px;
+    font-size: 1.1rem;
+    margin-top: 5px;
+    width: 20px; /* Đảm bảo các icon thẳng hàng */
+    text-align: center;
+}
+
+/* --- Cột 2: Menu điều hướng --- */
+.site-footer .footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.site-footer .footer-nav li {
+    margin-bottom: 10px;
+}
+.site-footer .footer-nav a {
+    color: var(--footer-link);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.site-footer .footer-nav a:hover {
+    color: var(--footer-text);
+    text-decoration: underline;
+}
+
+/* --- Cột 3: Mạng xã hội & Đăng ký --- */
+.site-footer .social-icons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.site-footer .social-icons a {
+    color: var(--footer-text);
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+.site-footer .social-icons a:hover {
+    opacity: 0.8;
+}
+
+.site-footer .follow-subscribe p {
+    color: var(--footer-link);
+}
+
+/* --- Nút cuộn lên đầu trang --- */
+.site-footer .scroll-to-top {
+    position: absolute;
+    /* Vị trí tương ứng với trong ảnh */
+    bottom: 90px;
+    right: 15px;
+    background-color: var(--footer-scroll-bg);
+    color: var(--footer-scroll-icon);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.2rem;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+.site-footer .scroll-to-top:hover {
+    background-color: #f5f5f5;
+    transform: translateY(-3px);
+}
+
+/* --- Thanh Copyright --- */
+.site-footer .footer-bottom-bar {
+    background-color: var(--footer-bottom-bg);
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+    z-index: 2; /* Đè lên bản đồ */
+    margin-top: 40px;
+}
+.site-footer .footer-bottom-bar p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--footer-text);
+}
