@@ -1149,3 +1149,41 @@ body {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
+/* css cho hiển thị lỗi*/
+.modal {
+    /* Quan trọng: Ẩn modal theo mặc định.
+      JavaScript sẽ đổi thuộc tính này thành 'flex' để hiển thị.
+    */
+    display: none;
+
+    /* Các thuộc tính căn giữa (giữ nguyên) */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    /* Dùng 'flex' để căn giữa (như lần trước) */
+    justify-content: center;
+    align-items: center;
+
+    /* Thêm 'flex' ở đây nếu bạn muốn nó là mặc định
+       thay vì 'display: none'
+       NHƯNG 'display: none;' mới là cách để ẩn nó
+    */
+}
+
+/* Các CSS lỗi (giữ nguyên) */
+.error {
+    color: #D8000C;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.input-border.error-field {
+    border-color: #D8000C;
+    border-width: 2px;
+}

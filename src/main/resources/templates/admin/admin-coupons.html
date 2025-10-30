@@ -95,12 +95,14 @@
             </li>
             <li class="nav-item active">
                 <a th:href="@{/admin/error-reports}" class="nav-link">
-                    <div class="nav-icon"><i class="fas fa-bug"></i></div><span>Báo lỗi người dùng</span>
+                    <div class="nav-icon"><i class="fas fa-bug"></i></div>
+                    <span>Báo lỗi người dùng</span>
                 </a>
             </li>
             <li class="nav-item active">
-                <a th:href="@{/admin/error-reports}" class="nav-link">
-                    <div class="nav-icon"><i class="fas fa-tag"></i></div><span>Khuyến mại</span>
+                <a th:href="@{/admin-coupon}" class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-tag"></i></div>
+                    <span>Khuyến mại</span>
                 </a>
             </li>
         </ul>
@@ -197,7 +199,7 @@
                         <th>Thao tác</th>
                     </tr>
                     </thead>
-                    <tbody id="usersTableBody" >
+                    <tbody id="usersTableBody">
                     <tr th:each="c : ${coupons}" th:id="'user-row-' + ${c.coupon_id}">
                         <td>
                             <input type="checkbox" class="user-checkbox">
@@ -210,7 +212,8 @@
                         </td>
 
                         <td th:text="${c.discount}"
-                        >10%</td>
+                        >10%
+                        </td>
 
                         <td th:text="${c.type}">fix</td>
                         <td th:text="${#temporals.format(c.expire, 'dd/MM/yyyy hh:mm a')}">27/10/2025</td>
@@ -225,12 +228,12 @@
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <button class="action-btn view"
-                                        type="button"
-                                        th:onclick="'viewUser(' + ${c.coupon_id} + ')'"
-                                        title="Xem chi tiết">
-                                    <i class="fas fa-eye"></i>
-                                </button>
+                                <!--                                <button class="action-btn view"-->
+                                <!--                                        type="button"-->
+                                <!--                                        th:onclick="'viewUser(' + ${c.coupon_id} + ')'"-->
+                                <!--                                        title="Xem chi tiết">-->
+                                <!--                                    <i class="fas fa-eye"></i>-->
+                                <!--                                </button>-->
 
                                 <button class="action-btn delete"
                                         type="button"
@@ -265,7 +268,8 @@
 
 <!-- ====================== Add Form===================-->
 
-<form action="#" th:action="@{/admin-coupon/admin-create-coupon}" th:object="${newCoupon}" method="post" id="createCouponForm">
+<form action="#" th:action="@{/admin-coupon/admin-create-coupon}" th:object="${newCoupon}" method="post"
+      id="createCouponForm">
 
     <div id="couponModal" class="modal">
         <div class="modal-content glass">
@@ -277,13 +281,22 @@
             </div>
             <div class="modal-body">
 
-                <div class="form-group"> <label for="couponCode">Mã Coupon</label>
+                <div class="form-group">
+                    <label for="couponCode">Mã Coupon</label>
                     <div class="input-wrapper">
                         <div class="input-icon">
                             <i class="fas fa-ticket-alt"></i>
                         </div>
                         <input type="text" id="couponCode" class="input-border" required
-                               th:field="*{code}" placeholder="Vd: SALE50">
+                               th:field="*{code}" placeholder="Vd: SALE50"
+                               th:classappend="${#fields.hasErrors('code')} ? 'error-field' : ''">
+<!--                        <div class="error"-->
+<!--                             th:if="${#fields.hasErrors('code')}"-->
+<!--                             th:errors="*{code}">-->
+                        </div>
+                    <div class="error"
+                         th:if="${#fields.hasErrors('code')}"
+                         th:errors="*{code}">
                     </div>
                 </div>
 
@@ -294,10 +307,21 @@
                             <div class="input-icon">
                                 <i class="fas fa-percent"></i>
                             </div>
-                            <select id="couponType" class="input-border" required th:field="*{type}">
+                            <select id="couponType" class="input-border" required
+                                    th:field="*{type}"
+                                    th:classappend="${#fields.hasErrors('type')} ? 'error-field' : ''">
                                 <option value="1">Tiền mặt (fixed)</option>
                                 <option value="2">Phần trăm (percent)</option>
                             </select>
+
+                            <!--                            <div class="error"-->
+                            <!--                                 th:if="${#fields.hasErrors('type')}"-->
+                            <!--                                 th:errors="*{type}">-->
+                            <!--                            </div>-->
+                        </div>
+                        <div class="error"
+                             th:if="${#fields.hasErrors('type')}"
+                             th:errors="*{type}">
                         </div>
                     </div>
 
@@ -308,7 +332,12 @@
                                 <i class="fas fa-money-bill-wave"></i>
                             </div>
                             <input type="number" id="couponDiscount" class="input-border" required
-                                   th:field="*{discount}" placeholder="Vd: 50000 hoặc 20">
+                                   th:field="*{discount}" placeholder="Vd: 50000 hoặc 20"
+                                   th:classappend="${#fields.hasErrors('discount')} ? 'error-field' : ''">
+                        </div>
+                        <div class="error"
+                             th:if="${#fields.hasErrors('discount')}"
+                             th:errors="*{discount}">
                         </div>
                     </div>
                 </div>
@@ -321,8 +350,12 @@
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
                             <input type="number" id="couponCondition" class="input-border"
-                                   th:field="*{condition}" placeholder="Bỏ trống nếu không có">
+                                   th:field="*{condition}" placeholder="Giá trị tối thiểu của hàng"
+                                   th:classappend="${#fields.hasErrors('condition')} ? 'error-field' : ''">
                         </div>
+                        <div class="error"
+                             th:if="${#fields.hasErrors('condition')}"
+                             th:errors="*{condition}"></div>
                     </div>
 
                     <div class="form-group">
@@ -332,11 +365,19 @@
                                 <i class="fas fa-calendar-times"></i>
                             </div>
                             <input type="datetime-local" id="couponExpire" class="input-border" required
-                                   th:field="*{expire}">
+                                   th:field="*{expire}"
+                                   th:classappend="${#fields.hasErrors('expire') or #fields.hasErrors('global')} ? 'error-field' : ''">
+
+                            <div class="error"
+                                 th:if="${#fields.hasErrors('expire')}"
+                                 th:errors="*{expire}"></div>
+                        </div>
+                        <div class="form-group" th:if="${#fields.hasErrors('global')}">
+                            <div class="error" th:errors="*{global}">
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-secondary glass" onclick="closeCouponModal()">Hủy</button>
@@ -347,10 +388,12 @@
 </form>
 
 <!--==================FORM UPDATE======================-->
-<form th:action="@{/admin-coupon/admin-update-coupon/0}" th:object="${couponUpdate}" method="POST" id="updateCouponForm">
+<form th:action="@{/admin-coupon/admin-update-coupon/{id}(id=${failedUpdateId != null ? failedUpdateId : 0})}"
+      th:object="${couponUpdate}" method="POST"
+      id="updateCouponForm">
 
-    <input type="hidden" name="_method" value="POST">
     <input type="hidden" name="coupon_id" id="updateCouponId">
+
     <div id="updateCouponModal" class="modal">
         <div class="modal-content glass">
             <div class="modal-header">
@@ -361,13 +404,17 @@
             </div>
             <div class="modal-body">
 
-                <div class="form-group"> <label for="updateCouponCode">Mã Coupon</label>
+                <div class="form-group"><label for="updateCouponCode">Mã Coupon</label>
                     <div class="input-wrapper">
                         <div class="input-icon">
                             <i class="fas fa-ticket-alt"></i>
                         </div>
                         <input type="text" id="updateCouponCode" class="input-border" required
                                th:field="*{code}" placeholder="Vd: SALE50">
+                    </div>
+                    <div class="error"
+                         th:if="${#fields.hasErrors('code')}"
+                         th:errors="*{code}">
                     </div>
                 </div>
 
@@ -394,7 +441,12 @@
                             <input type="number" id="updateCouponDiscount" class="input-border" required
                                    th:field="*{discount}" placeholder="Vd: 50000 hoặc 20">
                         </div>
+                        <div class="error"
+                             th:if="${#fields.hasErrors('discount')}"
+                             th:errors="*{discount}">
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="form-row">
@@ -407,6 +459,10 @@
                             <input type="number" id="updateCouponCondition" class="input-border"
                                    th:field="*{condition}" placeholder="Bỏ trống nếu không có">
                         </div>
+                        <div class="error"
+                             th:if="${#fields.hasErrors('condition')}"
+                             th:errors="*{condition}">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -418,6 +474,13 @@
                             <input type="datetime-local" id="updateCouponExpire" class="input-border" required
                                    th:field="*{expire}">
                         </div>
+                        <div class="error"
+                             th:if="${#fields.hasErrors('expire')}"
+                             th:errors="*{expire}">
+                        </div>
+                        <div class="form-group" th:if="${#fields.hasErrors('global')}">
+                            <div class="error" th:errors="*{global}">
+                            </div></div>
                     </div>
                 </div>
 
@@ -430,73 +493,6 @@
     </div>
 </form>
 
-
-<!-- ===================User Details Modal ===========================-->
-<!--<div id="userDetailsModal" class="modal">-->
-<!--    <div class="modal-content glass">-->
-<!--        <div class="modal-header">-->
-<!--            <h3>Chi tiết người dùng</h3>-->
-<!--            <button class="close-btn" onclick="closeUserDetailsModal()">-->
-<!--                <i class="fas fa-times"></i>-->
-<!--            </button>-->
-<!--        </div>-->
-<!--        <div class="modal-body">-->
-<!--            <div class="user-details-content">-->
-<!--                <div class="user-profile">-->
-<!--                    <div class="user-avatar-large">-->
-<!--                        <i class="fas fa-user"></i>-->
-<!--                    </div>-->
-<!--                    <div class="user-info-details">-->
-<!--                        <h4 id="detailFullName">Nguyễn Văn An</h4>-->
-<!--                        <span id="detailUserEmail">nguyenvanan@email.com</span>-->
-<!--                        <div class="user-stats">-->
-<!--                            <div class="stat-item">-->
-<!--                                <span class="stat-label">Số đơn hàng:</span>-->
-<!--                                <span class="stat-value">15</span>-->
-<!--                            </div>-->
-<!--                            <div class="stat-item">-->
-<!--                                <span class="stat-label">Tổng chi tiêu:</span>-->
-<!--                                <span class="stat-value">2,500,000 VNĐ</span>-->
-<!--                            </div>-->
-<!--                            <div class="stat-item">-->
-<!--                                <span class="stat-label">Ngày tham gia:</span>-->
-<!--                                <span class="stat-value">15/01/2024</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="user-activity">-->
-<!--                    <h5>Hoạt động gần đây</h5>-->
-<!--                    <div class="activity-list">-->
-<!--                        <div class="activity-item">-->
-<!--                            <div class="activity-icon">-->
-<!--                                <i class="fas fa-shopping-cart"></i>-->
-<!--                            </div>-->
-<!--                            <div class="activity-content">-->
-<!--                                <p>Đặt vé sự kiện "Concert Mùa Hè 2024"</p>-->
-<!--                                <span class="activity-time">2 giờ trước</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="activity-item">-->
-<!--                            <div class="activity-icon">-->
-<!--                                <i class="fas fa-sign-in-alt"></i>-->
-<!--                            </div>-->
-<!--                            <div class="activity-content">-->
-<!--                                <p>Đăng nhập vào hệ thống</p>-->
-<!--                                <span class="activity-time">1 ngày trước</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="modal-footer">-->
-<!--            <button class="btn-secondary glass" onclick="closeUserDetailsModal()">Đóng</button>-->
-<!--            <button class="btn-primary glass" onclick="editUserFromDetails()">Chỉnh sửa</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
 <!-- Toast Notification -->
 <div id="toast" class="toast glass">
     <div class="toast-content">
@@ -505,7 +501,38 @@
     </div>
 </div>
 
-<script  th:src="@{/js/admin-coupons.js(v=${#dates.createNow().time})}"></script>
+<script th:src="@{/js/admin-coupons.js(v=${#dates.createNow().time})}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
 
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- 1. KIỂM TRA LỖI FORM CREATE ---
+        // Kiểm tra BẤT KỲ lỗi nào trên 'newCoupon'
+        const hasCreateErrors = /*[[${#fields.hasErrors('newCoupon')}]]*/ false;
+
+        if (hasCreateErrors) {
+            const createModal = document.getElementById('couponModal');
+            if (createModal) {
+                // Sửa thành 'flex' để căn giữa modal
+                createModal.style.display = 'flex';
+            }
+        }
+
+        // --- 2. KIỂM TRA LỖI FORM UPDATE ---
+        // Kiểm tra BẤT KỲ lỗi nào trên 'couponUpdate'
+        const hasUpdateErrors = /*[[${#fields.hasErrors('couponUpdate')}]]*/ false;
+
+        if (hasUpdateErrors) {
+            const updateModal = document.getElementById('updateCouponModal');
+            if (updateModal) {
+                // Sửa thành 'flex' để căn giữa modal
+                updateModal.style.display = 'flex';
+            }
+        }
+    });
+
+    /*]]>*/
+</script>
 </body>
 </html>

@@ -22,12 +22,6 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-function openAddUserModal() {
-    document.getElementById('userModal').style.display = 'flex';
-    document.getElementById('createUser').reset();
-    document.querySelector('.modal-header h3').textContent = 'Thêm người dùng mới';
-}
-
 function closeUserModal() {
     document.getElementById('userModal').style.display = 'none';
 }
@@ -78,17 +72,18 @@ function deleteCoupon(couponId) {
 
         fetch(`/admin-coupon/remove-coupon/${couponId}`, {
             method: 'DELETE'
+            // Thêm CSRF token header nếu bạn dùng Spring Security
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Lỗi khi xoá user");
+                throw new Error("Lỗi khi xoá coupon");
             }
             return response.text(); // vì controller trả về String "OK"
         })
         .then(result => {
             if (result === "OK") {
                 showToast(`Đã xóa mã ${couponId} thành công!`, 'success');
-                // Có thể xoá user khỏi bảng mà không cần reload
+                // Xoá dòng khỏi bảng
                 document.getElementById(`user-row-${couponId}`).remove();
             }
         })
@@ -98,7 +93,6 @@ function deleteCoupon(couponId) {
         });
     }
 }
-
 
 function previousPage() {
     showToast('Đang chuyển đến trang trước...', 'info');
@@ -121,44 +115,6 @@ function togglePassword(inputId) {
         button.classList.remove('fa-eye-slash');
         button.classList.add('fa-eye');
     }
-}
-
-function saveUser() {
-    const fullName = document.getElementById('firstName').value.trim();
-    const userEmail = document.getElementById('email').value.trim();
-    const userRole = document.getElementById('role').value;
-    const userStatus = document.getElementById('status').value;
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    if (!fullName || !userEmail) {
-        showToast('Vui lòng điền đầy đủ thông tin bắt buộc', 'error');
-        return;
-    }
-
-    if (password && password !== confirmPassword) {
-        showToast('Mật khẩu xác nhận không khớp', 'error');
-        return;
-    }
-
-    showToast('Đang lưu thông tin người dùng...', 'info');
-    closeUserModal();
-
-    setTimeout(() => {
-        showToast('Đã lưu thông tin người dùng thành công!', 'success');
-    }, 1000);
-}
-
-function closeUserDetailsModal() {
-    document.getElementById('userDetailsModal').style.display = 'none';
-}
-
-function editUserFromDetails() {
-    closeUserDetailsModal();
-    setTimeout(() => {
-        editUser('current');
-    }, 300);
 }
 
 // Active navigation highlighting
@@ -184,13 +140,29 @@ function closeUpdateUserModal() {
 function openAddCouponModal() {
     const modal = document.getElementById('couponModal');
     if (modal) {
-        // Reset form (đảm bảo form trống khi mở)
-        document.getElementById('createCouponForm').reset();
 
-        // Đặt lại tiêu đề modal
+        // --- SỬA LỖI: DÙNG RESET THỦ CÔNG ---
+        // 1. Reset các trường input về rỗng
+        document.getElementById('couponCode').value = '';
+        document.getElementById('couponDiscount').value = '';
+        document.getElementById('couponCondition').value = '';
+        document.getElementById('couponExpire').value = '';
+        // 2. Reset trường select
+        document.getElementById('couponType').value = '1';
+        // --- KẾT THÚC SỬA ---
+
+        // 3. Đặt lại tiêu đề modal
         document.getElementById('modalTitle').textContent = 'Thêm mã giảm giá';
 
-        // Hiển thị modal
+    const form = document.getElementById('createCouponForm');
+    if (form) {
+        const errorMessages = form.querySelectorAll('.error');
+        errorMessages.forEach(msg => msg.textContent = '');
+
+        const errorInputs = form.querySelectorAll('.error-field');
+        errorInputs.forEach(input => input.classList.remove('error-field'));
+    }
+        // 4. Hiển thị modal
         modal.style.display = 'flex';
     }
 }
@@ -202,7 +174,7 @@ function openAddCouponModal() {
  */
 function openUpdateCouponModal(couponId) {
     // 1. Fetch dữ liệu coupon từ server
-    fetch(`/admin-coupon/${couponId}`) // Giả định endpoint này tồn tại (xem phần Controller)
+    fetch(`/admin-coupon/${couponId}`) // Endpoint này đã có trong Controller
         .then(res => {
             if (!res.ok) {
                 throw new Error('Không thể tải thông tin coupon');
@@ -213,36 +185,38 @@ function openUpdateCouponModal(couponId) {
             // 2. Điền dữ liệu vào form
             document.getElementById('modalUpdateTitle').textContent = `Cập nhật mã: ${coupon.code}`;
 
-            document.getElementById('updateCouponId').value = coupon.coupon_id;
+            document.getElementById('updateCouponId').value = coupon.coupon_id; // Dùng cho input hidden
             document.getElementById('updateCouponCode').value = coupon.code;
             document.getElementById('updateCouponType').value = coupon.type;
             document.getElementById('updateCouponDiscount').value = coupon.discount;
-
-            // Xử lý giá trị 'condition' có thể là null
             document.getElementById('updateCouponCondition').value = coupon.condition || '';
 
             // 3. Định dạng ngày giờ cho input 'datetime-local'
-            // Input này yêu cầu định dạng YYYY-MM-DDTHH:MM
-            // Giả sử server trả về một chuỗi ISO (vd: "2025-10-29T17:00:00")
             if (coupon.expire) {
-                // Cắt chuỗi để lấy 16 ký tự đầu (YYYY-MM-DDTHH:MM)
                 document.getElementById('updateCouponExpire').value = coupon.expire.slice(0, 16);
             } else {
                 document.getElementById('updateCouponExpire').value = '';
             }
 
             // 4. Đặt 'action' cho form một cách động
-            // Điều này ghi đè 'th:action' và đảm bảo form submit đúng ID
+            // *** QUAN TRỌNG: Dòng này vẫn cần thiết ***
+            // Nó đặt action cho lần MỞ ĐẦU TIÊN.
+            // Bản sửa lỗi HTML/Controller sẽ xử lý sau khi TẢI LẠI TRANG.
             const form = document.querySelector('#updateCouponForm');
             form.action = `/admin-coupon/admin-update-coupon/${couponId}`;
 
-            // 5. Hiển thị modal
+            // 5. Xóa lỗi cũ (nếu có)
+            const errorMessages = form.querySelectorAll('.error');
+            errorMessages.forEach(msg => msg.textContent = '');
+            const errorInputs = form.querySelectorAll('.error-field');
+            errorInputs.forEach(input => input.classList.remove('error-field'));
+
+            // 6. Hiển thị modal
             document.getElementById('updateCouponModal').style.display = 'flex';
         })
         .catch(err => {
             console.error('Lỗi khi lấy thông tin coupon:', err);
-            // Bạn có thể dùng hàm showToast ở đây
-            // showToast('Không thể lấy thông tin coupon', 'error');
+            showToast('Không thể lấy thông tin coupon', 'error');
         });
 }
 
@@ -253,7 +227,34 @@ function openUpdateCouponModal(couponId) {
 function closeUpdateCouponModal() {
     document.getElementById('updateCouponModal').style.display = 'none';
 }
-// Thêm hàm này vào file admin-coupons.js
+// Thay thế hàm closeCouponModal() cũ của bạn bằng hàm này
+// Dùng hàm này thay thế cho hàm closeCouponModal cũ của bạn
 function closeCouponModal() {
-    document.getElementById('couponModal').style.display = 'none';
+    const modal = document.getElementById('couponModal');
+    if (modal) {
+        // 1. Ẩn modal
+        modal.style.display = 'none';
+    }
+
+    // --- BẮT ĐẦU RESET THỦ CÔNG ---
+    // 2. Reset các trường input về rỗng
+    document.getElementById('couponCode').value = '';
+    document.getElementById('couponDiscount').value = '';
+    document.getElementById('couponCondition').value = ''; // Đặt về rỗng
+    document.getElementById('couponExpire').value = '';
+
+    // 3. Reset trường select về giá trị đầu tiên
+    document.getElementById('couponType').value = '1'; // '1' là "Tiền mặt (fixed)"
+    // --- KẾT THÚC RESET THỦ CÔNG ---
+
+
+    // 4. Xóa các thông báo lỗi (giữ nguyên logic cũ)
+    const form = document.getElementById('createCouponForm');
+    if (form) {
+        const errorMessages = form.querySelectorAll('.error');
+        errorMessages.forEach(msg => msg.textContent = '');
+
+        const errorInputs = form.querySelectorAll('.error-field');
+        errorInputs.forEach(input => input.classList.remove('error-field'));
+    }
 }
