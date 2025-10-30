@@ -1,25 +1,37 @@
+/* CSS này đã được "scoped" (giới hạn phạm vi)
+  với class .report-form-page.
+  Nó sẽ KHÔNG ảnh hưởng đến các thành phần khác như footer.
+*/
+
 /* Reset & base */
-* {
+.report-form-page * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  /* Bỏ margin: 0; padding: 0;
+     vì .report-form-page * là quá rộng,
+     có thể ảnh hưởng đến các thành phần con của Bootstrap
+     bên trong form nếu có.
+     Chỉ giữ lại box-sizing.
+  */
 }
 
-body {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: #f8f9fb;
-  color: #333;
-  line-height: 1.5;
-}
+/* Áp dụng font, background,... cho trang cụ thể nếu cần,
+   nhưng an toàn hơn là để body chung xử lý.
+   Chúng ta có thể bỏ phần body đi.
+*/
 
-.container {
+.report-form-page .container {
+  /* Class .container này có thể xung đột với .container của Bootstrap.
+     Tuy nhiên, vì ta đã bọc trong <main class="container report-form-page">
+     nên Bootstrap sẽ lo phần .container,
+     và CSS của bạn sẽ ghi đè max-width.
+  */
   max-width: 800px;
   margin: 40px auto;
   padding: 0 16px;
 }
 
 /* Heading */
-h1 {
+.report-form-page h1 {
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
@@ -27,7 +39,7 @@ h1 {
   color: #0d3b66;
 }
 
-.hint {
+.report-form-page .hint {
   text-align: center;
   font-size: 0.95rem;
   color: #666;
@@ -35,7 +47,7 @@ h1 {
 }
 
 /* Card */
-.card {
+.report-form-page .card {
   background: #fff;
   padding: 32px;
   border-radius: 12px;
@@ -43,24 +55,25 @@ h1 {
 }
 
 /* Form layout */
-.row {
+/* ĐÂY LÀ PHẦN SỬA QUAN TRỌNG NHẤT */
+.report-form-page .row {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 /* Labels & inputs */
-label {
+.report-form-page label {
   display: block;
   font-weight: 600;
   margin-bottom: 6px;
   color: #0d3b66;
 }
 
-input[type="text"],
-input[type="email"],
-textarea,
-input[type="file"] {
+.report-form-page input[type="text"],
+.report-form-page input[type="email"],
+.report-form-page textarea,
+.report-form-page input[type="file"] {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #ccc;
@@ -70,48 +83,51 @@ input[type="file"] {
   background: #fafafa;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-textarea:focus {
+.report-form-page input[type="text"]:focus,
+.report-form-page input[type="email"]:focus,
+.report-form-page textarea:focus {
   border-color: #0077ff;
   outline: none;
   background: #fff;
   box-shadow: 0 0 0 3px rgba(0,119,255,0.15);
 }
 
-textarea {
+.report-form-page textarea {
   resize: vertical;
   min-height: 100px;
 }
 
 /* File input hint */
-input[type="file"] {
+.report-form-page input[type="file"] {
   padding: 6px;
   background: transparent;
 }
 
-.error {
+.report-form-page .error {
   margin-top: 4px;
   font-size: 0.85rem;
   color: #d9534f;
 }
 
 /* Checkbox */
-input[type="checkbox"] {
+.report-form-page input[type="checkbox"] {
   margin-right: 8px;
   transform: scale(1.1);
   accent-color: #0077ff;
 }
 
 /* Actions */
-.actions {
+.report-form-page .actions {
   margin-top: 28px;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
 }
 
-.btn.primary {
+/* Sử dụng .report-form-page .btn.primary
+   để đảm bảo nó cụ thể hơn .btn.primary của Bootstrap
+*/
+.report-form-page .btn.primary {
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
@@ -121,31 +137,29 @@ input[type="checkbox"] {
   transition: background 0.2s, transform 0.1s;
 }
 
-.btn.primary:hover {
+.report-form-page .btn.primary:hover {
   transform: translateY(-1px);
 }
 
-.btn.primary:active {
+.report-form-page .btn.primary:active {
   transform: translateY(0);
 }
 
-.btn.primary.secondary {
+.report-form-page .btn.primary.secondary {
   background: #e0e0e0;
   color: #333;
 }
 
-.btn.primary.secondary:hover {
+.report-form-page .btn.primary.secondary:hover {
   background: #d5d5d5;
 }
 
-/* Chỉ áp dụng gradient cho nút chính (btn-primary), không ảnh hưởng btn-secondary của Bootstrap */
-.btn.primary {
+/* Chỉ áp dụng gradient cho nút chính, không ảnh hưởng btn-secondary của Bootstrap */
+.report-form-page .btn.primary {
   background: linear-gradient(135deg, #0077ff, #00c6ff);
   color: #fff;
 }
 
-.btn.primary:hover {
+.report-form-page .btn.primary:hover {
   background: linear-gradient(135deg, #006ae0, #00afd6);
 }
-
-
