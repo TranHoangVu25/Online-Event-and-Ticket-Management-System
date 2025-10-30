@@ -15,8 +15,8 @@ public class EndDateValidatorCreate implements ConstraintValidator<EndDateConstr
     @Override
     public boolean isValid(EventCreationRequest request, ConstraintValidatorContext context) {
         if (Objects.isNull(request)
-        || request.getStartTime() == null
-        || request.getEndTime() == null
+                || request.getStartTime() == null
+                || request.getEndTime() == null
         )
             return true;
 
