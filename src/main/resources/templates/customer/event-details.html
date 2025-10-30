@@ -106,18 +106,33 @@
             <span th:text="${eventForm.ticketClass[0].soldQuantity}"></span>
           </div>
 
-          <div class="d-flex gap-2">
+          <div class="d-flex gap-2"
+               th:with="remainTicket = ${eventForm.ticketClass[0].totalQuantity - eventForm.ticketClass[0].soldQuantity},
+                        isSoldOut = ${remainTicket <= 0},
+                        isPastEvent = ${#temporals.createNow().isAfter(eventForm.event.startTime)},
+                        isDisabled = ${isSoldOut or isPastEvent}">
+
+            <a  th:if="${isDisabled}"
+                href="#"
+                class="btn btn-success btn-lg flex-fill disabled"
+                role="button"
+                style="pointer-events: none;"
+                th:text="${isSoldOut ? 'Hết vé' : 'Sự kiện đã qua'}">
+              Buy now (Disabled)
+            </a>
+
+            <a  th:unless="${isDisabled}"
+                th:href="@{/user/buy-ticket/{id}(id=${eventForm.event.id})}"
+                class="btn btn-success btn-lg flex-fill"
+                role="button">
+              Buy now
+            </a>
+
             <a
-              th:href="@{/user/buy-ticket/{id}(id=${eventForm.event.id})}"
-              class="btn btn-success btn-lg flex-fill"
-              role="button"
-              >Buy now</a
-            >
-            <a
-              th:href="@{/user/main-event}"
-              class="btn btn-danger btn-lg flex-fill"
-              role="button"
-              >Cancel</a
+                    th:href="@{/user/main-event}"
+                    class="btn btn-danger btn-lg flex-fill"
+                    role="button"
+            >Cancel</a
             >
           </div>
         </div>
