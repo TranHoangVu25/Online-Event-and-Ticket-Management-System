@@ -65,7 +65,6 @@ public class AuthenticationService {
                 .build();
     }
 
-
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new Exception("USER_NOT_EXISTED"));

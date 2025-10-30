@@ -27,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,6 +74,11 @@ public class AuthenticateController {
             session.setAttribute("full_name",full_name);
 
             if (scope.contains("ROLE_ADMIN")){
+                LocalDateTime login_time = LocalDateTime.now();
+                User user1 = userRepository.findById(userId)
+                        .orElseThrow(()-> new RuntimeException("In login. User not found"));
+                user1.setLastLogin(login_time);
+                userRepository.save(user1);
                 return "redirect:/admin-home";
             }
 //            else if (){
