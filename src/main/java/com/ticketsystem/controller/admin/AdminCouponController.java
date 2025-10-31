@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,12 +33,13 @@ public class AdminCouponController {
         model.addAttribute("coupons", coupons);
         model.addAttribute("newCoupon", new CouponCreateRequest());
         model.addAttribute("couponUpdate", new CouponUpdateRequest());
+        model.addAttribute("activePage", "coupons");
         return "admin/admin-coupons";
     }
 
     @PostMapping("/admin-create-coupon")
     public String createCoupon(
-            @ModelAttribute("newCoupon") @Valid CouponCreateRequest coupon,
+            @ModelAttribute("newCoupon") @Validated CouponCreateRequest coupon,
             BindingResult bindingResult,
             Model model
     ) {
@@ -45,6 +47,7 @@ public class AdminCouponController {
             List<Coupon> coupons = couponService.getAllCoupon();
             model.addAttribute("coupons", coupons);
             model.addAttribute("couponUpdate", new CouponUpdateRequest());
+            model.addAttribute("activePage", "coupons");
             return "admin/admin-coupons";
         }
         couponService.createCoupon(coupon);
@@ -71,6 +74,7 @@ public class AdminCouponController {
             model.addAttribute("coupons", coupons);
             model.addAttribute("newCoupon", new CouponCreateRequest());
             model.addAttribute("failedUpdateId", coupon_id);
+            model.addAttribute("activePage", "coupons");
             return "admin/admin-coupons";
         }
         couponService.updateCoupon(coupon_id, request);

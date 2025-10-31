@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -22,6 +23,10 @@ public class CouponServiceImpl implements CouponService{
 
     @Override
     public Coupon createCoupon(CouponCreateRequest coupon) {
+        BigDecimal max_discount = new BigDecimal(100);
+        if(coupon.getType()==2 && coupon.getDiscount().compareTo(max_discount)>0){
+            throw new RuntimeException("Mã giảm giá không được giảm > 100%");
+        }
         Coupon c = new Coupon().builder()
                 .condition(coupon.getCondition())
                 .expire(coupon.getExpire())

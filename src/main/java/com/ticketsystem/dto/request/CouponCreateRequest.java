@@ -1,6 +1,7 @@
 package com.ticketsystem.dto.request;
 
 import com.ticketsystem.exception.Error;
+import com.ticketsystem.validator.CouponDiscountConstraint;
 import com.ticketsystem.validator.CouponExpireConstraint;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @CouponExpireConstraint
+@CouponDiscountConstraint
 public class CouponCreateRequest {
     @Min(message = "Condition must be > 0", value = 0)
     Integer condition;
