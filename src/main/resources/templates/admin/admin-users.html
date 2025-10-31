@@ -9,347 +9,254 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
-    <!-- Background Particles -->
-    <div class="background-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-    <!-- Header -->
-    <header class="admin-header glass">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <i class="fas fa-calendar-alt"></i>
+<div th:replace="~{admin/layout :: admin-background}"></div>
+
+<header th:replace="~{admin/layout :: admin-header}"></header>
+
+<div class="admin-container">
+    <nav th:replace="~{admin/layout :: admin-sidebar}"></nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-header glass">
+            <div class="header-left">
+                <div class="section-icon">
+                    <i class="fas fa-users"></i>
                 </div>
-                <h1>EventHub Admin</h1>
+                <div class="header-text">
+                    <h2>Quản lý người dùng</h2>
+                    <p>Quản lý tài khoản người dùng và phân quyền</p>
+                </div>
             </div>
-            <div class="admin-info">
-                <div class="admin-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <span class="admin-name" th:text="${session.userName}">Admin</span>
-                <button class="logout-btn glass"
-                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/logout}'; }|">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Đăng xuất</span>
+            <div class="header-actions">
+                <button class="btn-primary glass" onclick="openAddUserModal()">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Thêm người dùng</span>
+                </button>
+                <button class="btn-secondary glass" onclick="refreshUsers()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Làm mới</span>
                 </button>
             </div>
         </div>
-    </header>
 
-    <!-- Main Content -->
-    <div class="admin-container">
-        <!-- Sidebar Navigation -->
-        <nav class="admin-sidebar glass">
-            <div class="sidebar-header">
-                <div class="admin-avatar-large">
-                    <i class="fas fa-user-shield"></i>
+        <!-- User Statistics -->
+        <div class="stats-section">
+            <div class="stat-card glass">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
                 </div>
-                <span>Quản trị viên</span>
-            </div>
-
-            <ul class="nav-menu">
-                <li class="nav-item active">
-                    <a th:href="@{/admin-home}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-tachometer-alt"></i>
-                        </div>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/admin-events}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-calendar-plus"></i>
-                        </div>
-                        <span>Quản lý sự kiện</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/admin-orders}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <span>Xử lý đơn hàng</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/users}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <span>Quản lý người dùng</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/admin-create-event}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-plus-circle"></i>
-                        </div>
-                        <span>Tạo sự kiện mới</span>
-                    </a>
-                </li>
-                <li class="nav-item active">
-                    <a th:href="@{/admin/error-reports}" class="nav-link">
-                        <div class="nav-icon"><i class="fas fa-bug"></i></div><span>Báo lỗi người dùng</span>
-                    </a>
-                </li>
-                <li class="nav-item active">
-                    <a th:href="@{/admin-coupon}" class="nav-link">
-                        <div class="nav-icon"><i class="fas fa-tag"></i></div>
-                        <span>Khuyến mại</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <div class="content-header glass">
-                <div class="header-left">
-                    <div class="section-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="header-text">
-                        <h2>Quản lý người dùng</h2>
-                        <p>Quản lý tài khoản người dùng và phân quyền</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="btn-primary glass" onclick="openAddUserModal()">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Thêm người dùng</span>
-                    </button>
-                    <button class="btn-secondary glass" onclick="refreshUsers()">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Làm mới</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- User Statistics -->
-            <div class="stats-section">
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Tổng người dùng</h3>
-                        <p class="stat-number">1,247</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+12%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Người dùng hoạt động</h3>
-                        <p class="stat-number">892</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+8%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-clock"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Người dùng mới</h3>
-                        <p class="stat-number">45</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+15%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="stat-card glass">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-slash"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Người dùng bị khóa</h3>
-                        <p class="stat-number">23</p>
-                        <div class="stat-trend negative">
-                            <i class="fas fa-arrow-down"></i>
-                            <span>-5%</span>
-                        </div>
+                <div class="stat-content">
+                    <h3>Tổng người dùng</h3>
+                    <p class="stat-number">1,247</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12%</span>
                     </div>
                 </div>
             </div>
+            <div class="stat-card glass">
+                <div class="stat-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Người dùng hoạt động</h3>
+                    <p class="stat-number">892</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+8%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card glass">
+                <div class="stat-icon">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Người dùng mới</h3>
+                    <p class="stat-number">45</p>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+15%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card glass">
+                <div class="stat-icon">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Người dùng bị khóa</h3>
+                    <p class="stat-number">23</p>
+                    <div class="stat-trend negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>-5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <!-- Filters and Search -->
-            <div class="filters-section glass">
-                <div class="filter-group">
-                    <label for="searchUser">Tìm kiếm:</label>
-                    <div class="input-wrapper">
-                        <div class="input-icon">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <input type="text" id="searchUser" class="input-border" placeholder="Tìm theo tên, email...">
+        <!-- Filters and Search -->
+        <div class="filters-section glass">
+            <div class="filter-group">
+                <label for="searchUser">Tìm kiếm:</label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <i class="fas fa-search"></i>
                     </div>
+                    <input type="text" id="searchUser" class="input-border" placeholder="Tìm theo tên, email...">
                 </div>
-                <div class="filter-group">
-                    <label for="roleFilter">Vai trò:</label>
-                    <div class="input-wrapper">
-                        <div class="input-icon">
-                            <i class="fas fa-user-tag"></i>
-                        </div>
-                        <select id="roleFilter" class="input-border">
-                            <option value="">Tất cả vai trò</option>
-                            <option value="admin">Admin</option>
-                            <option value="user">Người dùng</option>
-                            <option value="moderator">Moderator</option>
-                        </select>
+            </div>
+            <div class="filter-group">
+                <label for="roleFilter">Vai trò:</label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <i class="fas fa-user-tag"></i>
                     </div>
+                    <select id="roleFilter" class="input-border">
+                        <option value="">Tất cả vai trò</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">Người dùng</option>
+                        <option value="moderator">Moderator</option>
+                    </select>
                 </div>
-                <div class="filter-group">
-                    <label for="statusFilter">Trạng thái:</label>
-                    <div class="input-wrapper">
-                        <div class="input-icon">
-                            <i class="fas fa-toggle-on"></i>
-                        </div>
-                        <select id="statusFilter" class="input-border">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="active">Hoạt động</option>
-                            <option value="inactive">Không hoạt động</option>
-                            <option value="blocked">Bị khóa</option>
-                        </select>
+            </div>
+            <div class="filter-group">
+                <label for="statusFilter">Trạng thái:</label>
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <i class="fas fa-toggle-on"></i>
                     </div>
+                    <select id="statusFilter" class="input-border">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="active">Hoạt động</option>
+                        <option value="inactive">Không hoạt động</option>
+                        <option value="blocked">Bị khóa</option>
+                    </select>
                 </div>
-                <div class="filter-actions">
-                    <button class="btn-primary glass" onclick="applyFilters()">
-                        <i class="fas fa-filter"></i>
-                        <span>Lọc</span>
-                    </button>
-                    <button class="btn-secondary glass" onclick="clearFilters()">
-                        <i class="fas fa-times"></i>
-                        <span>Xóa bộ lọc</span>
+            </div>
+            <div class="filter-actions">
+                <button class="btn-primary glass" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i>
+                    <span>Lọc</span>
+                </button>
+                <button class="btn-secondary glass" onclick="clearFilters()">
+                    <i class="fas fa-times"></i>
+                    <span>Xóa bộ lọc</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="users-table-container glass">
+            <div class="table-header">
+                <h3>Danh sách người dùng</h3>
+                <div class="table-actions">
+                    <button class="btn-secondary glass" onclick="exportUsers()">
+                        <i class="fas fa-download"></i>
+                        <span>Xuất Excel</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Users Table -->
-            <div class="users-table-container glass">
-                <div class="table-header">
-                    <h3>Danh sách người dùng</h3>
-                    <div class="table-actions">
-                        <button class="btn-secondary glass" onclick="exportUsers()">
-                            <i class="fas fa-download"></i>
-                            <span>Xuất Excel</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="users-table">
-                        <thead>
-                        <tr>
-                            <th>
-                                <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
-                            </th>
-                            <th>Thông tin người dùng</th>
-                            <th>Email</th>
-                            <th>Vai trò</th>
-                            <th>Trạng thái</th>
-                            <th>Ngày tham gia</th>
-                            <th>Lần đăng nhập cuối</th>
-                            <th>Thao tác</th>
-                        </tr>
-                        </thead>
-                        <tbody id="usersTableBody" >
-                        <tr th:each="user : ${users}" th:id="'user-row-' + ${user.id}">
-                            <td>
-                                <input type="checkbox" class="user-checkbox">
-                            </td>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="user-details" >
-                                        <h4 th:text="${user.username}">Nguyễn Văn An</h4>
-                                        <span class="user-id" th:text="${user.id}">#USR001</span>
-                                    </div>
+            <div class="table-responsive">
+                <table class="users-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th>Thông tin người dùng</th>
+                        <th>Email</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tham gia</th>
+                        <th>Lần đăng nhập cuối</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    <tr th:each="user : ${users}" th:id="'user-row-' + ${user.id}">
+                        <td>
+                            <input type="checkbox" class="user-checkbox">
+                        </td>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    <i class="fas fa-user"></i>
                                 </div>
-                            </td>
-                            <td th:text="${user.email}">nguyenvanan@email.com</td>
-                            <td>
+                                <div class="user-details">
+                                    <h4 th:text="${user.username}">Nguyễn Văn An</h4>
+                                    <span class="user-id" th:text="${user.id}">#USR001</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${user.email}">nguyenvanan@email.com</td>
+                        <td>
                                 <span class="role-badge admin" th:text="${user.role.roleName}">
                                     Admin</span>
-                            </td>
-                            <td>
+                        </td>
+                        <td>
                                 <span class="status-badge active"
                                       th:text="${user.isActive}"
                                 >Hoạt động</span>
-                            </td>
-                            <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy hh:mm a')}"
-                            >15/01/2024</td>
+                        </td>
+                        <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy hh:mm a')}"
+                        >15/01/2024
+                        </td>
 
-                            <td th:text="${#temporals.format(user.lastLogin, 'dd/MM/yyyy hh:mm a')}">2 giờ trước</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-btn edit"
-                                            type="button"
-                                    th:onclick="'openUpdateUserModal(' + ${user.id} + ')'"
-                                    title="Chỉnh sửa">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-
-<!--                                    <button class="action-btn view" onclick="viewUser(' + ${user.id} + ')" title="Xem chi tiết">-->
-<!--                                        <i class="fas fa-eye"></i>-->
-<!--                                    </button>-->
-                                    <button class="action-btn view"
-                                            type="button"
-                                            th:onclick="'viewUser(' + ${user.id} + ')'"
-                                            title="Xem chi tiết">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn block" onclick="toggleUserStatus(' + ${user.id} + ')" title="Khóa/Mở khóa">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                    <button class="action-btn delete"
-                                            type="button"
-                                            th:onclick="'deleteUser(' + ${user.id} + ')'"
-                                            title="Xóa">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                <div class="pagination glass">
-                    <button class="pagination-btn" onclick="previousPage()">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="pagination-btn active">1</button>
-                    <button class="pagination-btn">2</button>
-                    <button class="pagination-btn">3</button>
-                    <span class="pagination-ellipsis">...</span>
-                    <button class="pagination-btn">10</button>
-                    <button class="pagination-btn" onclick="nextPage()">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
+                        <td th:text="${#temporals.format(user.lastLogin, 'dd/MM/yyyy hh:mm a')}">2 giờ trước</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit"
+                                        type="button"
+                                        th:onclick="'openUpdateUserModal(' + ${user.id} + ')'"
+                                        title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn view"
+                                        type="button"
+                                        th:onclick="'viewUser(' + ${user.id} + ')'"
+                                        title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn block" onclick="toggleUserStatus(' + ${user.id} + ')"
+                                        title="Khóa/Mở khóa">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                                <button class="action-btn delete"
+                                        type="button"
+                                        th:onclick="'deleteUser(' + ${user.id} + ')'"
+                                        title="Xóa">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-        </main>
-    </div>
 
-    <!-- ====================== Add Form===================-->
+            <!-- Pagination -->
+            <div class="pagination glass">
+                <button class="pagination-btn" onclick="previousPage()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <span class="pagination-ellipsis">...</span>
+                <button class="pagination-btn">10</button>
+                <button class="pagination-btn" onclick="nextPage()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+<!-- ====================== Add Form===================-->
 
-    <form action="#" th:action="@{/admin/admin-create-users}" th:object="${userCreation}" method="post" id="createUser" >
+<form action="#" th:action="@{/admin/admin-create-users}" th:object="${userCreation}" method="post" id="createUser">
 
     <div id="userModal" class="modal">
         <div class="modal-content glass">
@@ -360,285 +267,284 @@
                 </button>
             </div>
             <div class="modal-body">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">Họ và tên </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <input type="text" id="firstName" class="input-border" required
-                                       th:field="*{fullName}">
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <div class="input-wrapper">
-                            <div class="input-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <input type="email" id="email" class="input-border" required
-                                   th:field="*{email}">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại</label>
-                        <div class="input-wrapper">
-                            <div class="input-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <input type="tel" id="phone" class="input-border"
-                                   th:field="*{phoneNumber}">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="role">Vai trò</label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-user-tag"></i>
-                                </div>
-                                <select id="role" class="input-border" required th:field="*{role.id}">
-                                    <option value="2">USER</option>
-                                    <option value="1">ADMIN</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="status">Trạng thái</label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-toggle-on"></i>
-                                </div>
-                                <select id="status" class="input-border" required th:field="*{active}">
-                                    <option value="true">Hoạt động</option>
-                                    <option value="false">Không hoạt động</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class from-group>
-                        <label for="username">Tên đăng nhập</label>
+                        <label for="firstName">Họ và tên </label>
                         <div class="input-wrapper">
                             <div class="input-icon">
                                 <i class="fas fa-user"></i>
                             </div>
-                            <input type="text" id="username" class="input-border" required
-                                   th:field="*{username}">
+                            <input type="text" id="firstName" class="input-border" required
+                                   th:field="*{fullName}">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <input type="email" id="email" class="input-border" required
+                               th:field="*{email}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <input type="tel" id="phone" class="input-border"
+                               th:field="*{phoneNumber}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="role">Vai trò</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-user-tag"></i>
+                            </div>
+                            <select id="role" class="input-border" required th:field="*{role.id}">
+                                <option value="2">USER</option>
+                                <option value="1">ADMIN</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="password">Mật khẩu</label>
+                        <label for="status">Trạng thái</label>
                         <div class="input-wrapper">
                             <div class="input-icon">
-                                <i class="fas fa-lock"></i>
+                                <i class="fas fa-toggle-on"></i>
                             </div>
-                            <input type="password" id="password" class="input-border password-input" required
-                                   th:field="*{passwordHash}">
-                            <button type="button" class="toggle-password" onclick="togglePassword('password')">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                            <select id="status" class="input-border" required th:field="*{active}">
+                                <option value="true">Hoạt động</option>
+                                <option value="false">Không hoạt động</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Xác nhận mật khẩu</label>
-                        <div class="input-wrapper">
-                            <div class="input-icon">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <input type="password" id="confirmPassword" class="input-border password-input" required>
-                            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                </div>
+                <div class from-group>
+                    <label for="username">Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
                         </div>
+                        <input type="text" id="username" class="input-border" required
+                               th:field="*{username}">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="password" class="input-border password-input" required
+                               th:field="*{passwordHash}">
+                        <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Xác nhận mật khẩu</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="confirmPassword" class="input-border password-input" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-secondary glass" onclick="closeUserModal()">Hủy</button>
                 <button class="btn-primary glass" type="submit" onclick="saveUser()">Lưu</button>
             </div>
-            </div>
         </div>
-    </form>
+    </div>
+</form>
 
-    <!-- ====================== Update Form ===================-->
-    <form th:action="@{/admin/admin-update-user/{id}(id=${id})}"
-          th:object="${userUpdate}" method="post" id="updateUserForm">
+<!-- ====================== Update Form ===================-->
+<form th:action="@{/admin/admin-update-user/{id}(id=${id})}"
+      th:object="${userUpdate}" method="post" id="updateUserForm">
 
     <div id="updateUserModal" class="modal">
-            <div class="modal-content glass">
-                <div class="modal-header">
-                    <h3 id="modalUpdateTitle">Cập nhật người dùng</h3>
-                    <button class="close-btn" type="button" onclick="closeUpdateUserModal()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="updateFullName">Họ và tên</label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <input type="text" id="updateFullName" class="input-border" required
-                                       th:field="*{fullName}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="updateEmail">Email</label>
-                        <div class="input-wrapper">
-                            <div class="input-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <input type="email" id="updateEmail" class="input-border" required
-                                   th:field="*{email}">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="updatePhone">Số điện thoại</label>
-                        <div class="input-wrapper">
-                            <div class="input-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <input type="tel" id="updatePhone" class="input-border"
-                                   th:field="*{phoneNumber}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="updateRole">Vai trò</label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-user-tag"></i>
-                                </div>
-                                <select id="updateRole" class="input-border" required th:field="*{role.id}">
-                                    <option value="2">USER</option>
-                                    <option value="1">ADMIN</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="updateUsername">Tên đăng nhập</label>
-                        <div class="input-wrapper">
-                            <div class="input-icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <input type="text" id="updateUsername" class="input-border" required
-                                   th:field="*{username}">
-                        </div>
-                    </div>
-
-                    <!-- Có thể ẩn mật khẩu nếu chỉ muốn update thông tin -->
-                    <div class="form-group">
-                        <label for="updatePassword">Mật khẩu (nếu muốn đổi)</label>
-                        <div class="input-wrapper">
-                            <div class="input-icon">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <input type="password" id="updatePassword" class="input-border password-input"
-                                   th:field="*{passwordHash}">
-                            <button type="button" class="toggle-password" onclick="togglePassword('updatePassword')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button class="btn-secondary glass" type="button" onclick="closeUpdateUserModal()">Hủy</button>
-                    <button class="btn-primary glass" type="submit">Cập nhật</button>
-                </div>
-            </div>
-        </div>
-    </form>
-
-
-    <!-- ===================User Details Modal ===========================-->
-    <div id="userDetailsModal" class="modal">
         <div class="modal-content glass">
             <div class="modal-header">
-                <h3>Chi tiết người dùng</h3>
-                <button class="close-btn" onclick="closeUserDetailsModal()">
+                <h3 id="modalUpdateTitle">Cập nhật người dùng</h3>
+                <button class="close-btn" type="button" onclick="closeUpdateUserModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="user-details-content">
-                    <div class="user-profile">
-                        <div class="user-avatar-large">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="updateFullName">Họ và tên</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <input type="text" id="updateFullName" class="input-border" required
+                                   th:field="*{fullName}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateEmail">Email</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <input type="email" id="updateEmail" class="input-border" required
+                               th:field="*{email}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updatePhone">Số điện thoại</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <input type="tel" id="updatePhone" class="input-border"
+                               th:field="*{phoneNumber}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="updateRole">Vai trò</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-user-tag"></i>
+                            </div>
+                            <select id="updateRole" class="input-border" required th:field="*{role.id}">
+                                <option value="2">USER</option>
+                                <option value="1">ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateUsername">Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
                             <i class="fas fa-user"></i>
                         </div>
-                        <div class="user-info-details">
-                            <h4 id="detailFullName">Nguyễn Văn An</h4>
-                            <span id="detailUserEmail">nguyenvanan@email.com</span>
-                            <div class="user-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">Số đơn hàng:</span>
-                                    <span class="stat-value">15</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Tổng chi tiêu:</span>
-                                    <span class="stat-value">2,500,000 VNĐ</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Ngày tham gia:</span>
-                                    <span class="stat-value">15/01/2024</span>
-                                </div>
+                        <input type="text" id="updateUsername" class="input-border" required
+                               th:field="*{username}">
+                    </div>
+                </div>
+
+                <!-- Có thể ẩn mật khẩu nếu chỉ muốn update thông tin -->
+                <div class="form-group">
+                    <label for="updatePassword">Mật khẩu (nếu muốn đổi)</label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="updatePassword" class="input-border password-input"
+                               th:field="*{passwordHash}">
+                        <button type="button" class="toggle-password" onclick="togglePassword('updatePassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary glass" type="button" onclick="closeUpdateUserModal()">Hủy</button>
+                <button class="btn-primary glass" type="submit">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- ===================User Details Modal ===========================-->
+<div id="userDetailsModal" class="modal">
+    <div class="modal-content glass">
+        <div class="modal-header">
+            <h3>Chi tiết người dùng</h3>
+            <button class="close-btn" onclick="closeUserDetailsModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="user-details-content">
+                <div class="user-profile">
+                    <div class="user-avatar-large">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info-details">
+                        <h4 id="detailFullName">Nguyễn Văn An</h4>
+                        <span id="detailUserEmail">nguyenvanan@email.com</span>
+                        <div class="user-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Số đơn hàng:</span>
+                                <span class="stat-value">15</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Tổng chi tiêu:</span>
+                                <span class="stat-value">2,500,000 VNĐ</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Ngày tham gia:</span>
+                                <span class="stat-value">15/01/2024</span>
                             </div>
                         </div>
                     </div>
-                    <div class="user-activity">
-                        <h5>Hoạt động gần đây</h5>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p>Đặt vé sự kiện "Concert Mùa Hè 2024"</p>
-                                    <span class="activity-time">2 giờ trước</span>
-                                </div>
+                </div>
+                <div class="user-activity">
+                    <h5>Hoạt động gần đây</h5>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-shopping-cart"></i>
                             </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-sign-in-alt"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p>Đăng nhập vào hệ thống</p>
-                                    <span class="activity-time">1 ngày trước</span>
-                                </div>
+                            <div class="activity-content">
+                                <p>Đặt vé sự kiện "Concert Mùa Hè 2024"</p>
+                                <span class="activity-time">2 giờ trước</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Đăng nhập vào hệ thống</p>
+                                <span class="activity-time">1 ngày trước</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-secondary glass" onclick="closeUserDetailsModal()">Đóng</button>
-                <button class="btn-primary glass" onclick="editUserFromDetails()">Chỉnh sửa</button>
-            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary glass" onclick="closeUserDetailsModal()">Đóng</button>
+            <button class="btn-primary glass" onclick="editUserFromDetails()">Chỉnh sửa</button>
         </div>
     </div>
+</div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast glass">
-        <div class="toast-content">
-            <i class="toast-icon"></i>
-            <span class="toast-message"></span>
-        </div>
+<!-- Toast Notification -->
+<div id="toast" class="toast glass">
+    <div class="toast-content">
+        <i class="toast-icon"></i>
+        <span class="toast-message"></span>
     </div>
+</div>
 
-    <script th:src="@{/js/admin-users.js(v=${#dates.createNow().time})}"></script>
-    <script th:src="@{/js/admin-users.js}"></script>
+<script th:src="@{/js/admin-users.js(v=${#dates.createNow().time})}"></script>
+<script th:src="@{/js/admin-users.js}"></script>
 
 </body>
 </html>

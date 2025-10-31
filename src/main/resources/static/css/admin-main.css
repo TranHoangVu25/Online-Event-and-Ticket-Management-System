@@ -1,0 +1,4 @@
+.nav-item.active .nav-link {
+    background-color: #007bff; /* Làm cho nó nổi bật */
+    color: #ffffff;
+}

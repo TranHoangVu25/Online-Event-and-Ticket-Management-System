@@ -32,51 +32,12 @@
     </style>
 </head>
 <body class="dark-theme">
+<div th:replace="~{admin/layout :: admin-background}"></div>
 
-<!-- Background particles -->
-<div class="background-particles">
-    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
-</div>
-
-<!-- Header -->
-<header class="admin-header glass">
-    <div class="header-content">
-        <div class="logo-section">
-            <div class="logo-icon"><i class="fas fa-calendar-alt"></i></div>
-            <h1>EventHub Admin</h1>
-        </div>
-        <div class="admin-info">
-            <div class="admin-avatar"><i class="fas fa-user-circle"></i></div>
-            <span class="admin-name" th:text="${adminName}">Admin</span>
-            <button class="logout-btn glass"
-                    th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')){window.location='@{/logout}';}|">
-                <i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span>
-            </button>
-        </div>
-    </div>
-</header>
+<header th:replace="~{admin/layout :: admin-header}"></header>
 
 <div class="admin-container">
-    <!-- Sidebar -->
-    <nav class="admin-sidebar glass">
-        <div class="sidebar-header">
-            <div class="admin-avatar-large"><i class="fas fa-user-shield"></i></div>
-            <span>Quản trị viên</span>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a th:href="@{/admin}" class="nav-link"><div class="nav-icon"><i class="fas fa-tachometer-alt"></i></div><span>Dashboard</span></a></li>
-            <li class="nav-item"><a th:href="@{/admin/admin-events}" class="nav-link"><div class="nav-icon"><i class="fas fa-calendar-plus"></i></div><span>Quản lý sự kiện</span></a></li>
-            <li class="nav-item"><a th:href="@{/admin/admin-orders}" class="nav-link"><div class="nav-icon"><i class="fas fa-shopping-cart"></i></div><span>Xử lý đơn hàng</span></a></li>
-            <li class="nav-item"><a th:href="@{/admin/users}" class="nav-link"><div class="nav-icon"><i class="fas fa-users"></i></div><span>Quản lý người dùng</span></a></li>
-            <li class="nav-item"><a th:href="@{/admin/admin-create-event}" class="nav-link"><div class="nav-icon"><i class="fas fa-plus-circle"></i></div><span>Tạo sự kiện mới</span></a></li>
-            <li class="nav-item"><a th:href="@{/admin/reports}" class="nav-link"><div class="nav-icon"><i class="fas fa-chart-bar"></i></div><span>Báo cáo</span></a></li>
-            <li class="nav-item active">
-                <a th:href="@{/admin/error-reports}" class="nav-link">
-                    <div class="nav-icon"><i class="fas fa-bug"></i></div><span>Báo lỗi người dùng</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <nav th:replace="~{admin/layout :: admin-sidebar}"></nav>
 
     <!-- Main -->
     <main class="main-content">
@@ -220,35 +181,7 @@
 
                 <!-- Thao tác nhanh -->
                 <div>
-<!--                    <div class="field-label">Thao tác nhanh</div>-->
-<!--                    <div class="row-actions">-->
-
-<!--                        &lt;!&ndash; Đang xử lý &ndash;&gt;-->
-<!--                        <form th:action="@{/admin/error-reports/change-status}" method="post" style="display:inline-block;">-->
-<!--                            <input type="hidden" name="id" th:value="${er.id}" />-->
-<!--                            <input type="hidden" name="status" value="in_progress" />-->
-<!--                            <button type="submit" class="btn-secondary">-->
-<!--                                <i class="fa-solid fa-person-digging"></i>-->
-<!--                                <span>Đang xử lý</span>-->
-<!--                            </button>-->
-<!--                        </form>-->
-
-<!--                        &lt;!&ndash; Đã xử lý &ndash;&gt;-->
-<!--                        <form th:action="@{/admin/error-reports/change-status}" method="post" style="display:inline-block;">-->
-<!--                            <input type="hidden" name="id" th:value="${er.id}" />-->
-<!--                            <input type="hidden" name="status" value="resolved" />-->
-<!--                            <button type="submit" class="btn-secondary">-->
-<!--                                <i class="fa-solid fa-circle-check"></i>-->
-<!--                                <span>Đã xử lý</span>-->
-<!--                            </button>-->
-<!--                        </form>-->
-
-<!--                    </div>-->
-
-
                 </div>
-
-
             </aside>
         </div>
     </main>

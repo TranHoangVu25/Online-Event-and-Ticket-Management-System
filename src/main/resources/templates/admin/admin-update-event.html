@@ -9,105 +9,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
-    <!-- Background Particles -->
-    <div class="background-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
+<div th:replace="~{admin/layout :: admin-background}"></div>
 
-    <!-- Header -->
-    <header class="admin-header glass">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <h1>EventHub Admin</h1>
-            </div>
-            <div class="admin-info">
-                <div class="admin-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <span class="admin-name" th:text="${session.userName}">Admin</span>
-                <button class="logout-btn glass"
-                        th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/logout}'; }|">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Đăng xuất</span>
-                </button>
-            </div>
-        </div>
-    </header>
+<header th:replace="~{admin/layout :: admin-header}"></header>
 
-    <!-- Main Content -->
-    <div class="admin-container">
-        <!-- Sidebar Navigation -->
-        <nav class="admin-sidebar glass">
-            <div class="sidebar-header">
-                <div class="admin-avatar-large">
-                    <i class="fas fa-user-shield"></i>
-                </div>
-                <span>Quản trị viên</span>
-            </div>
-
-            <ul class="nav-menu">
-                <li class="nav-item active">
-                    <a th:href="@{/admin/home}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-tachometer-alt"></i>
-                        </div>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/admin-events}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-calendar-plus"></i>
-                        </div>
-                        <span>Quản lý sự kiện</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/admin-orders}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <span>Xử lý đơn hàng</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/users}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <span>Quản lý người dùng</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/admin/admin-create-event}" class="nav-link">
-                        <div class="nav-icon">
-                            <i class="fas fa-plus-circle"></i>
-                        </div>
-                        <span>Tạo sự kiện mới</span>
-                    </a>
-                </li>
-                <li class="nav-item active">
-                    <a th:href="@{/admin/error-reports}" class="nav-link">
-                        <div class="nav-icon"><i class="fas fa-bug"></i></div><span>Báo lỗi người dùng</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
+<div class="admin-container">
+    <nav th:replace="~{admin/layout :: admin-sidebar}"></nav>
 
         <!-- Main Content Area -->
         <main class="main-content">
             <div class="content-header glass">
                 <div class="header-left">
                     <h2>Sửa sự kiện</h2>
-<!--                    <p>Sửa sự kiện mới vào hệ thống EventHub</p>-->
                 </div>
                 <div class="header-actions">
                     <button class="preview-btn glass" onclick="previewEvent()">
@@ -238,7 +151,6 @@
                                     <div class="input-border"></div>
                                 </div>
                             </div>
-<!--                            <button type="button" class="remove-ticket" title="Xóa loại vé">✕</button>-->
                         </div>
                         <div class="form-row">
 
@@ -263,9 +175,6 @@
                                 </div>
                             </div>
                         </div>
-<!--                        <div class="actions">-->
-<!--                            <button id="add-ticket" type="button">Thêm loại vé</button>-->
-<!--                        </div>-->
                     </div>
 
                     <!-- Media and Images Section -->
@@ -276,23 +185,6 @@
                             </div>
                             <h3 class="section-title">Hình ảnh và media</h3>
                         </div>
-
-<!--                        <div class="form-row">-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="eventImage">Hình ảnh chính *</label>-->
-<!--                                <div class="image-upload glass">-->
-<!--                                    <input type="file" id="eventImage" name="eventImage"-->
-<!--                                           accept="image/*" required>-->
-<!--                                    <div class="upload-placeholder">-->
-<!--                                        <div class="upload-icon">-->
-<!--                                            <i class="fas fa-cloud-upload-alt"></i>-->
-<!--                                        </div>-->
-<!--                                        <p>Kéo thả hình ảnh hoặc click để chọn</p>-->
-<!--                                        <span>Kích thước tối đa: 5MB</span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
 
                         <div class="form-row">
                             <div class="form-group">
@@ -321,20 +213,11 @@
                                     >
                                     <div class="input-border"></div>
                                 </div>
-<!--                                <small class="form-help">Link YouTube hoặc video khác</small>-->
                             </div>
                         </div>
                     </div>
                     <!-- Form Actions -->
                     <div class="form-actions glass">
-<!--                        <button type="button" class="btn-secondary glass" onclick="resetForm()">-->
-<!--                            <i class="fas fa-undo"></i>-->
-<!--                            <span>Làm mới</span>-->
-<!--                        </button>-->
-<!--                        <button type="button" class="btn-secondary glass" onclick="saveDraft()">-->
-<!--                            <i class="fas fa-save"></i>-->
-<!--                            <span>Lưu nháp</span>-->
-<!--                        </button>-->
                         <button type="submit" class="btn-primary glass">
                             <i class="fas fa-check"></i>
                             <span>Lưu</span>
@@ -343,8 +226,6 @@
                 </form>
             </div>
         </main>
-
-
     </div>
 
     <!-- Toast Notification -->

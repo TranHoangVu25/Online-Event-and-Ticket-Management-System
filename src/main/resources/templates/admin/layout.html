@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.w3.org/1999/xhtml">
 
+<div th:fragment="admin-background" class="background-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
 <header th:fragment="admin-header" class="admin-header glass">
     <div class="header-content">
         <div class="logo-section">
@@ -10,6 +18,9 @@
             <h1>EventHub Admin</h1>
         </div>
         <div class="admin-info">
+            <div class="admin-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
             <span class="admin-name" th:text="${session.userName}">Admin</span>
             <button class="logout-btn glass"
                     th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/logout}'; }|">
@@ -19,7 +30,6 @@
         </div>
     </div>
 </header>
-
 
 <nav th:fragment="admin-sidebar" class="admin-sidebar glass">
     <div class="sidebar-header">
@@ -74,7 +84,6 @@
         </li>
     </ul>
 </nav>
-
 
 <div th:fragment="admin-footer">
     <div id="toast" class="toast glass">
