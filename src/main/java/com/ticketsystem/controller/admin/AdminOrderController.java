@@ -32,6 +32,7 @@ public class AdminOrderController {
     public String getOrder(Model model){
         List<OrderInformationResponse> orderForm = orderService.getAllOrder();
         model.addAttribute("orderForm",orderForm);
+        model.addAttribute("activePage","orders");
         return "/admin/admin-orders";
     }
     @GetMapping("admin-order-detail/{orderId}/{ticketClassId}")

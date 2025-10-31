@@ -98,33 +98,6 @@ function submitForm() {
     }
 }
 
-// Utility functions
-function getCategoryName(category) {
-    const categories = {
-        'concert': 'Concert',
-        'workshop': 'Workshop',
-        'conference': 'Hội nghị',
-        'exhibition': 'Triển lãm',
-        'sports': 'Thể thao',
-        'seminar': 'Hội thảo',
-        'other': 'Khác'
-    };
-    return categories[category] || category;
-}
-
-function getTicketClassName(ticketClass) {
-    const ticketClasses = {
-        'vip': 'VIP',
-        'premium': 'Premium',
-        'standard': 'Standard',
-        'economy': 'Economy',
-        'student': 'Student',
-        'senior': 'Senior',
-        'children': 'Children'
-    };
-    return ticketClasses[ticketClass] || ticketClass;
-}
-
 function formatPrice(price) {
     return new Intl.NumberFormat('vi-VN', {
         style: 'currency',
@@ -175,23 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (ticketClass) {
         ticketClass.addEventListener('change', autoFillTicketPrice);
     }
-    
-    // Load draft if exists
-//    const draft = localStorage.getItem('eventDraft');
-//    if (draft) {
-//        const eventData = JSON.parse(draft);
-//        Object.keys(eventData).forEach(key => {
-//            const element = document.getElementById(key);
-//            if (element) {
-//                if (element.type === 'checkbox') {
-//                    element.checked = eventData[key] === 'on';
-//                } else {
-//                    element.value = eventData[key];
-//                }
-//            }
-//        });
-//        showToast('Đã tải bản nháp', 'info');
-//    }
+
 });
 
 // Form submission
@@ -199,47 +156,4 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     e.preventDefault();
     submitForm();
 });
-
-// Active navigation highlighting
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPage = window.location.pathname.split('/').pop();
-    const navItems = document.querySelectorAll('.nav-item');
-    
-    navItems.forEach(item => {
-        const link = item.querySelector('.nav-link');
-        if (link.getAttribute('href') === currentPage) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-});
-//
-//document.addEventListener("DOMContentLoaded", () => {
-//    const container = document.getElementById("ticket-container");
-//    const addBtn = document.getElementById("btn-add");
-//
-//    addBtn.addEventListener("click", (e) => {
-//        e.preventDefault(); // Ngăn submit form khi ấn nút thêm
-//
-//        // Lấy form đầu tiên làm mẫu
-//        const firstForm = document.querySelector(".form-section");
-//        const newForm = firstForm.cloneNode(true);
-//
-//        // Reset input values và bỏ th:field
-//        newForm.querySelectorAll("input").forEach((input, index) => {
-//            input.value = "";
-//            input.removeAttribute("th:field"); // bỏ binding Thymeleaf
-//            input.removeAttribute("id"); // tránh trùng id
-//            input.name = `ticketClass[${Date.now()}]_${index}`; // đặt name tạm
-//        });
-//
-//        // Hiện nút xóa
-//        const deleteBtn = newForm.querySelector(".btn-delete");
-//        deleteBtn.style.display = "block";
-//        deleteBtn.onclick = () => newForm.remove();
-//
-//        container.appendChild(newForm);
-//    });
-//});
 

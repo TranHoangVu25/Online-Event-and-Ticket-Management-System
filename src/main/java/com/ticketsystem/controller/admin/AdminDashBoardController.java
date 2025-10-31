@@ -31,6 +31,7 @@ public class AdminDashBoardController {
         RevenueResponse revenueResponse = revenueService.getMonthlyRevenueByPeriod("year");
         model.addAttribute("revenueData", revenueResponse);
         model.addAttribute("activePeriod", "year");
+        model.addAttribute("activePage","dashboard");
 
         return "/admin/admin-dashboard";
     }

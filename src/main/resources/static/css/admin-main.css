@@ -1,4 +1,28 @@
+/* Thêm vào file static/css/admin-main.css
+  (hoặc file CSS chung của admin)
+*/
+
+/* Kiểu cơ bản của một mục menu (để so sánh) */
+.nav-item .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: #e0e0e0; /* Màu chữ bình thường */
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ĐÂY LÀ PHẦN QUAN TRỌNG:
+  Định dạng cho mục menu đang được "active"
+*/
 .nav-item.active .nav-link {
-    background-color: #007bff; /* Làm cho nó nổi bật */
-    color: #ffffff;
+    background-color: rgba(0, 123, 255, 0.25); /* Một màu nền nổi bật */
+    color: #ffffff; /* Màu chữ trắng sáng */
+    font-weight: 600; /* In đậm chữ */
+}
+
+/* (Tùy chọn) Làm nổi bật icon bên trong */
+.nav-item.active .nav-link .nav-icon {
+    color: #00f2ff; /* Màu xanh neon cho icon */
 }

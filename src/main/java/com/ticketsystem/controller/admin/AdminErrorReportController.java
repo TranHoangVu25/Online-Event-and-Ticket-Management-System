@@ -26,6 +26,9 @@ public class AdminErrorReportController {
     public String getErrors(Model model) {
         List<ErrorReport> errorReports = errorReportService.getAllReport();
         model.addAttribute("errorReports", errorReports);
+
+        //add trường này để active trong ui xem đang ở trong phần nào trong sidebar
+        model.addAttribute("activePage","reports");
         return "admin/admin-error-reports";
     }
 
@@ -36,6 +39,7 @@ public class AdminErrorReportController {
     ) {
         ErrorReport errorReport = errorReportService.getReportById(errId);
         model.addAttribute("er", errorReport);
+        model.addAttribute("activePage","reports");
         return "admin/admin-error-reports-detail";
     }
 

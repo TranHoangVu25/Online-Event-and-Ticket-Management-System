@@ -47,7 +47,6 @@ public class AdminEventController {
         if(keyword!=null && !keyword.trim().isEmpty()){
             events = eventService.findEventByName(keyword);
         }
-//        else {
             events = eventService.getEvents();
 
 
@@ -59,7 +58,7 @@ public class AdminEventController {
         model.addAttribute("events", events);
         model.addAttribute("keyword",keyword);
         model.addAttribute("eventViews", eventViews);
-
+        model.addAttribute("activePage","events");
         return "admin/admin-events";
 
     }
@@ -68,6 +67,8 @@ public class AdminEventController {
     @GetMapping("/admin-create-event")
     public String showCreateForm(Model model){
         model.addAttribute("eventForm",new EventFormCreationRequest());
+        model.addAttribute("activePage","create-event");
+
         return "admin/admin-create-event";
     }
 
@@ -96,7 +97,7 @@ public class AdminEventController {
         eventForm.setTicketClass(ticketClass);
 
         model.addAttribute("eventForm",eventForm);
-
+        model.addAttribute("activePage","events");
         return "admin/admin-update-event";
     }
 

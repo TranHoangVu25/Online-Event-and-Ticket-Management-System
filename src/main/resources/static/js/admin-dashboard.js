@@ -41,18 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Active navigation highlighting
-    const currentPage = window.location.pathname.split('/').pop();
-    const navItems = document.querySelectorAll('.nav-item');
-    
-    navItems.forEach(item => {
-        const link = item.querySelector('.nav-link');
-        if (link.getAttribute('href') === currentPage) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
 });
 
 // Revenue Chart functionality

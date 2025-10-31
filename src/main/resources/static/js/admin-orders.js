@@ -8,7 +8,6 @@ function logout() {
         }, 1000);
     }
 }
-
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     const messageEl = toast.querySelector('.toast-message');
@@ -217,18 +216,3 @@ function processOrder() {
 function goToPage(page) {
     showToast(`Đang chuyển đến trang ${page}...`, 'info');
 }
-
-// Active navigation highlighting
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPage = window.location.pathname.split('/').pop();
-    const navItems = document.querySelectorAll('.nav-item');
-    
-    navItems.forEach(item => {
-        const link = item.querySelector('.nav-link');
-        if (link.getAttribute('href') === currentPage) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-});

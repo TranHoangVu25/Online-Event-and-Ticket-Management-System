@@ -117,22 +117,6 @@ function togglePassword(inputId) {
     }
 }
 
-// Active navigation highlighting
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPage = window.location.pathname.split('/').pop();
-    const navItems = document.querySelectorAll('.nav-item');
-
-    navItems.forEach(item => {
-        const link = item.querySelector('.nav-link');
-        if (link.getAttribute('href') === currentPage) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-});
-
-
 function closeUpdateUserModal() {
     document.getElementById("updateUserModal").style.display = "none";
 }
