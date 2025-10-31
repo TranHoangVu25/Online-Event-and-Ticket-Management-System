@@ -11,9 +11,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ElementType.TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {CouponExpireValidator.class,CouponExpireUpdateValidator.class})
-public @interface CouponExpireConstraint {
-    String message() default "Invalid expire date";
+@Constraint(validatedBy = {CouponDiscountCreateValidator.class})
+public @interface CouponDiscountConstraint {
+    String message() default "Voucher (%) must not > 100";
 
     Class<?>[] groups() default {};
 

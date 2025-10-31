@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<header th:fragment="admin-header" class="admin-header glass">
+    <div class="header-content">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h1>EventHub Admin</h1>
+        </div>
+        <div class="admin-info">
+            <span class="admin-name" th:text="${session.userName}">Admin</span>
+            <button class="logout-btn glass"
+                    th:onclick="|if(confirm('Bạn có chắc chắn muốn đăng xuất?')) { window.location='@{/logout}'; }|">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<nav th:fragment="admin-sidebar" class="admin-sidebar glass">
+    <div class="sidebar-header">
+        <div class="admin-avatar-large">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <span>Quản trị viên</span>
+    </div>
+
+    <ul class="nav-menu">
+        <li class="nav-item" th:classappend="${activePage == 'dashboard'} ? 'active'">
+            <a th:href="@{/admin-home}" class="nav-link">
+                <div class="nav-icon"><i class="fas fa-tachometer-alt"></i></div>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item" th:classappend="${activePage == 'events'} ? 'active'">
+            <a th:href="@{/admin/admin-events}" class="nav-link">
+                <div class="nav-icon"><i class="fas fa-calendar-plus"></i></div>
+                <span>Quản lý sự kiện</span>
+            </a>
+        </li>
+        <li class="nav-item" th:classappend="${activePage == 'orders'} ? 'active'">
+            <a th:href="@{/admin/admin-orders}" class="nav-link">
+                <div class="nav-icon"><i class="fas fa-shopping-cart"></i></div>
+                <span>Xử lý đơn hàng</span>
+            </a>
+        </li>
+        <li class="nav-item" th:classappend="${activePage == 'users'} ? 'active'">
+            <a th:href="@{/admin/users}" class="nav-link">
+                <div class="nav-icon"><i class="fas fa-users"></i></div>
+                <span>Quản lý người dùng</span>
+            </a>
+        </li>
+        <li class="nav-item" th:classappend="${activePage == 'create-event'} ? 'active'">
+            <a th:href="@{/admin/admin-create-event}" class="nav-link">
+                <div class="nav-icon"><i class="fas fa-plus-circle"></i></div>
+                <span>Tạo sự kiện mới</span>
+            </a>
+        </li>
+        <li class="nav-item" th:classappend="${activePage == 'reports'} ? 'active'">
+            <a th:href="@{/admin/error-reports}" class="nav-link">
+                <div class="nav-icon"><i class="fas fa-bug"></i></div>
+                <span>Báo lỗi người dùng</span>
+            </a>
+        </li>
+        <li class="nav-item" th:classappend="${activePage == 'coupons'} ? 'active'">
+            <a th:href="@{/admin-coupon}" class="nav-link">
+                <div class="nav-icon"><i class="fas fa-tag"></i></div>
+                <span>Khuyến mại</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+<div th:fragment="admin-footer">
+    <div id="toast" class="toast glass">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+
+</div>
+
+</html>

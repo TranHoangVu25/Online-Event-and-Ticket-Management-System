@@ -1,20 +1,20 @@
 package com.ticketsystem.validator;
 
-import com.ticketsystem.dto.request.CouponCreateRequest;
+import com.ticketsystem.dto.request.CouponUpdateRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class CouponDiscountCreateValidator implements ConstraintValidator<CouponDiscountConstraint, CouponCreateRequest> {
+public class CouponDiscountUpdateValidator implements ConstraintValidator<CouponDiscountConstraint, CouponUpdateRequest> {
     @Override
     public void initialize(CouponDiscountConstraint constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
     @Override
-    public boolean isValid(CouponCreateRequest request, ConstraintValidatorContext context) { // Đổi tên tham số
+    public boolean isValid(CouponUpdateRequest request, ConstraintValidatorContext context) { // Đổi tên tham số
         if (Objects.isNull(request) || request.getDiscount() == null) {
             return true;
         }
