@@ -27,7 +27,7 @@ public class Coupon {
     @Column(unique = true)
     String code;
     @Column(nullable = false)
-    BigDecimal discount;
+    Double discount;
 
     //loại coupon
     //1 :fixed (tiền mặt)

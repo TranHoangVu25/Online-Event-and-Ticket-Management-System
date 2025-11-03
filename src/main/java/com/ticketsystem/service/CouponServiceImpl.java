@@ -23,8 +23,7 @@ public class CouponServiceImpl implements CouponService{
 
     @Override
     public Coupon createCoupon(CouponCreateRequest coupon) {
-        BigDecimal max_discount = new BigDecimal(100);
-        if(coupon.getType()==2 && coupon.getDiscount().compareTo(max_discount)>0){
+        if(coupon.getType()==2 && coupon.getDiscount()>100){
             throw new RuntimeException("Mã giảm giá không được giảm > 100%");
         }
         Coupon c = new Coupon().builder()

@@ -80,13 +80,6 @@
                         <input type="hidden" id="totalPriceInput" name="totalPrice" th:value="${eventForm.totalPrice}" />
                     </div>
 
-                    <div>
-                        <p class="mb-1"><strong>Coupon</strong></p>
-                        <input type="text" placeholder="Nhập mã giảm giá"
-                               th:field="*{eventForm.coupon.code}"
-                        />
-                    </div>
-
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-success btn-lg flex-fill" style="width: 100px;">Buy now</button>
                         <button type="button"
@@ -95,7 +88,6 @@
                                 th:onclick="|window.location.href='@{/user/event-details/{id}(id=${eventForm.event.id})}'|">
                             Cancel
                         </button>
-
                     </div>
                 </form>
             </div>

@@ -18,7 +18,6 @@ public class CouponDiscountCreateValidator implements ConstraintValidator<Coupon
         if (Objects.isNull(request) || request.getDiscount() == null) {
             return true;
         }
-        BigDecimal max_discount = new BigDecimal(100);
-        return request.getDiscount().compareTo(max_discount) < 0 && request.getType() == 2;
+        return request.getDiscount() < 100 && request.getType() == 2;
     }
 }

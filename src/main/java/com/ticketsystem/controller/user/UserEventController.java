@@ -43,6 +43,7 @@ public class UserEventController {
         return "customer/main-event";
     }
 
+    //màn hiển thị thông tin event-detail
     @GetMapping("/event-details/{id}")
     public String getEventDetail(@PathVariable int id, Model model) {
         EventResponse event = eventService.getEvent(id);
@@ -52,6 +53,7 @@ public class UserEventController {
         return "customer/event-details";
     }
 
+    //hiển thị thông tin màn buy-ticket
     @GetMapping("/buy-ticket/{id}")
     public String showBuyTicket(
             @PathVariable int id,
@@ -69,8 +71,10 @@ public class UserEventController {
         return "customer/buy-ticket";
     }
 
+    //gửi thông tin qua màn payment
     @PostMapping("/buy-ticket/{id}")
-    public String buyTicket(@ModelAttribute EventFormBuyTicket eventForm,
+    public String buyTicket(
+            @ModelAttribute EventFormBuyTicket eventForm,
                             RedirectAttributes redirectAttributes
     ) {
         // eventForm có chứa eventId, ticket số lượng, totalPrice

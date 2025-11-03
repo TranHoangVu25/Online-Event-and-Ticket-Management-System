@@ -14,5 +14,5 @@ import java.util.Map;
 public class OrderCreationRequest {
     Map<Integer, Integer> tickets;
     String method;
-//    Coupon coupon;
+    String couponCode;
 }
