@@ -49,10 +49,11 @@ public class SecurityConfig {
                                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                                         .requestMatchers(HttpMethod.GET, PUBLIC_END_POINT_GET_POST).permitAll()
                                         .requestMatchers(HttpMethod.POST, PUBLIC_END_POINT_GET_POST).permitAll()
-                                        .requestMatchers(HttpMethod.GET, END_POINT_ADMIN).hasRole("ADMIN")
-                                        .requestMatchers(HttpMethod.POST, END_POINT_ADMIN).hasRole("ADMIN")
-                                        .requestMatchers(HttpMethod.GET,END_POINT_CUSTOMER).hasRole("USER")
-                                        .requestMatchers(HttpMethod.POST,END_POINT_CUSTOMER).hasRole("USER")
+//                                        .requestMatchers(HttpMethod.GET, END_POINT_ADMIN).hasRole("ADMIN")
+//                                        .requestMatchers(HttpMethod.POST, END_POINT_ADMIN).hasRole("ADMIN")
+//                                        .requestMatchers(HttpMethod.GET,END_POINT_CUSTOMER).hasRole("USER")
+//                                        .requestMatchers(HttpMethod.POST,END_POINT_CUSTOMER).hasRole("USER")
+                                        .requestMatchers(HttpMethod.GET).permitAll()
 
                                         .anyRequest().authenticated());
 

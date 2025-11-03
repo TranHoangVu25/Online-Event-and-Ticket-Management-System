@@ -24,7 +24,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css(v=${#dates.createNow().time})}">
 </head>
 <body>
-    <div th:replace="layout :: header"></div>
+<div th:replace="~{layout :: header}"></div>
 
     <!-- Welcome Section -->
     <section class="welcome-section py-5 text-center bg-light">
@@ -33,41 +33,75 @@
                 <span th:if="${loggedInUser}">
                     Welcome, <span th:text="${session.userName}"></span>!
                 </span>
-                            <span th:unless="${loggedInUser}">
-                    Welcome to EventOnline
+                <span th:text="#{welcome.message}">
+                    Welcome
                 </span>
             </h1>
             <p class="lead mb-4">
+                <span th:text="#{welcome.hope}">
                 Your one-stop platform to discover and join the best events happening around you. Stay connected, stay inspired!
+                </span>
             </p>
-            <a th:href="@{/user/main-event}" class="btn btn-primary btn-lg">Explore Events</a>
+            <a th:href="@{/user/main-event}" class="btn btn-primary btn-lg">
+                <span th:text="#{button.explore}">
+                Explore Events
+                </span>
+            </a>
         </div>
     </section>
 
     <!-- Why Choose Us Section -->
     <section class="why-choose-us py-5">
         <div class="container text-center">
-            <h2 class="mb-5 fw-bold">Why Choose EventOnline?</h2>
+            <h2 class="mb-5 fw-bold">
+                <span th:text="#{why_choose.title}">
+                Why Choose EventOnline?
+                </span>
+            </h2>
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="feature-card p-4 shadow-sm rounded">
                         <span class="material-symbols-rounded feature-icon mb-3">event_available</span>
-                        <h5>Wide Range of Events</h5>
-                        <p>Discover thousands of events tailored to your interests.</p>
+                        <h5>
+                            <span th:text="#{why_choose.event_available}">
+                Wide Range of Events
+                </span>
+
+                        </h5>
+                        <p>
+                            <span th:text="#{why_choose.event_available_desc}">
+                 Discover thousands of events tailored to your interests.
+                </span>
+                           </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card p-4 shadow-sm rounded">
                         <span class="material-symbols-rounded feature-icon mb-3">security</span>
-                        <h5>Secure & Trusted</h5>
-                        <p>Your data and payments are safe with our trusted platform.</p>
+                        <h5>
+                            <span th:text="#{why_choose.security}">
+                                            Secure & Trusted
+                </span>
+                        </h5>
+                        <p>
+                            <span th:text="#{why_choose.security_desc}">
+                                Your data and payments are safe with our trusted platform.
+                            </span>
+                            </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-card p-4 shadow-sm rounded">
                         <span class="material-symbols-rounded feature-icon mb-3">support_agent</span>
-                        <h5>24/7 Support</h5>
-                        <p>We are here to help anytime you need assistance.</p>
+                        <h5>
+                            <span th:text="#{why_choose.support_agent}">
+                                 24/7 Support
+                            </span>
+                           </h5>
+                        <p>
+                            <span th:text="#{why_choose.support_agent_desc}">
+                                We are here to help anytime you need assistance.</span>
+                            </p>
                     </div>
                 </div>
             </div>
@@ -78,27 +112,43 @@
     <section class="contact-section my-5" id = "contact">
         <div class="row">
             <div class="col-12 contact-column">
-                <h2>Get In Touch</h2>
+                <h2>
+                    <span th:text="#{contact.title}">Get In Touch</span></h2>
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-6">
-                        <input type="text" placeholder="Your Name">
-                        <input type="text" placeholder="Your Email">
-                        <input type="text" placeholder="Your Subject">
-                        <input type="text" placeholder="Phone Number">
-                        <textarea placeholder="Your Message"></textarea>
+                        <input type="text" th:placeholder="#{contact.name}">
+                        <input type="text" th:placeholder="#{contact.email}">
+                        <input type="text" th:placeholder="#{contact.subject}">
+                        <input type="text" th:placeholder="#{contact.phone}">
+                        <textarea th:text="#{contact.send}"></textarea>
                     </div>
                 </div>
                 <div class="contact-info">
-                    <p><span class="material-symbols-rounded">email</span> Email address contact@yourmail.com</p>
-                    <p><span class="material-symbols-rounded">call</span> Phone Number +831 546 547</p>
-                    <p><span class="material-symbols-rounded">location_on</span> Location Cesare Rosaroll, 118 80139 Eventine</p>
+                    <p>
+                        <span class="material-symbols-rounded">email</span>
+                        <span th:text="#{contact.info_email}">Email address</span>
+                        <span th:text="#{contact.info_email_value}">contact@yourmail.com</span>
+                    </p>
+
+                    <p>
+                        <span class="material-symbols-rounded">call</span>
+                        <span th:text="#{contact.info_phone}">Phone Number</span>
+                        <span th:text="#{contact.info_phone_value}">+831 546 547</span>
+                    </p>
+
+                    <p>
+                        <span class="material-symbols-rounded">location_on</span>
+                        <span th:text="#{contact.info_location}">Location</span>
+                        <span th:text="#{contact.info_location_value}">Cesare Rosaroll, 118 80139 Eventine</span>
+                    </p>
                 </div>
-                <button>Send Message</button>
+
+                <button th:text="#{contact.send}">Send Message</button>
             </div>
         </div>
     </section>
 
-    <div th:replace="layout :: footer"></div>
+<div th:replace="~{layout :: footer}"></div>
     <!-- JS -->
     <script th:src="@{/js/script.js}" defer></script>
 

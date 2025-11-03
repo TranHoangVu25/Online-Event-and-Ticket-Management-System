@@ -3,111 +3,111 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" th:href="@{/css/layout.css(v=${#dates.createNow().time})}">
 <body>
+
 <!-- Header Fragment -->
 <header th:fragment="header">
     <nav class="navbar">
         <span class="hamburger-btn material-symbols-rounded">menu</span>
+
         <a href="#" class="logo">
-            <img th:src="@{/images/logo.jpg}" alt="logo" />
-            <h2>EventOnlive</h2>
+            <img th:src="@{/images/logo.jpg}" alt="logo"/>
+            <h2>EventOnline</h2>
         </a>
+
         <ul class="links">
             <span class="close-btn material-symbols-rounded">close</span>
-            <li><a th:href="@{/home-page}">Home</a></li>
-            <li><a th:href="@{/user/main-event}">Events</a></li>
-            <li><a th:href="@{/user/customer-orders}">My orders</a></li>
-            <li><a th:href="@{/user/report-error}">Report Error</a></li>
+            <li><a th:href="@{/home-page}" th:text="#{nav.home}">Home</a></li>
+            <li><a th:href="@{/user/main-event}" th:text="#{nav.events}">Events</a></li>
+            <li><a th:href="@{/user/customer-orders}" th:text="#{nav.orders}">My orders</a></li>
+            <li><a th:href="@{/user/report-error}" th:text="#{nav.report_error}">Report Error</a></li>
         </ul>
-        <span style = "color: blanchedalmond;"> Welcome, <b th:text="${session.full_name}" >User!</b></span>
+
+        <span style="color: blanchedalmond;">
+            <span th:text="#{nav.welcome}">Welcome,</span>
+            <b th:text="${session.full_name}">User!</b>
+        </span>
+
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle logout-btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                More
+            <button class="btn btn-secondary dropdown-toggle logout-btn" type="button"
+                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                    th:text="#{nav.more}">More
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" th:href="@{/user/customer-orders}" th:text="#{nav.orders}">My orders</a></li>
+                <li><a class="dropdown-item" th:href="@{/user/profile}" th:text="#{nav.edit_profile}">Edit profile</a></li>
+                <li><a class="dropdown-item" th:href="@{/user/change-password}" th:text="#{nav.change_password}">Change Password</a></li>
+                <li>
+                    <a class="dropdown-item" style="color: red" href="#"
+                       th:onclick="|if(confirm('#{nav.logout_confirm}')) window.location='@{/logout}';|"
+                       th:text="#{nav.logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
 
-                <li>
-                    <a class="dropdown-item" th:href="@{/user/customer-orders}">My orders</a>
-                </li>
-                <li>
-                    <a class="dropdown-item"
-                       th:href="@{/user/profile}">
-                        Edit profile</a>
-                </li>
-                <li>
-                    <a class="dropdown-item"
-                       th:href="@{/user/change-password}">
-                        Change Password</a>
-                </li>
-                <li>
-                    <a class="dropdown-item" style="color: red" href="#" th:onclick="|if(confirm('Are you sure you want to log out?')) window.location='@{/logout}';|">Logout</a>
-                </li>
+        <!-- === Language Switcher === -->
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle logout-btn"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <span th:text="${#locale.language.toUpperCase()}">EN</span>
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" th:href="@{${currentUri}(lang='vi')}">Tiếng Việt</a></li>
+                <li><a class="dropdown-item" th:href="@{${currentUri}(lang='en')}">English</a></li>
             </ul>
         </div>
     </nav>
 </header>
 
-<!-- Footer Fragment -->
-<!--<footer th:fragment="footer" class="site-footer">-->
-<!--    <p>&copy; 2025 Eventine. All rights reserved.</p>-->
-<!--</footer>-->
+<!-- === Footer Section === -->
 <footer class="footer-section">
     <div class="container">
         <div class="row">
 
-            <!-- === Cột 1: Thông tin công ty === -->
+            <!-- === Column 1: Company Info === -->
             <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                 <div class="footer-widget">
                     <div class="footer-logo">
-                        <!-- TODO: THAY LOGO -->
                         <a href="#">
                             <img src="https://placehold.co/180x50/ffffff/1a2d6a?text=TERACOM" alt="Teracom Logo">
                         </a>
                     </div>
-                    <h3 class="footer-company-name">TERACOM JOINT STOCK COMPANY</h3>
+                    <h3 class="footer-company-name" th:text="#{footer.company_name}">TERACOM JOINT STOCK COMPANY</h3>
 
-                    <h4 class="footer-widget-title">HEADQUATER</h4>
+                    <h4 class="footer-widget-title" th:text="#{footer.headquarter}">HEADQUARTER</h4>
                     <ul class="footer-contact-list">
-                        <li>
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>03rd & 06th Floor, ATS Building, 252, Hoang Quoc Viet Street, Nghia Do Ward, Ha Noi</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-phone-alt"></i>
-                            <span>+84 97 269 77 70</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-envelope"></i>
-                            <span>sales@teracom.vn</span>
-                        </li>
+                        <li><i class="fas fa-map-marker-alt"></i><span th:text="#{footer.address1}"></span></li>
+                        <li><i class="fas fa-phone-alt"></i><span th:text="#{footer.phone}"></span></li>
+                        <li><i class="fas fa-envelope"></i><span th:text="#{footer.email}"></span></li>
                     </ul>
 
-                    <h4 class="footer-widget-title mt-4">BRANCH</h4>
+                    <h4 class="footer-widget-title mt-4" th:text="#{footer.branch}">BRANCH</h4>
                     <ul class="footer-contact-list">
-                        <li>
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>No.25T2, Hoang Dao Thuy Street, Thanh Xuan Ward, Ha Noi</span>
-                        </li>
+                        <li><i class="fas fa-map-marker-alt"></i><span th:text="#{footer.address2}"></span></li>
                     </ul>
                 </div>
             </div>
 
-            <!-- === Cột 2: Company Links === -->
+            <!-- === Column 2: Company Links === -->
             <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
                 <div class="footer-widget">
-                    <h4 class="footer-widget-title">COMPANY</h4>
+                    <h4 class="footer-widget-title" th:text="#{footer.company}">COMPANY</h4>
                     <ul class="footer-links-list">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Service</a></li>
-                        <li><a href="#">Blogs</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#" th:text="#{footer.about}">About</a></li>
+                        <li><a href="#" th:text="#{footer.service}">Service</a></li>
+                        <li><a href="#" th:text="#{footer.blogs}">Blogs</a></li>
+                        <li><a href="#" th:text="#{footer.contact}">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
 
-            <!-- === Cột 3: Follow Us === -->
+            <!-- === Column 3: Follow Us === -->
             <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                 <div class="footer-widget">
-                    <h4 class="footer-widget-title">FOLLOW US</h4>
+                    <h4 class="footer-widget-title" th:text="#{footer.follow_us}">FOLLOW US</h4>
                     <div class="footer-social-icons">
                         <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -116,42 +116,36 @@
                 </div>
             </div>
 
-            <!-- === Cột 4: Subscribe Us === -->
+            <!-- === Column 4: Subscribe === -->
             <div class="col-lg-3 col-md-6">
                 <div class="footer-widget footer-subscribe">
-                    <!-- "Subscriber Us" không đúng ngữ pháp, tôi đã sửa thành "Subscribe" -->
-                    <h4 class="footer-widget-title">SUBSCRIBE US</h4>
-                    <p>Sign up to get the latest updates and amazing offers delivered directly to your inbox</p>
-                    <!-- Bạn có thể thêm một form input tại đây nếu muốn -->
+                    <h4 class="footer-widget-title" th:text="#{footer.subscribe}">SUBSCRIBE US</h4>
+                    <p th:text="#{footer.subscribe_desc}"></p>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- === Thanh Copyright === -->
+    <!-- === Copyright === -->
     <div class="footer-copyright-bar">
         <div class="container">
-            <p>&copy; Copyright 2025 by Teracom Jsc, Leading Software Outsourcing Company in Vietnam. All Rights Reserved.</p>
+            <p th:text="#{footer.copyright}"></p>
         </div>
     </div>
 
-    <!-- === Các nút nổi === -->
+    <!-- Floating Buttons -->
     <div class="footer-floating-buttons">
-        <!-- Nút Back to Top (sẽ được JS điều khiển) -->
         <a href="#" id="backToTopBtn" class="floating-btn back-to-top" aria-label="Back to top">
             <i class="fas fa-arrow-up"></i>
         </a>
-        <!-- Nút còn lại -->
         <a href="#" class="floating-btn other-btn" aria-label="Other action">
-            <i class="fas fa-arrow-right-to-bracket"></i> <!-- Icon ví dụ, bạn có thể thay bằng icon 'g' hoặc 'login' -->
+            <i class="fas fa-arrow-right-to-bracket"></i>
         </a>
     </div>
 </footer>
+
 <!-- JS -->
 <script th:src="@{/js/script.js}" defer></script>
-
-<!-- Bootstrap JS Bundle -->
 <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js}"></script>
 
 </body>
