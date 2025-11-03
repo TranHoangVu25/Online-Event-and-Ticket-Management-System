@@ -1,5 +1,6 @@
 package com.ticketsystem.dto.response;
 
+import com.ticketsystem.entity.Coupon;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,4 +18,5 @@ public class EventFormBuyTicket {
     BigDecimal totalPrice;
     List<Integer> ticketRemain;
     Integer quantity;
+    Coupon coupon;
 }

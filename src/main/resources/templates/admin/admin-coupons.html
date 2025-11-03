@@ -15,10 +15,11 @@
 
 <header th:replace="~{admin/layout :: admin-header}"></header>
 
-    <nav th:replace="~{admin/layout :: admin-sidebar}"></nav>
     <!-- Main Content Area -->
     <main class="main-content">
-        <div class="content-header glass">
+        <nav th:replace="~{admin/layout :: admin-sidebar}"></nav>
+
+        <div class="content-header glass" style="margin-top:100px;height:100px">
             <div class="header-left">
                 <div class="section-icon">
                     <i class="fas fa-users"></i>

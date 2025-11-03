@@ -26,28 +26,16 @@ public class UserOrdersController {
     PaymentService paymentService;
     OrderDetailService orderDetailService;
 
-@GetMapping("/customer-orders")
-String getPayment(Model model, HttpSession session){
-    Integer userId = (Integer) session.getAttribute("userId");
-    if (userId == null) {
-        // Nếu chưa login, redirect về login hoặc trả lỗi
-        return "redirect:/login";
-    }
-    List<OrderInformationResponse> orderForm = orderService.getAllOrderByUserId(userId);
-    model.addAttribute("orderForm",orderForm);
-    return "customer/customer-orders";
-}
+// controller thực hiện chức năng thanh toán
     @PostMapping("/checkout/{userId}")
     public String checkout(@PathVariable int userId,
                            @ModelAttribute OrderCreationRequest request,
-                           @ModelAttribute("eventForm") EventFormBuyTicket eventForm,
                            RedirectAttributes redirectAttributes) {
 
         log.info("Payment method: {}", request.getMethod());
         request.getTickets().forEach((ticketClassId, qty) ->
                 log.info("TicketClassId: {}, Quantity: {}", ticketClassId, qty)
         );
-
         // Tạo order
         Order order = orderService.createOrder(request, userId);
 
@@ -58,12 +46,27 @@ String getPayment(Model model, HttpSession session){
         return "redirect:/user/main-event";
     }
 
+    //lấy thông tin về order của user (hiển thị danh sách order)
+    @GetMapping("/customer-orders")
+    String getPayment(Model model, HttpSession session){
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            // Nếu chưa login, redirect về login hoặc trả lỗi
+            return "redirect:/login";
+        }
+        List<OrderInformationResponse> orderForm = orderService.getAllOrderByUserId(userId);
+        model.addAttribute("orderForm",orderForm);
+        return "customer/customer-orders";
+    }
+
+    //controller hiển thị thông tin chi tiết của order (modal trong màn customer-orders)
     @GetMapping("/order-detail/{orderId}/{ticketClassId}")
     @ResponseBody
-    public FormOrderDetailResponse  getOrderDetail(@PathVariable int orderId
-            ,@PathVariable int ticketClassId){
+    public FormOrderDetailResponse  getOrderDetail(
+            @PathVariable int orderId,
+            @PathVariable int ticketClassId
+    ){
         FormOrderDetailResponse response = orderDetailService.getOrderDetailById(orderId,ticketClassId);
-//        log.info("DEBUG ===== orderId=" + orderId + ", ticketClassId=" + ticketClassId + ", result=" + response);
         return response;
     }
 }

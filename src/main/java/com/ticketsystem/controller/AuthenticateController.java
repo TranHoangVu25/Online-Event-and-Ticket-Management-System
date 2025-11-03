@@ -58,7 +58,7 @@ public class AuthenticateController {
             AuthenticationResponse response = authenticationService.authenticate(request);
             String jwt = response.getToken();
             session.setAttribute("jwt",jwt);
-//            log.info("jwt====="+jwt);
+            log.info("jwt====="+jwt);
             Jwt decodedJwt  = customJwtDecoder.decode(jwt);
             String scope = decodedJwt.getClaimAsString("scope");
             String userName = decodedJwt.getClaimAsString("sub");

@@ -18,21 +18,6 @@
 
 <body>
     <div th:replace="layout :: header"></div>
-
-    <!-- fake data (24-35) -->
-<!--    <main class="container py-5"-->
-<!--          th:with="-->
-<!--        eventTitle='Tech Expo 2025',-->
-<!--        eventDescription='Triển lãm công nghệ lớn nhất trong năm.',-->
-<!--        eventDate='20/10/2025',-->
-<!--        eventTime='12:00 - 14:00',-->
-<!--        eventLocation='Hội trường A',-->
-<!--        ticketQuantity=1,-->
-<!--        ticketsLeft=50,-->
-<!--        ticketsSold=150,-->
-<!--        totalPrice='1,000,000 VND',-->
-<!--        ticketClass='vip'-->
-<!--    ">-->
         <div class="row g-4" >
             <div class="col-lg-7">
                 <img th:src="@{'https://picsum.photos/id/1011/800/400'}" th:alt="${eventForm.event.name}" class="img-fluid rounded shadow-sm mb-3" />
@@ -57,48 +42,17 @@
                     <h5>Select ticket quantity</h5>
                     <input type="hidden" th:field="*{eventForm.event.id}"/>
                     <input type="hidden" th:field="*{eventForm.event.name}"/>
-<!--                    <input type="hidden" th:field="*{eventForm.totalPrice}"/>-->
                     <input type="hidden" th:field="*{eventForm.ticketClass[0].id}"/>
                     <input type="hidden" th:field="*{eventForm.ticketClass[0].name}"/>
                     <input type="hidden" th:field="*{eventForm.ticketClass[0].price}"/>
-<!--                    <input type="hidden" th:field="*{eventForm.ticketClass[0].soldQuantity}"/>-->
-
-                    <!--                    <div class="form-check mb-2">-->
-<!--                        <input class="form-check-input" type="radio" name="ticketClass" id="vip" value="vip"-->
-<!--                               th:checked="${ticketClass == 'vip'}" />-->
-<!--                        <label class="form-check-label" for="vip">VIP</label>-->
-<!--                    </div>-->
-
-<!--                    <div class="form-check mb-2">-->
-<!--                        <input class="form-check-input" type="radio" name="ticketClass" id="standard" value="standard"-->
-<!--                               th:checked="${ticketClass == 'standard'}" />-->
-<!--                        <label class="form-check-label" for="standard">Standard</label>-->
-<!--                    </div>-->
-
-<!--                    <div class="form-check mb-3">-->
-<!--                        <input class="form-check-input" type="radio" name="ticketClass" id="economy" value="economy"-->
-<!--                               th:checked="${ticketClass == 'economy'}" />-->
-<!--                        <label class="form-check-label" for="economy">Economy</label>-->
-<!--                    </div>-->
 
                     <div class="d-flex gap-3 mb-3 top-boxes">
-<!--                        <div class="info-box small-box text-center flex-fill quantity-box">-->
-<!--                            <label for="quantitySelect" class="form-label mb-1"><strong>Select number</strong></label>-->
-<!--                            <select id="quantitySelect" name="quantity" class="form-select" th:value="${ticketQuantity}">-->
-<!--                                <option th:each="i : ${#numbers.sequence(1, ticketsLeft)}"-->
-<!--                                        th:value="${i}"-->
-<!--                                        th:text="${i}"-->
-<!--                                        th:selected="${ticketQuantity == i}">-->
-<!--                                </option>-->
-<!--                            </select>-->
-<!--                        </div>-->
                         <div class="info-box small-box text-center flex-fill quantity-box">
                          <label for="quantitySelect" class="form-label mb-1"><strong>Select number</strong></label>
                         <select id="quantitySelect" name="quantity" class="form-select"
                                 th:value="${eventForm.ticketClass[0].totalQuantity}"
                                 th:attr="data-price=${eventForm.ticketClass[0].price}"
                         >
-                            <option th:value="0" th:text="0" th:selected="${true}"></option>
                             <option th:each="i : ${#numbers.sequence(1, eventForm.ticketRemain[0])}"
                                     th:value="${i}"
                                     th:text="${i}">
@@ -117,10 +71,6 @@
                         </div>
                     </div>
 
-<!--                    <div class="info-box text-center price-box mb-4">-->
-<!--                        <p class="mb-1"><strong>Total price</strong></p>-->
-<!--                        <p th:text="${eventForm.totalPrice}">totalPrice</p>-->
-<!--                    </div>-->
                     <div class="info-box text-center price-box mb-4">
                         <p class="mb-1"><strong>Total price</strong></p>
                         <p id="totalPrice"
@@ -130,11 +80,15 @@
                         <input type="hidden" id="totalPriceInput" name="totalPrice" th:value="${eventForm.totalPrice}" />
                     </div>
 
+                    <div>
+                        <p class="mb-1"><strong>Coupon</strong></p>
+                        <input type="text" placeholder="Nhập mã giảm giá"
+                               th:field="*{eventForm.coupon.code}"
+                        />
+                    </div>
+
                     <div class="d-flex gap-2">
-<!--                        <a th:href="@{/user/payment}" class="btn btn-success btn-lg flex-fill" role="button">Buy now</a>-->
                         <button type="submit" class="btn btn-success btn-lg flex-fill" style="width: 100px;">Buy now</button>
-<!--                        <a th:href="@{/user/event-details/{id}(id=${eventForm.event.id})}" class="btn btn-danger btn-lg flex-fill"-->
-<!--                           role="button">Cancel</a>-->
                         <button type="button"
                                 class="btn btn-danger btn-lg flex-fill"
                                 style="width: 100px;"
@@ -143,9 +97,7 @@
                         </button>
 
                     </div>
-
                 </form>
-
             </div>
         </div>
     </main>

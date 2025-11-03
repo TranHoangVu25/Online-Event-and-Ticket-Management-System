@@ -1,5 +1,6 @@
 package com.ticketsystem.dto.request;
 
+import com.ticketsystem.entity.Coupon;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderCreationRequest {
-    private Map<Integer, Integer> tickets;
-    private String method;
+    Map<Integer, Integer> tickets;
+    String method;
+//    Coupon coupon;
 }

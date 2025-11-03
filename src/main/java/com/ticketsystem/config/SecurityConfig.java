@@ -25,12 +25,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity // thêm vào để có thể phân quyền = @PreAuthorized mà không cần phân quyền = endpoint
 
 public class SecurityConfig {
-
-    private final String[] PUBLIC_END_POINT_POST = {
-            "/login","/register", "/auth/token", "/auth/introspect", "auth/logout", "auth/refresh","/forgot-password"
+    private final String[] PUBLIC_END_POINT_GET_POST = {
+            "/login", "/register", "/forgot-password"
     };
-    private final String[] PUBLIC_END_POINT_GET = {
-            "/login","/register","/forgot-password"
+    private final String[] END_POINT_ADMIN = {
+            "/admin-coupon/**","/admin-home", "/admin/**"
+    };
+    private final String[] END_POINT_CUSTOMER = {
+            "/user/**", "/home-page"
     };
 
     @Autowired
@@ -38,18 +40,21 @@ public class SecurityConfig {
 
     @Autowired
     AuthenticationEntryPoint customAuthenticationEntryPoint;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(
-                request ->
-                        request
-                                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, PUBLIC_END_POINT_POST).permitAll()
-                                .requestMatchers(HttpMethod.GET, PUBLIC_END_POINT_GET).permitAll()
-                                .requestMatchers(HttpMethod.GET).permitAll()
-                                .requestMatchers(HttpMethod.POST).permitAll()
-//
-                                .anyRequest().authenticated());
+                        request ->
+                                request
+                                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET, PUBLIC_END_POINT_GET_POST).permitAll()
+                                        .requestMatchers(HttpMethod.POST, PUBLIC_END_POINT_GET_POST).permitAll()
+                                        .requestMatchers(HttpMethod.GET, END_POINT_ADMIN).hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.POST, END_POINT_ADMIN).hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.GET,END_POINT_CUSTOMER).hasRole("USER")
+                                        .requestMatchers(HttpMethod.POST,END_POINT_CUSTOMER).hasRole("USER")
+
+                                        .anyRequest().authenticated());
 
         //thực hiện request mà cung cấp 1 token của user thì server sẽ xác thực người dùng
         //dựa trên token để cấp quyền truy cập
