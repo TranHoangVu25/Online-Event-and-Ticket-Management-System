@@ -1,23 +1,95 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Đã gửi báo lỗi</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="#{page.thankyou.heading}">Cảm ơn!</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Font Awesome (cho icons) CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Google Font (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
-    body{font-family:system-ui,sans-serif;padding:24px;background:#fafafa}
-    .wrap{max-width:640px;margin:0 auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
-    .id{font-family:ui-monospace,monospace;background:#f4f4f5;padding:6px 10px;border-radius:8px;display:inline-block}
-    a.btn{display:inline-block;margin-top:12px;padding:10px 14px;background:#111;color:#fff;border-radius:10px;text-decoration:none}
+    /* CSS tùy chỉnh */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f9fa; /* Màu nền xám nhạt */
+        display: flex;
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        min-height: 100vh; /* Đảm bảo chiếm toàn bộ chiều cao màn hình */
+    }
+
+    /* Thẻ Cảm ơn */
+    .thank-you-card {
+        max-width: 550px;
+        width: 100%;
+    }
+
+    /* Icon thành công */
+    .success-icon {
+        font-size: 5rem; /* Kích thước 80px */
+        color: #198754; /* Màu xanh lá thành công của Bootstrap */
+    }
+
+    /* Mã lỗi */
+    .error-id-badge {
+        font-size: 1.1rem;
+        font-weight: 700;
+        padding: 0.5em 1em;
+        background-color: #e9ecef; /* Nền xám nhạt */
+        color: #495057; /* Màu chữ tối */
+        border-radius: 0.375rem; /* Bo góc */
+    }
   </style>
 </head>
-<body>
-<div class="wrap">
-  <h1>Cảm ơn!</h1>
-  <p>Thank you! Your report has been submitted.</p>
-  <p>Mã theo dõi (Error ID): <span class="id" th:text="${errorId}">ERR-XXXX</span></p>
-  <p>Nếu bạn đã nhập email, bạn sẽ nhận được email xác nhận.</p>
-  <a class="btn" th:href="@{/home-page}">Về trang chủ</a>
+<body class="p-4">
+
+<!-- Thẻ Cảm ơn -->
+<div class="card thank-you-card shadow-lg border-0 rounded-4">
+  <div class="card-body p-5 text-center">
+
+    <!-- Icon -->
+    <div class="mb-4">
+      <i class="fa-solid fa-circle-check success-icon"></i>
+    </div>
+
+    <!-- Tiêu đề -->
+    <h1 class="display-5 fw-bold" th:text="#{page.thankyou.heading}">Cảm ơn!</h1>
+
+    <!-- Thông điệp -->
+    <p class="lead text-muted" th:text="#{page.thankyou.submission_message}">
+      Thank you! Your report has been submitted.
+    </p>
+
+    <!-- Mã lỗi -->
+    <div class="my-4">
+      <span th:text="#{page.thankyou.error_id}">Error ID:</span>
+      <span class="error-id-badge ms-2" th:text="${errorId}">ERR-XXXX</span>
+    </div>
+
+    <!-- Email -->
+    <p classt="text-muted" th:text="#{page.thankyou.email_confirmation}">
+      If you provided an email, you will receive a confirmation email.
+    </p>
+
+    <!-- Nút về trang chủ -->
+    <a class="btn btn-primary btn-lg mt-3" th:href="@{/home-page}">
+      <i class="fa-solid fa-house me-2"></i>
+      <span th:text="#{button.home_page}">Về trang chủ</span>
+    </a>
+
+  </div>
 </div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
