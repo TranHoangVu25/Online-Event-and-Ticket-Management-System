@@ -3,135 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website with Login & Signup Form | CodingNepal</title>
+    <title>Danh Sách Đơn Hàng</title>
 
-    <!-- Google Fonts Link For Icons -->
+    <!-- Google Fonts Link For Icons (Material Symbols) -->
     <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0}">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- 2. Font Awesome (cho icons) CDN -->
+    <!-- Font Awesome (cho icons) CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- 3. Google Font (Giống với font trong ảnh) -->
+    <!-- Google Font (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- CSS (Thymeleaf) -->
+     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Chúng ta sẽ không cần orders.css cũ nữa, thay bằng CSS tùy chỉnh bên dưới -->
     <link rel="stylesheet" th:href="@{/css/orders.css}">
-
 </head>
 <body>
-    <div th:replace="layout :: header"></div>
+<!-- Header (giữ nguyên) -->
+<div th:replace="layout :: header"></div>
 
-    <div style="text-align: center; margin: 20px 0;">
-        <h2>List Orders</h2>
+<!-- Tiêu đề trang -->
+<div class="container my-4">
+    <div class="text-center">
+        <h2 class="display-5 fw-bold" th:text="#{order.list}">List Orders</h2>
+        <p class="lead text-muted" th:text="#{sub.title}">Duyệt và quản lý các đơn hàng gần đây của bạn.</p>
     </div>
+</div>
 
-    <main>
-        <div class="container mt-5 mb-5">
-            <div class="d-flex justify-content-center row">
-                <div class="col-md-10">
-                    <div th:each="order : ${orderForm}" class="row p-2 bg-white border rounded mt-2" th:classappend="${orderStat.index == 0} ? '' : ' mt-2'">
-                        <div class="col-md-3 mt-1">
-                            <img class="img-fluid img-responsive rounded product-image" th:src="${order.thumbnailUrl}" alt="Ticket image">
-                        </div>
-                        <div class="col-md-6 mt-1">
-                            <h5>Order ID: <span th:text="${order.orderId}"></span></h5>
-                            <p>Order Date: <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy hh:mm a')}"
-                            ></span></p>
-                            <p>Event Title: <span th:text="${order.eventName}"></span></p>
-                            <p>Ticket Class: <span th:text="${order.ticketClassName}"></span></p>
-                            <p>Quantity: <span th:text="${order.quantity}"></span></p>
-                            <p>
-                                Status:
-                                <span th:text="${order.status == 0 ? 'Pending' : (order.status == 1 ? 'Success' : 'Failed')}"></span>
-                            </p>
-                        </div>
-                        <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                            <div class="d-flex flex-row align-items-center">
-                                <h4 class="mr-1" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></h4>
+<main>
+    <div class="container mt-4 mb-5">
+        <div class="d-flex justify-content-center row">
+            <div class="col-md-10">
+
+                <!-- Vòng lặp đơn hàng -->
+                <div th:each="order : ${orderForm}" class="card order-card shadow-sm rounded-3 mb-3">
+                    <div class="card-body p-4">
+                        <div class="row g-3 align-items-center">
+                            <!-- Cột hình ảnh -->
+                            <div class="col-12 col-lg-3 text-center">
+                                <img class="img-fluid rounded product-image"
+                                     th:src="${order.thumbnailUrl}"
+                                     alt="Ticket image"
+                                     onerror="this.src='https://placehold.co/300x200/e9ecef/495057?text=Image+Error'">
                             </div>
-                            <div class="d-flex flex-column mt-4">
-<!--                                <button-->
-<!--                                        class="btn btn-primary btn-sm"-->
-<!--                                        type="button"-->
-<!--                                        data-bs-toggle="modal"-->
-<!--                                        data-bs-target="#orderDetailsModal"-->
-<!--                                        th:onclick="|viewOrderDetail(${order.order.id}, ${order.ticketClass.id})|">-->
-<!--                                    Details-->
-<!--                                </button>-->
 
-                                <button
-                                        class="btn btn-primary btn-sm"
+                            <!-- Cột thông tin chi tiết -->
+                            <div class="col-12 col-lg-6">
+                                <h5 class="card-title mb-2 fw-bold" th:text="${order.eventName}">Event Title</h5>
+                                <p class="mb-1">
+                                    <strong th:text="#{order.id}">Order ID:</strong>
+                                    <span class="text-muted" th:text="${order.orderId}"></span>
+                                </p>
+                                <p class="mb-1">
+                                    <strong th:text="#{order.date}">Order Date:</strong>
+                                    <span class="text-muted" th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy hh:mm a')}"></span>
+                                </p>
+                                <p class="mb-1">
+                                    <strong th:text="#{ticket.class}">Ticket Class:</strong>
+                                    <span class="text-muted" th:text="${order.ticketClassName}"></span>
+                                </p>
+                                <p class="mb-1">
+                                    <strong th:text="#{order.quantity}">Quantity:</strong>
+                                    <span class="text-muted" th:text="${order.quantity}"></span>
+                                </p>
+                                <p class="mb-0">
+                                    <strong th:text="#{order.status}">Status:</strong>
+                                    <!-- Badge (Nhãn) trạng thái có màu sắc -->
+                                    <span class="badge"
+                                          th:classappend="${order.status == 0 ? 'text-bg-warning' : (order.status == 1 ? 'text-bg-success' : 'text-bg-danger')}"
+                                          th:text="${order.status == 0 ? 'Pending' : (order.status == 1 ? 'Success' : 'Failed')}">
+                                        </span>
+                                </p>
+                            </div>
+
+                            <!-- Cột giá tiền và nút -->
+                            <div class="col-12 col-lg-3 text-lg-end d-flex flex-column justify-content-center align-items-lg-end">
+                                <h4 class="order-price mb-3" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></h4>
+
+                                <button class="btn btn-primary w-100 w-lg-auto"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#orderDetailsModal"
                                         th:onclick="|viewOrderDetail(${order.orderId}, ${order.ticketClassId})|">
-                                    Detail
+                                    <i class="fa-solid fa-receipt me-1"></i>
+                                    <span th:text="#{button.detail}">Detail</span>
                                 </button>
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <!-- Modal (Cửa sổ chi tiết) - Được làm đẹp -->
+                <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content rounded-3 shadow-lg">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="orderDetailsLabel">Chi Tiết Đơn Hàng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4">
+                                <img id="detailTicketImage"
+                                     class="img-fluid rounded mb-3"
+                                     alt="Ticket image"
+                                     onerror="this.src='https://placehold.co/600x300/e9ecef/495057?text=Image+Error'">
 
+                                <!-- Thông tin sự kiện -->
+                                <h5 class="mb-2" th:text="#{event.title}">Event Title:</h5>
+                                <p class="display-6 fs-4" id="detailEventTitle">Summer Music Fest</p>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content ">
-                                <div class="modal-header ">
-                                    <h5 class="modal-title text-center w-100"  id="orderDetailsLabel">Order Details</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <img id="detailTicketImage" class="img-fluid img-responsive rounded product-image"
-                                         alt="Ticket image">
-
-                                    <p><strong>Order ID:</strong> <span id="detailOrderId">00001</span></p>
-                                    <p><strong>Order Date:</strong> <span id="detailOrderDate">2025-08-01</span></p>
-                                    <hr>
-
-                                    <p><strong>Event Title:</strong> <span id="detailEventTitle">Summer Music Fest</span></p>
-                                    <p><strong>Event Date:</strong> <span id="detailEventDate">2025-08-15</span></p>
-<!--                                    <p><strong>Event Time:</strong> <span id="detailEventTime">18:00 - 21:00</span></p>-->
-                                    <p><strong>Event Location:</strong> <span id="detailEventLocation">Central Park</span></p>
-                                    <hr>
-
-<!--                                    <p><strong>Ticket Code:</strong> <span id="detailTicketCode">ST12345</span></p>-->
-                                    <p><strong>Ticket Class:</strong> <span id="detailTicketClass">VIP</span></p>
-                                    <p><strong>Quantity:</strong> <span id="detailQuantity">2</span></p>
-<!--                                    <p><strong>Price:</strong> <span id="detailPrice">200.000 VND</span></p>-->
-<!--                                    <hr>-->
-                                    <hr>
-<!--                                    <p><strong>Shipping Cost:</strong> <span id="detailShippingCost">50.000 VND</span></p>-->
-                                    <p><strong>Total:</strong> <span id="detailTotal">450.000</span></p>
-
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-2 mb-md-0">
+                                        <strong th:text="#{event.date}">Event Date:</strong>
+                                        <span class="d-block text-muted" id="detailEventDate"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong th:text="#{event.location}">Event Location:</strong>
+                                        <span class="d-block text-muted" id="detailEventLocation"></span>
+                                    </div>
                                 </div>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <hr>
+
+                                <!-- Thông tin đơn hàng -->
+                                <h5 class="mb-3">Chi Tiết Đơn Hàng</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2 mb-md-0">
+                                        <strong th:text="#{order.id}">Order ID:</strong>
+                                        <span class="d-block text-muted" id="detailOrderId"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong th:text="#{order.date}">Order Date:</strong>
+                                        <span class="d-block text-muted" id="detailOrderDate"></span>
+                                    </div>
                                 </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-6 mb-2 mb-md-0">
+                                        <strong th:text="#{ticket.class}">Ticket Class:</strong>
+                                        <span class="d-block text-muted" id="detailTicketClass"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong th:text="#{order.quantity}">Quantity:</strong>
+                                        <span class="d-block text-muted" id="detailQuantity"></span>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- Tổng tiền -->
+                                <div class="text-end">
+                                    <strong class="fs-5" th:text="#{order.total}">Total:</strong>
+                                    <span class="fs-4 order-price ms-2" id="detailTotal"></span>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark me-1"></i>
+                                    <span th:text="#{button.close}">Close</span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
+<!-- Footer (giữ nguyên) -->
+<div th:replace="layout :: footer"></div>
 
-    <div th:replace="layout :: footer"></div>
-    <!-- JS -->
-<!--    <script th:src="@{/js/script.js}" defer></script>-->
-    <script th:src="@{/js/script.js(v=${#dates.createNow().time})}" defer></script>
+<!-- JS (giữ nguyên) -->
+<script th:src="@{/js/script.js(v=${#dates.createNow().time})}" defer></script>
 
-
-    <!-- Bootstrap JS Bundle (gồm Popper) -->
-    <script th:src="'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'"></script>
+<!-- Bootstrap JS Bundle (gồm Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -33,9 +33,13 @@ public class WebConfig implements WebMvcConfigurer {
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
         source.setBasenames(
-                "i18n/messages",
-                "i18n/event",
-                "i18n/user"
+                "i18n/user/messages",
+                "i18n/user/event",
+                "i18n/user/user",
+                "i18n/user/detail",
+                "i18n/user/order",
+                "i18n/user/report"
+
         );
 
         source.setDefaultEncoding("UTF-8");

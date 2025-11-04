@@ -51,7 +51,7 @@
         <!-- main image -->
         <div class="col-lg-7">
           <img
-            th:src="@{'https://picsum.photos/id/1011/800/400'}"
+                  th:src="${eventForm.event.thumbnailUrl}"
             th:alt="${eventForm.event.name}"
             class="img-fluid rounded shadow-sm mb-3"
           />
@@ -74,35 +74,31 @@
           <h1 class="mb-4" th:text="${eventForm.event.name}">eventTitle</h1>
 
           <div class="info-box mb-3">
-            <strong>Description:</strong>
+            <strong th:text="#{information.description}">Description:</strong>
             <span th:text="${eventForm.event.description}"></span>
           </div>
           <div class="info-box mb-3">
-            <strong>Start Date:</strong>
+            <strong th:text="#{information.start}">Start Date:</strong>
             <span
               th:text="${#temporals.format(eventForm.event.startTime, 'dd/MM/yyyy hh:mm a')}"
             ></span>
           </div>
           <div class="info-box mb-3">
-            <strong>End Date::</strong>
-            <span
-              th:text="${#temporals.format(eventForm.event.startTime, 'dd/MM/yyyy hh:mm a')}"
-            ></span>
-            -
+            <strong th:text="#{information.end}">End Date::</strong>
             <span
               th:text="${#temporals.format(eventForm.event.endTime, 'dd/MM/yyyy hh:mm a')}"
             ></span>
           </div>
           <div class="info-box mb-3">
-            <strong>Location:</strong>
+            <strong th:text="#{information.location}">Location:</strong>
             <span th:text="${eventForm.event.location.addressDetail}"></span>
           </div>
           <div class="info-box mb-3">
-            <strong>Tickets left:</strong>
+            <strong th:text="#{information.left}">Tickets left:</strong>
             <span th:text="${eventForm.ticketClass[0].totalQuantity - eventForm.ticketClass[0].soldQuantity}"></span>
           </div>
           <div class="info-box mb-4">
-            <strong>Tickets sold:</strong>
+            <strong th:text="#{information.sold}">Tickets sold:</strong>
             <span th:text="${eventForm.ticketClass[0].soldQuantity}"></span>
           </div>
 
@@ -117,7 +113,7 @@
                 class="btn btn-success btn-lg flex-fill disabled"
                 role="button"
                 style="pointer-events: none;"
-                th:text="${isSoldOut ? 'Hết vé' : 'Sự kiện đã qua'}">
+                th:text="${isSoldOut ? #{button.sold_out} : (${isPastEvent} ? #{button.past}:#{button.buy})">
               Buy now (Disabled)
             </a>
 
@@ -128,12 +124,10 @@
               Buy now
             </a>
 
-            <a
-                    th:href="@{/user/main-event}"
+            <a th:href="@{/user/main-event}"
                     class="btn btn-danger btn-lg flex-fill"
-                    role="button"
-            >Cancel</a
-            >
+               role="button">
+              <span th:text="#{button.cancel}">Cancel</span></a>
           </div>
         </div>
       </div>
