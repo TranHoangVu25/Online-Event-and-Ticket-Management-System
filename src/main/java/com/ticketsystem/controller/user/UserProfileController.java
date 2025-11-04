@@ -14,13 +14,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -38,6 +39,10 @@ public class UserProfileController {
                                  HttpSession session,
                                  Model model) {
         String userName = (String) session.getAttribute("userName");
+
+        if (userName == null || userName.isBlank()) {
+            return "redirect:/login";
+        }
         UserResponse user = userService.getUserByUserName(userName);
         model.addAttribute("user", user);
         return "/customer/customer-profile";
@@ -45,29 +50,35 @@ public class UserProfileController {
 
     @PostMapping("/profile")
     public String updateUserProfile(
-            @Valid @ModelAttribute UserUpdateRequest request,
-            HttpSession session) {
+            @Valid @ModelAttribute UserUpdateRequest request, HttpSession session) {
+        try {
         String userName = (String) session.getAttribute("userName");
+            if (userName.isBlank()) {
+                return "redirect:/login";
+            }
         UserResponse user = userService.getUserByUserName(userName);
         userService.updateUser(request, user.getId());
-        return "redirect:/user/profile/" + userName;
+//        return "redirect:/user/profile/" + userName;
+            return "redirect:/user/profile";
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     // GET: hiển thị form
     @GetMapping("/change-password")
     public String showChangePasswordForm(Model model, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        UserResponse1 user = userService.getUser(userId);
-
-        if (userId == null) {
-            return "redirect:/login";
+        try {
+            Integer userId = (Integer) session.getAttribute("userId");
+            UserResponse1 user = userService.getUser(userId);
+            model.addAttribute("user", user);
+            model.addAttribute("changePasswordRequest", new ChangePasswordRequest());
+            return "/customer/customer-change-password";
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
-        model.addAttribute("user", user);
-
-        model.addAttribute("changePasswordRequest", new ChangePasswordRequest());
-        return "/customer/customer-change-password";
     }
-
     // POST: xử lý đổi mật khẩu
     @PostMapping("/change-password")
     public String handleChangePassword(
@@ -75,7 +86,7 @@ public class UserProfileController {
             BindingResult result,
             HttpSession session,
             Model model) {
-
+        try {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
@@ -83,6 +94,10 @@ public class UserProfileController {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not existed"));
+
+            UserResponse1 user1 = userService.getUser(userId);
+            userService.changePassword(request.getNewPassword(), userId);
+            model.addAttribute("user",user1);
 
         if (!authenticationService.checkPassword(request.getOldPassword(), user.getPasswordHash())) {
             result.rejectValue("oldPassword", "error.oldPassword", "Mật khẩu cũ không đúng");
@@ -96,11 +111,13 @@ public class UserProfileController {
             model.addAttribute("changePasswordRequest", request);
             return "/customer/customer-change-password";
         }
-        UserResponse1 user1 = userService.getUser(userId);
 
-        userService.changePassword(request.getNewPassword(), userId);
         model.addAttribute("successMessage", "Đổi mật khẩu thành công!");
-        model.addAttribute("user",user1);
+
         return "/customer/customer-change-password";
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }

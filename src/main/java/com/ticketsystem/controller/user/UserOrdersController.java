@@ -48,7 +48,10 @@ public class UserOrdersController {
 
     //lấy thông tin về order của user (hiển thị danh sách order)
     @GetMapping("/customer-orders")
-    String getPayment(Model model, HttpSession session){
+    String getPayment(
+            Model model,
+            HttpSession session
+    ){
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             // Nếu chưa login, redirect về login hoặc trả lỗi

@@ -38,7 +38,9 @@ public class WebConfig implements WebMvcConfigurer {
                 "i18n/user/user",
                 "i18n/user/detail",
                 "i18n/user/order",
-                "i18n/user/report"
+                "i18n/user/report",
+                "i18n/user/password"
+
 
         );
 
